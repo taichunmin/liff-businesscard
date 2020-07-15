@@ -1,0 +1,133 @@
+<%
+function r4 () {
+  return _.padStart(_.random(65535).toString(16), 4, '0')
+}
+function randomUuid () {
+  return `${r4()}${r4()}-${r4()}-${r4()}-${r4()}-${r4()}${r4()}${r4()}`
+}
+function gaScreenView (vcard) {
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `Right Align-2020/07/16-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: randomUuid(), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "size": "giga",
+  "type": "bubble",
+  "body": {
+    "layout": "horizontal",
+    "spacing": "md",
+    "type": "box",
+    "contents": [
+      {
+        "aspectMode": "cover",
+        "aspectRatio": "1:1",
+        "flex": 1,
+        "size": "full",
+        "type": "image",
+        "url": "${vcard.logo}"
+      },
+      {
+        "flex": 4,
+        "layout": "vertical",
+        "type": "box",
+        "contents": [
+          {
+            "align": "end",
+            "size": "xxl",
+            "text": "${vcard.name}",
+            "type": "text",
+            "weight": "bold"
+          },
+          {
+            "align": "end",
+            "size": "sm",
+            "text": "${vcard.title}",
+            "type": "text"
+          },
+          {
+            "align": "end",
+            "margin": "xxl",
+            "size": "lg",
+            "text": "${vcard.company}",
+            "type": "text",
+            "weight": "bold",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "${vcard.maps}"
+            }
+          },
+          {
+            "align": "end",
+            "size": "sm",
+            "text": "${vcard.address}",
+            "type": "text",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "${vcard.maps}"
+            }
+          },
+          {
+            "align": "end",
+            "margin": "xxl",
+            "text": "${vcard.tel}",
+            "type": "text",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "tel:${vcard.tel}"
+            }
+          },
+          {
+            "align": "end",
+            "text": "${vcard.email}",
+            "type": "text",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "mailto:${vcard.email}"
+            }
+          },
+          {
+            "align": "end",
+            "text": "${vcard.url}",
+            "type": "text",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "${vcard.url}"
+            }
+          },
+          {
+            "height": "1px",
+            "layout": "vertical",
+            "offsetStart": "0px",
+            "offsetTop": "0px",
+            "position": "absolute",
+            "type": "box",
+            "width": "1px",
+            "contents": [
+              {
+                "aspectMode": "fit",
+                "aspectRatio": "1:1",
+                "size": "full",
+                "type": "image",
+                "url": "${gaScreenView(vcard)}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

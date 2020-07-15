@@ -1,0 +1,36 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = 'Chatbot 台灣開發者'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="點此連結來製作自己的「Chatbot 台灣開發者」名片吧！")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/oScjWVD.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl+"forms/anch-passport-1.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-title") 頭銜
+    input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
+    small#help-label.form-text.text-muted 請填寫您想要顯示在名片上的頭銜。
+  .form-group.my-2
+    label(for="vcard-name") 暱稱
+    input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
+    small#help-label.form-text.text-muted 請填寫您想要顯示在名片上的暱稱。
+
+block before-vue
+  script.
+    window.vueData = {
+      vcard: {
+        name: '小美',
+        template: '#{baseUrl}cards/chatbot-tw-1.txt',
+        title: '小萌新',
+      },
+    }

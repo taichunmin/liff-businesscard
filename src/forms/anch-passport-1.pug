@@ -1,0 +1,61 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = '動物森友會護照'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="點此連結來製作自己的「動物森友會」護照吧！")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/YqW1e5j.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl+"forms/anch-passport-1.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-avator") 大頭照
+    input#vcard-avator.form-control.form-control-sm(type="text", v-model="vcard.avator")
+    small#help-label.form-text.text-muted 請填寫大頭照圖片網址，比例為 #[code 1:1]。 #[a(href="https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4/edit#gid=1696242249", target="_blank") 居民大頭貼請點此]
+  .form-group.my-2
+    label(for="vcard-title") 頭銜
+    input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
+    small#help-label.form-text.text-muted 請填寫頭銜。
+  .form-group.my-2
+    label(for="vcard-name") 名稱
+    input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
+    small#help-label.form-text.text-muted 請填寫角色名稱。
+  .form-group.my-2
+    label(for="vcard-island") 島名
+    input#vcard-island.form-control.form-control-sm(type="text", v-model="vcard.island")
+    small#help-label.form-text.text-muted 請填寫無人島名稱。
+  .form-group.my-2
+    label(for="vcard-fruit") 水果
+    select#vcard-fruit.form-control.form-control-sm(v-model="vcard.fruit")
+      option(value="Apple") 蘋果 Apple
+      option(value="Cherry") 櫻桃 Cherry
+      option(value="Orange") 橘子 Orange
+      option(value="Peach") 桃子 Peach
+      option(value="Pear") 梨子 Pear
+    small#help-label.form-text.text-muted 請選擇無人島上的水果。
+  .form-group.my-2
+    label(for="vcard-nso") NSO
+    input#vcard-nso.form-control.form-control-sm(type="url", v-model="vcard.nso")
+    small#help-label.form-text.text-muted 請填寫 NSO 的好友代碼。
+
+block before-vue
+  script.
+    window.vueData = {
+      vcard: {
+        avator: 'https://acnhcdn.com/latest/NpcIcon/cat18.png',
+        fruit: 'Apple',
+        island: '美麗島',
+        name: '小美',
+        nso: 'SW-0000-0000-0000',
+        template: '#{baseUrl}cards/anch-passport-1.txt',
+        title: '幸運的小女孩',
+      },
+    }

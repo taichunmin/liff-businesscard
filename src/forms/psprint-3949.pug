@@ -1,0 +1,73 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = 'PsPrint Right Align One'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="PsPrint Right Align One")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/g8GdiVN.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl + "forms/psprint-3949.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-logo") LOGO
+    input#vcard-logo.form-control.form-control-sm(type="text", v-model="vcard.logo")
+    small#help-label.form-text.text-muted 請填寫 LOGO，比例為 #[code 1:1]。
+  .form-group.my-2
+    label(for="vcard-name") 姓名
+    input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
+    small#help-label.form-text.text-muted 請填寫姓名。
+  .form-group.my-2
+    label(for="vcard-title") 職稱
+    input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
+    small#help-label.form-text.text-muted 請填寫職稱。
+  .form-group.my-2
+    label(for="vcard-company") 公司
+    input#vcard-company.form-control.form-control-sm(type="text", v-model="vcard.company")
+    small#help-label.form-text.text-muted 請填寫公司名稱。
+  .form-group.my-2
+    label(for="vcard-address") 地址
+    input#vcard-address.form-control.form-control-sm(type="text", v-model="vcard.address")
+    small#help-label.form-text.text-muted 請填寫公司地址。
+  .form-group.my-2
+    label(for="vcard-maps") 地圖
+    input#vcard-maps.form-control.form-control-sm(type="url", v-model="vcard.maps")
+    small#help-label.form-text.text-muted 請填寫公司的 Google 地圖網址。
+  .form-group.my-2
+    label(for="vcard-tel") 電話
+    input#vcard-tel.form-control.form-control-sm(type="tel", v-model="vcard.tel")
+    small#help-label.form-text.text-muted 請填寫公司電話。
+  .form-group.my-2
+    label(for="vcard-email") 信箱
+    input#vcard-email.form-control.form-control-sm(type="email", v-model="vcard.email")
+    small#help-label.form-text.text-muted 請填寫公司信箱。
+  .form-group.my-2
+    label(for="vcard-url") 網站
+    input#vcard-url.form-control.form-control-sm(type="url", v-model="vcard.url")
+    small#help-label.form-text.text-muted 請填寫公司網站。
+
+block before-vue
+  script.
+    window.vueData = {
+      vcard: {
+        address: '台中市西屯區市政路402號7樓',
+        company: '微程式資訊股份有限公司',
+        email: 'mei@program.com.tw',
+        ext: '000',
+        logo: 'https://i.imgur.com/GclvYFK.png',
+        maps: 'https://www.google.com/maps/search/?api=1&query_place_id=ChIJAaZEqCYWaTQRMv6fuIsJEuo&query=%E5%BE%AE%E7%A8%8B%E5%BC%8F%E8%B3%87%E8%A8%8A&openExternalBrowser=1',
+        mobile: '0000000000',
+        name: '王小美',
+        tel: '04-23692699,000',
+        template: '#{baseUrl}cards/psprint-3949.txt',
+        title: '行銷企劃',
+        url: 'https://www.program.com.tw',
+      },
+    }

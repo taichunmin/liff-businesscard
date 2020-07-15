@@ -1,0 +1,58 @@
+- const GA_MEASUREMENT_ID = 'UA-39556213-12'
+script(async, src=`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`)
+script.
+  /* global sleep */
+  window.dataLayer = window.dataLayer || []
+  function gtag () { window.dataLayer.push(arguments) }
+  window.gtagStartTime = new Date()
+  gtag('js', window.gtagStartTime)
+  gtag('config', 'UA-39556213-3')
+  gtag('config', '#{GA_MEASUREMENT_ID}', {
+    app_name: 'LINE 數位版名片網站',
+    send_page_view: false,
+    transport_type: 'beacon',
+  })
+  window.gtagEvent = (category, action, label, value = 1) => new Promise(resolve => {
+    gtag('event', action, {
+      event_callback: resolve,
+      event_category: category,
+      event_label: label,
+      value,
+    })
+  })
+  window.gtagScreenView = screenName => new Promise(resolve => {
+    gtag('event', 'screen_view', {
+      event_callback: resolve,
+      screen_name: screenName,
+    })
+  })
+  window.gtagError = async (err, fatal = false) => new Promise(resolve => {
+    gtag('event', 'exception', {
+      description: err.message || '',
+      event_callback: resolve,
+      fatal,
+    })
+  })
+  window.gtagTiming = async (name) => new Promise(resolve => {
+    gtag('event', 'timing_complete', {
+      event_callback: resolve,
+      event_category: location.pathname,
+      name,
+      value: new Date() - window.gtagStartTime,
+    })
+  })
+  window.gtagSetLineId = async lineId => {
+    while (!window.liff) { // 如果沒有 window.liff 就隔一段時間檢查一次
+      await sleep(2000)
+    }
+    await liff.ready
+    const config = {
+      app_name: `LIFF ${liff.getOS()}`,
+      send_page_view: false,
+      transport_type: 'beacon',
+    }
+    const profile = await liff.getProfile()
+    if (liff.isInClient) config.app_version = liff.getLineVersion()
+    if (_.hasIn(profile, 'userId')) config.user_id = profile.userId
+    gtag('config', '#{GA_MEASUREMENT_ID}', config)
+  }

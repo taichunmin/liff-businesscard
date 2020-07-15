@@ -1,0 +1,37 @@
+{
+  "name": "liff-businesscard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:taichunmin/liff-businesscard.git",
+  "author": "taichunmin <taichunmin@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "cross-env DEBUG=app:* node ./index.js",
+    "dev": "cross-env DEBUG=app:* node ./dev.js",
+    "lint": "eslint --ext .js,.pug --fix ."
+  },
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "finalhandler": "^1.1.2",
+    "jstransformer-sass": "^1.0.0",
+    "ncp": "^2.0.0",
+    "pug": "^3.0.0",
+    "serve-static": "^1.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-pug": "^1.2.2",
+    "eslint-plugin-standard": "^4.0.1",
+    "livereload": "^0.9.1",
+    "node-watch": "^0.6.4"
+  },
+  "resolutions": {
+    "**/kind-of": "^6.0.3"
+  }
+}

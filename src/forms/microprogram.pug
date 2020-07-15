@@ -1,0 +1,61 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = '微程式資訊 LINE 名片'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="微程式資訊的名片範例。")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/NXiylpJ.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl + "forms/microprogram.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-title-tw") 中文職稱
+    input#vcard-title-tw.form-control.form-control-sm(type="text", v-model="vcard.title_tw")
+    small#help-label.form-text.text-muted 請填寫中文職稱。
+  .form-group.my-2
+    label(for="vcard-name-tw") 中文姓名
+    input#vcard-name-tw.form-control.form-control-sm(type="text", v-model="vcard.name_tw")
+    small#help-label.form-text.text-muted 請填寫中文姓名。
+  .form-group.my-2
+    label(for="vcard-title-en") 英文職稱
+    input#vcard-title-en.form-control.form-control-sm(type="text", v-model="vcard.title_en")
+    small#help-label.form-text.text-muted 請填寫英文職稱。
+  .form-group.my-2
+    label(for="vcard-name-en") 英文姓名
+    input#vcard-name-en.form-control.form-control-sm(type="text", v-model="vcard.name_en")
+    small#help-label.form-text.text-muted 請填寫英文姓名。
+  .form-group.my-2
+    label(for="vcard-mobile") 手機號碼
+    input#vcard-mobile.form-control.form-control-sm(type="tel", v-model="vcard.mobile")
+    small#help-label.form-text.text-muted 請填寫手機號碼。
+  .form-group.my-2
+    label(for="vcard-ext") 分機號碼
+    input#vcard-ext.form-control.form-control-sm(type="tel", v-model="vcard.ext")
+    small#help-label.form-text.text-muted 請填寫分機號碼。
+  .form-group.my-2
+    label(for="vcard-email") 公司信箱
+    input#vcard-email.form-control.form-control-sm(type="email", v-model="vcard.email")
+    small#help-label.form-text.text-muted 請填寫公司信箱。
+
+block before-vue
+  script.
+    window.vueData = {
+      vcard: {
+        email: 'mei@program.com.tw',
+        ext: '000',
+        mobile: '0000000000',
+        name_en: 'Mei Wang',
+        name_tw: '王小美',
+        template: '#{baseUrl}cards/microprogram.txt',
+        title_en: 'Marketing',
+        title_tw: '行銷企劃',
+      },
+    }

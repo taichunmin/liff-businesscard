@@ -35,7 +35,7 @@ block content
 block script
   script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
   script.
-    /* global decodeBase64url */
+    /* global decodeBase64url, getCsv */
     window.gtagSetLineId()
     const vm = new Vue({ // eslint-disable-line
       el: '#app',
@@ -47,9 +47,9 @@ block script
       },
       async mounted () {
         try {
-          await liff.init({ liffId: '#{liffIdShare}' })
+          await liff.init({ liffId: '#{liffIdShareCsv}' })
           if (this.param('liff.state')) return await new Promise(resolve => {}) // 永遠不會結束的 Promise
-          window.gtagScreenView('瀏覽分享名片網頁')
+          window.gtagScreenView('瀏覽分享名片網頁 CSV')
           window.gtagTiming('mounted start')
           if (!liff.isLoggedIn()) {
             liff.login({ redirectUri: location.href })
@@ -69,7 +69,7 @@ block script
       },
       computed: {
         shortcut () {
-          return `https://liff.line.me/#{liffIdShare}/${new URL(location).search}`
+          return `https://liff.line.me/#{liffIdShareCsv}/${new URL(location).search}`
         },
       },
       methods: {
@@ -122,14 +122,15 @@ block script
           }
         },
         async getVcard () {
-          this.vcard = _.mapValues(_.omit(_.fromPairs([...new URL(location).searchParams]), [
-            'code',
-            'liffClientId',
-            'liffRedirectUri',
-            'state',
-            'template',
-          ]), decodeBase64url)
-          window.gtagTiming('vcard loaded')
+          try {
+            const args = _.fromPairs(_.map(['csv', 'key', 'value'], k => [k, this.paramBase64url(k)]))
+            this.vcard = _.find(await getCsv(args.csv), [args.key, args.value])
+            window.gtagTiming('vcard loaded')
+          } catch (err) {
+            err.message = err.message ? `名片資料獲取失敗: ${err.message}` : '名片資料獲取失敗'
+            this.render = null
+            throw err
+          }
         },
         async btnShare () {
           try {

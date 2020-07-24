@@ -23,7 +23,7 @@ function jsonStringifyEscape (obj) {
 %>
 
 {
-  "altText": "「${vcard.speaker}」將為我們帶來「${vcard.title}」議程，時間是 8/2 ${vcard.time}，地點在 TR212，歡迎大家踴躍參加！",
+  "altText": "「${vcard.speaker}」將為我們帶來「${vcard.title}」議程，時間是 ${vcard.time}，地點在 ${vcard.room}，歡迎大家踴躍參加！",
   "type": "flex",
   "contents": {
     "type": "bubble",
@@ -33,7 +33,7 @@ function jsonStringifyEscape (obj) {
       "type": "box",
       "contents": [
         {
-          "text": "8/2 ${vcard.time}",
+          "text": "${vcard.time}",
           "type": "text"
         },
         {
@@ -55,7 +55,7 @@ function jsonStringifyEscape (obj) {
                 {
                   "color": "#ffffff",
                   "size": "xxs",
-                  "text": "TR212",
+                  "text": "${vcard.room}",
                   "type": "text",
                   "weight": "bold"
                 }
@@ -151,16 +151,19 @@ function jsonStringifyEscape (obj) {
       "type": "box",
       "contents": [
         {
+          "align": "center",
+          "backgroundColor": "#ffffff",
           "borderColor": "#ffffff",
-          "borderWidth": "3px",
-          "cornerRadius": "99px",
+          "borderWidth": "2px",
+          "cornerRadius": "50px",
+          "gravity": "center",
           "height": "100px",
           "layout": "vertical",
           "type": "box",
           "width": "100px",
           "contents": [
             {
-              "aspectMode": "fit",
+              "aspectMode": "cover",
               "aspectRatio": "1:1",
               "size": "full",
               "type": "image",

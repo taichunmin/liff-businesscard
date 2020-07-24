@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const { build } = require('./build')
 const finalhandler = require('finalhandler')
 const http = require('http')
@@ -16,7 +14,7 @@ async function main () {
   const publicDir = path.resolve(__dirname, 'dist')
 
   const livereloadServer = livereload.createServer({
-    delay: 500,
+    delay: 1000,
   })
   livereloadServer.watch(publicDir)
 
@@ -27,7 +25,7 @@ async function main () {
   })
   staticServer.listen(3000)
 
-  watch('./src', { recursive: true }, async (e, name) => {
+  watch(['./src', './public'], { recursive: true }, async (e, name) => {
     const match = name.match(/src[\\/](.+)\.pug/)
     if (!match) log(`"${name}" changed.`)
     else log(`http://localhost:3000/${match[1].replace(/\\/g, '/')}.html`)

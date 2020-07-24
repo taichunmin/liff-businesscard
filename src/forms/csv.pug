@@ -1,0 +1,46 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = 'LINE 數位版名片 (CSV)'
+  - const liffId = liffIdShareCsv // for layout-forms.pug
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="點此連結來製作自己的 LINE 數位版名片吧！")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/j017Uof.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl+"forms/csv.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-template") 名片樣板
+    input#vcard-template.form-control.form-control-sm(type="url", v-model="vcard.template")
+    small#help-label.form-text.text-muted 請填寫名片樣板網址。
+  .form-group.my-2
+    label(for="vcard-csv") CSV
+    input#vcard-csv.form-control.form-control-sm(type="url", v-model="vcard.csv")
+    small#help-label.form-text.text-muted 請填寫名片資料 CSV 網址。
+  .form-group.my-2
+    label(for="vcard-key") 比對欄位
+    input#vcard-key.form-control.form-control-sm(type="text", v-model="vcard.key")
+    small#help-label.form-text.text-muted 請填寫您想要比對的名片資料欄位。
+  .form-group.my-2
+    label(for="vcard-value") 比對資料
+    input#vcard-value.form-control.form-control-sm(type="text", v-model="vcard.value")
+    small#help-label.form-text.text-muted 請填寫您想要比對的名片資料欄位內容。
+
+block before-vue
+  script.
+    window.vueData = {
+      vcard: {
+        template: '#{baseUrl}cards/chatbot-tw-coscup-2020.txt',
+        csv: '#{baseUrl}csv/chatbot-tw-coscup-2020.csv',
+        key: 'id',
+        value: '1',
+      },
+    }

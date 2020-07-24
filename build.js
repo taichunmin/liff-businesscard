@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const _ = require('lodash')
 const fs = require('fs').promises
 const log = require('debug')('app:index')
@@ -21,6 +23,8 @@ exports.build = async () => {
   const PUG_OPTIONS = {
     basedir: path.resolve(__dirname, 'src'),
     baseUrl: _.trimEnd(getenv('BASEURL', 'https://taichunmin.idv.tw/liff-businesscard/'), '/') + '/',
+    liffIdShare: getenv('LIFFID_SHARE', '1654437282-9O3Gyk0p'),
+    liffIdShareCsv: getenv('LIFFID_SHARE_CSV', '1654437282-8ORYBGgE'),
   }
 
   // copy public files
@@ -32,7 +36,7 @@ exports.build = async () => {
   const pugFiles = _.map(_.filter(await fs.readdir(path.join(PUG_OPTIONS.basedir, 'forms')), file => {
     return file.indexOf('.') !== 0 && (file.slice(-4) === '.pug')
   }), file => `forms/${file}`)
-  pugFiles.push('index.pug', 'share.pug')
+  pugFiles.push('index.pug', 'share.pug', 'share-csv.pug')
 
   for (const file of pugFiles) {
     try {

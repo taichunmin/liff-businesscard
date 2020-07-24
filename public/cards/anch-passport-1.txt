@@ -174,8 +174,10 @@ function gaScreenView (vcard) {
                   "width": "100px",
                   "contents": [
                     {
-                      "aspectMode": "fit",
+                      "align": "center",
+                      "aspectMode": "cover",
                       "aspectRatio": "1:1",
+                      "gravity": "center",
                       "size": "full",
                       "type": "image",
                       "url": "${vcard.avator}"
@@ -250,8 +252,10 @@ function gaScreenView (vcard) {
                       "width": "24px",
                       "contents": [
                         {
-                          "aspectMode": "fit",
+                          "align": "center",
+                          "aspectMode": "cover",
                           "aspectRatio": "1:1",
+                          "gravity": "center",
                           "size": "full",
                           "type": "image",
                           "url": "https://i.imgur.com/2ebwzTk.png"
@@ -278,8 +282,10 @@ function gaScreenView (vcard) {
                       "width": "24px",
                       "contents": [
                         {
-                          "aspectMode": "fit",
+                          "align": "center",
+                          "aspectMode": "cover",
                           "aspectRatio": "1:1",
+                          "gravity": "center",
                           "size": "full",
                           "type": "image",
                           "url": "https://acnhcdn.com/latest/MenuIcon/${vcard.fruit}.png"
@@ -327,8 +333,10 @@ function gaScreenView (vcard) {
                       "width": "24px",
                       "contents": [
                         {
-                          "aspectMode": "fit",
+                          "align": "center",
+                          "aspectMode": "cover",
                           "aspectRatio": "1:1",
+                          "gravity": "center",
                           "size": "full",
                           "type": "image",
                           "url": "https://i.imgur.com/m9M26rs.png"
@@ -368,8 +376,10 @@ function gaScreenView (vcard) {
               "width": "1px",
               "contents": [
                 {
-                  "aspectMode": "fit",
+                  "align": "center",
+                  "aspectMode": "cover",
                   "aspectRatio": "1:1",
+                  "gravity": "center",
                   "size": "full",
                   "type": "image",
                   "url": "${gaScreenView(vcard)}"

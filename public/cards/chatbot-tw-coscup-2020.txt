@@ -151,20 +151,20 @@ function jsonStringifyEscape (obj) {
       "type": "box",
       "contents": [
         {
-          "align": "center",
           "backgroundColor": "#ffffff",
           "borderColor": "#ffffff",
           "borderWidth": "2px",
           "cornerRadius": "50px",
-          "gravity": "center",
           "height": "100px",
           "layout": "vertical",
           "type": "box",
           "width": "100px",
           "contents": [
             {
+              "align": "center",
               "aspectMode": "cover",
               "aspectRatio": "1:1",
+              "gravity": "center",
               "size": "full",
               "type": "image",
               "url": "${vcard.avatar}"

@@ -17,6 +17,9 @@ function gaScreenView (vcard) {
     v: 1, // api version
   })}`
 }
+function jsonStringifyEscape (obj) {
+  return JSON.stringify(obj).slice(1, -1)
+}
 %>
 
 {
@@ -82,7 +85,7 @@ function gaScreenView (vcard) {
         },
         {
           "size": "sm",
-          "text": "${vcard.description}",
+          "text": "${jsonStringifyEscape(vcard.description)}",
           "type": "text",
           "wrap": true
         }

@@ -52,7 +52,7 @@ script.
       transport_type: 'beacon',
     }
     const profile = await liff.getProfile()
-    if (liff.isInClient) config.app_version = liff.getLineVersion()
+    if (liff.isInClient()) config.app_version = liff.getLineVersion()
     if (_.hasIn(profile, 'userId')) config.user_id = profile.userId
     gtag('config', '#{GA_MEASUREMENT_ID}', config)
   }

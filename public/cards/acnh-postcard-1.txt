@@ -1,0 +1,217 @@
+<%
+const DESIGNS = {
+  MsgAcademy00: { bg: '#FFFFFF', body: '#210E0A', from: '#210E0A', to: '#210E0A' },
+  MsgActive00: { bg: '#FFFFFF', body: '#F3FC00', from: '#00FFC3', to: '#00FFC3' },
+  MsgActive01: { bg: '#FFFFFF', body: '#010D2A', from: '#980F00', to: '#980F00' },
+  MsgBaby00: { bg: '#FFFFFF', body: '#1B879D', from: '#251615', to: '#251615' },
+  MsgBank00: { bg: '#FFFFFF', body: '#022318', from: '#022318', to: '#022318' },
+  MsgBirthday00: { bg: '#FFFFFF', body: '#170B03', from: '#170B03', to: '#170B03' },
+  MsgBirthday01: { bg: '#FFFFFF', body: '#1B1611', from: '#0D0001', to: '#0D0001' },
+  MsgBirthday02: { bg: '#FAF8DF', body: '#20160A', from: '#D13C00', to: '#D13C00' },
+  MsgChristmas00: { bg: '#FFFFFF', body: '#FFFFFF', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgChristmas01: { bg: '#FFFFFF', body: '#6D0000', from: '#016672', to: '#016672' },
+  MsgChristmas02: { bg: '#410000', body: '#FFFFFF', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgCool00: { bg: '#FFFFFF', body: '#6D6D6D', from: '#BBBBBB', to: '#BBBBBB' },
+  MsgCool01: { bg: '#FFFFFF', body: '#FFD990', from: '#D1C330', to: '#D1C330' },
+  MsgCute00: { bg: '#FFFFFF', body: '#FFC8A3', from: '#FFC8A3', to: '#FFC8A3' },
+  MsgCute01: { bg: '#FFFFFF', body: '#2807CB', from: '#F64E09', to: '#EB1BBF' },
+  MsgDal00: { bg: '#FFFFFF', body: '#FFFFFF', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgEaster00: { bg: '#F8F6D3', body: '#281511', from: '#281511', to: '#281511' },
+  MsgElegant00: { bg: '#7ABB92', body: '#07412F', from: '#053643', to: '#053643' },
+  MsgElegant01: { bg: '#FFFFFF', body: '#E1B962', from: '#D1B42D', to: '#D1B42D' },
+  MsgEncourage00: { bg: '#FFFFFF', body: '#021200', from: '#271003', to: '#271003' },
+  MsgFall00: { bg: '#FFFFFF', body: '#7B210D', from: '#ED2104', to: '#ED2104' },
+  MsgFall01: { bg: '#FFFFFF', body: '#FFDB83', from: '#FFDB83', to: '#FFDB83' },
+  MsgFall02: { bg: '#FFFFFF', body: '#E9CF85', from: '#EDE1AB', to: '#EDE1AB' },
+  MsgFall03: { bg: '#FFFFFF', body: '#FFEB9E', from: '#FFEB9E', to: '#FFEB9E' },
+  MsgFather00: { bg: '#B8FFDF', body: '#0C4390', from: '#030956', to: '#030956' },
+  MsgFish00: { bg: '#FFFFFF', body: '#AD1600', from: '#E5DFC1', to: '#041554' },
+  MsgGorgeous00: { bg: '#FFFFFF', body: '#D3871D', from: '#873500', to: '#873500' },
+  MsgGorgeous01: { bg: '#FFFFFF', body: '#6D0F05', from: '#F4FF87', to: '#F4FF87' },
+  MsgGraduate00: { bg: '#FFFFFF', body: '#FFFFFF', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgHalloween00: { bg: '#FFFFFF', body: '#EBC726', from: '#F6F1BB', to: '#F6F1BB' },
+  MsgHalloween01: { bg: '#FFFFFF', body: '#FF5504', from: '#FFA907', to: '#FFA907' },
+  MsgInsect00: { bg: '#FFFFFF', body: '#71BF73', from: '#71BF73', to: '#71BF73' },
+  MsgLove00: { bg: '#FFFFFF', body: '#B01B1B', from: '#EF5656', to: '#EF5656' },
+  MsgMilage00: { bg: '#FFFFFF', body: '#23237D', from: '#23237D', to: '#23237D' },
+  MsgMother00: { bg: '#FFD9B8', body: '#900C37', from: '#560313', to: '#560313' },
+  MsgNewyear00: { bg: '#090650', body: '#975BFF', from: '#4864E9', to: '#FF7DE5' },
+  MsgNewyear01: { bg: '#FFFFFF', body: '#0B0603', from: '#0B0603', to: '#0B0603' },
+  MsgOther00: { bg: '#FFFFFF', body: '#FFD3AD', from: '#FFA12A', to: '#FFA12A' },
+  MsgOther01: { bg: '#FFFFFF', body: '#000000', from: '#000000', to: '#000000' },
+  MsgOther03: { bg: '#FFFFFF', body: '#282828', from: '#282828', to: '#282828' },
+  MsgOther04: { bg: '#FFFFFF', body: '#43D1C2', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgOther05: { bg: '#FFFFFF', body: '#FFFFFF', from: '#4100BF', to: '#4100BF' },
+  MsgOther06: { bg: '#FFFFFF', body: '#BDEBFF', from: '#69D3FF', to: '#69D3FF' },
+  MsgShopping00: { bg: '#FFFFFF', body: '#1B0800', from: '#1B0800', to: '#1B0800' },
+  MsgSimple00: { bg: '#FFFFFF', body: '#371E18', from: '#371E18', to: '#371E18' },
+  MsgSimple01: { bg: '#FFFFFF', body: '#2B2B2B', from: '#2B2B2B', to: '#2B2B2B' },
+  MsgSnowfes00: { bg: '#FFFFFF', body: '#FFFFFF', from: '#09577B', to: '#09577B' },
+  MsgSpring00: { bg: '#FFFFFF', body: '#480A1F', from: '#F41D61', to: '#F41D61' },
+  MsgSpring01: { bg: '#FFFFFF', body: '#DF2D04', from: '#033000', to: '#033000' },
+  MsgSpring02: { bg: '#FFFFFF', body: '#BF2000', from: '#520C03', to: '#520C03' },
+  MsgStar00: { bg: '#FFFFFF', body: '#B0DDE7', from: '#3BB2EB', to: '#3BB2EB' },
+  MsgSummer00: { bg: '#FFFFFF', body: '#053351', from: '#0E120E', to: '#0E120E' },
+  MsgSummer01: { bg: '#FFFFFF', body: '#005988', from: '#FFFFFF', to: '#0A0A10' },
+  MsgSummer02: { bg: '#E5DFDF', body: '#018536', from: '#DB0037', to: '#DB0037' },
+  MsgSummer03: { bg: '#FFFFFF', body: '#601600', from: '#3F0900', to: '#3F0900' },
+  MsgSympathy00: { bg: '#FFFFFF', body: '#022D67', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgThanksgiving00: { bg: '#B04B00', body: '#320300', from: '#791000', to: '#791000' },
+  MsgThankyou00: { bg: '#FFFFFF', body: '#550700', from: '#270B06', to: '#270B06' },
+  MsgThankyou01: { bg: '#FFFFFF', body: '#201A17', from: '#0A8F36', to: '#0A8F36' },
+  MsgTotakeke00: { bg: '#FFFFFF', body: '#443F3F', from: '#181818', to: '#181818' },
+  MsgTsunekichi00: { bg: '#FFFFFF', body: '#012086', from: '#012086', to: '#012086' },
+  MsgValentine00: { bg: '#FFFFFF', body: '#FFFFFF', from: '#FFD1EB', to: '#FFD1EB' },
+  MsgValentine01: { bg: '#FFFFFF', body: '#FFE6E9', from: '#FFA63A', to: '#FFA63A' },
+  MsgWedding00: { bg: '#FFFFFF', body: '#1FA1B5', from: '#104689', to: '#104689' },
+  MsgWinter00: { bg: '#FFFFFF', body: '#011351', from: '#0D5B7F', to: '#0D5B7F' },
+  MsgWinter01: { bg: '#FFFFFF', body: '#0D1324', from: '#FFFFFF', to: '#FFFFFF' },
+  MsgWinter02: { bg: '#FFFFFF', body: '#340300', from: '#1B0000', to: '#1B0000' },
+}
+function escapeStr (str) {
+  if (!_.isString(str)) return str
+  return JSON.stringify(str).slice(1, -1)
+}
+function r4 () {
+  return _.padStart(_.random(65535).toString(16), 4, '0')
+}
+function randomUuid () {
+  return `${r4()}${r4()}-${r4()}-${r4()}-${r4()}-${r4()}${r4()}${r4()}`
+}
+function gaScreenView (vcard) {
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `動物森友會卡片-2020/07/17-${vcard.design}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: randomUuid(), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "size": "giga",
+  "type": "bubble",
+  "body": {
+    "backgroundColor": "${DESIGNS[vcard.design].bg}",
+    "layout": "horizontal",
+    "paddingAll": "0px",
+    "position": "relative",
+    "type": "box",
+    "contents": [
+      {
+        "aspectMode": "cover",
+        "aspectRatio": "1230:780",
+        "size": "full",
+        "type": "image",
+        "url": "https://gistcdn.githack.com/taichunmin/e06833ec4b112ecdd5f856811c033897/raw/${vcard.design}.png"
+      },
+      {
+        "layout": "vertical",
+        "offsetBottom": "25px",
+        "offsetEnd": "40px",
+        "offsetStart": "40px",
+        "offsetTop": "25px",
+        "position": "absolute",
+        "type": "box",
+        "contents": [
+          {
+            "color": "${DESIGNS[vcard.design].to}",
+            "flex": 0,
+            "size": "sm",
+            "text": "${vcard.to}",
+            "type": "text",
+            "weight": "bold"
+          },
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          },
+          {
+            "layout": "horizontal",
+            "type": "box",
+            "contents": [
+              {
+                "flex": 1,
+                "layout": "vertical",
+                "type": "box",
+                "contents": [
+                  {
+                    "type": "filler"
+                  }
+                ]
+              },
+              {
+                "color": "${DESIGNS[vcard.design].body}",
+                "flex": 0,
+                "size": "sm",
+                "text": "${escapeStr(vcard.body)}",
+                "type": "text",
+                "weight": "bold",
+                "wrap": true
+              },
+              {
+                "flex": 1,
+                "layout": "vertical",
+                "type": "box",
+                "contents": [
+                  {
+                    "type": "filler"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          },
+          {
+            "align": "end",
+            "color": "${DESIGNS[vcard.design].from}",
+            "flex": 0,
+            "size": "sm",
+            "text": "${escapeStr(vcard.from)}",
+            "type": "text",
+            "weight": "bold"
+          }
+        ]
+      },
+      {
+        "height": "1px",
+        "layout": "vertical",
+        "offsetStart": "0px",
+        "offsetTop": "0px",
+        "position": "absolute",
+        "type": "box",
+        "width": "1px",
+        "contents": [
+          {
+            "align": "center",
+            "aspectMode": "cover",
+            "aspectRatio": "1:1",
+            "gravity": "center",
+            "size": "full",
+            "type": "image",
+            "url": "${gaScreenView(vcard)}"
+          }
+        ]
+      }
+    ]
+  }
+}

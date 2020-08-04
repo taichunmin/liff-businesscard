@@ -93,125 +93,129 @@ function gaScreenView (vcard) {
 %>
 
 {
-  "size": "giga",
-  "type": "bubble",
-  "body": {
-    "backgroundColor": "${DESIGNS[vcard.design].bg}",
-    "layout": "horizontal",
-    "paddingAll": "0px",
-    "position": "relative",
-    "type": "box",
-    "contents": [
-      {
-        "aspectMode": "cover",
-        "aspectRatio": "1230:780",
-        "size": "full",
-        "type": "image",
-        "url": "https://gistcdn.githack.com/taichunmin/e06833ec4b112ecdd5f856811c033897/raw/${vcard.design}.png"
-      },
-      {
-        "layout": "vertical",
-        "offsetBottom": "25px",
-        "offsetEnd": "40px",
-        "offsetStart": "40px",
-        "offsetTop": "25px",
-        "position": "absolute",
-        "type": "box",
-        "contents": [
-          {
-            "color": "${DESIGNS[vcard.design].to}",
-            "flex": 0,
-            "size": "sm",
-            "text": "${vcard.to}",
-            "type": "text",
-            "weight": "bold"
-          },
-          {
-            "flex": 1,
-            "layout": "vertical",
-            "type": "box",
-            "contents": [
-              {
-                "type": "filler"
-              }
-            ]
-          },
-          {
-            "layout": "horizontal",
-            "type": "box",
-            "contents": [
-              {
-                "flex": 1,
-                "layout": "vertical",
-                "type": "box",
-                "contents": [
-                  {
-                    "type": "filler"
-                  }
-                ]
-              },
-              {
-                "color": "${DESIGNS[vcard.design].body}",
-                "flex": 0,
-                "size": "sm",
-                "text": "${escapeStr(vcard.body)}",
-                "type": "text",
-                "weight": "bold",
-                "wrap": true
-              },
-              {
-                "flex": 1,
-                "layout": "vertical",
-                "type": "box",
-                "contents": [
-                  {
-                    "type": "filler"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "flex": 1,
-            "layout": "vertical",
-            "type": "box",
-            "contents": [
-              {
-                "type": "filler"
-              }
-            ]
-          },
-          {
-            "align": "end",
-            "color": "${DESIGNS[vcard.design].from}",
-            "flex": 0,
-            "size": "sm",
-            "text": "${escapeStr(vcard.from)}",
-            "type": "text",
-            "weight": "bold"
-          }
-        ]
-      },
-      {
-        "height": "1px",
-        "layout": "vertical",
-        "offsetStart": "0px",
-        "offsetTop": "0px",
-        "position": "absolute",
-        "type": "box",
-        "width": "1px",
-        "contents": [
-          {
-            "align": "center",
-            "aspectMode": "cover",
-            "aspectRatio": "1:1",
-            "gravity": "center",
-            "size": "full",
-            "type": "image",
-            "url": "${gaScreenView(vcard)}"
-          }
-        ]
-      }
-    ]
+  "altText": "有人寄給你一張「動物森友會」的卡片，請在手機上查看！",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "backgroundColor": "${DESIGNS[vcard.design].bg}",
+      "layout": "horizontal",
+      "paddingAll": "0px",
+      "position": "relative",
+      "type": "box",
+      "contents": [
+        {
+          "aspectMode": "cover",
+          "aspectRatio": "1230:780",
+          "size": "full",
+          "type": "image",
+          "url": "https://gistcdn.githack.com/taichunmin/e06833ec4b112ecdd5f856811c033897/raw/${vcard.design}.png"
+        },
+        {
+          "layout": "vertical",
+          "offsetBottom": "25px",
+          "offsetEnd": "40px",
+          "offsetStart": "40px",
+          "offsetTop": "25px",
+          "position": "absolute",
+          "type": "box",
+          "contents": [
+            {
+              "color": "${DESIGNS[vcard.design].to}",
+              "flex": 0,
+              "size": "sm",
+              "text": "${vcard.to}",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "color": "${DESIGNS[vcard.design].body}",
+                  "flex": 0,
+                  "size": "sm",
+                  "text": "${escapeStr(vcard.body)}",
+                  "type": "text",
+                  "weight": "bold",
+                  "wrap": true
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "align": "end",
+              "color": "${DESIGNS[vcard.design].from}",
+              "flex": 0,
+              "size": "sm",
+              "text": "${escapeStr(vcard.from)}",
+              "type": "text",
+              "weight": "bold"
+            }
+          ]
+        },
+        {
+          "height": "1px",
+          "layout": "vertical",
+          "offsetStart": "0px",
+          "offsetTop": "0px",
+          "position": "absolute",
+          "type": "box",
+          "width": "1px",
+          "contents": [
+            {
+              "align": "center",
+              "aspectMode": "cover",
+              "aspectRatio": "1:1",
+              "gravity": "center",
+              "size": "full",
+              "type": "image",
+              "url": "${gaScreenView(vcard)}"
+            }
+          ]
+        }
+      ]
+    }
   }
 }

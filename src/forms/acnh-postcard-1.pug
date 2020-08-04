@@ -1,0 +1,117 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = '動物森友會卡片'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="點此連結來製作「動物森友會」的卡片吧！")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/3WhiaK2.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl+"forms/acnh-postcard-1.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-design") 卡片底圖
+    select#vcard-design.form-control(v-model="vcard.design")
+      option(v-for="(name, id) of designs", :value="id") {{ name }} ({{ id }})
+    small#help-label.form-text.text-muted 請選擇卡片的底圖。
+  img.my-2.d-block.mx-auto.rounded(v-if="vcard.design", :src="`https://gistcdn.githack.com/taichunmin/e06833ec4b112ecdd5f856811c033897/raw/${vcard.design}.png`", style="max-width: 246px")
+  .form-group.my-2
+    label(for="vcard-to") 收件人
+    input#vcard-to.form-control.form-control-sm(type="text", v-model="vcard.to")
+    small#help-label.form-text.text-muted 請填寫卡片收件人。
+  .form-group.my-2
+    label(for="vcard-from") 寄件人
+    input#vcard-from.form-control.form-control-sm(type="text", v-model="vcard.from")
+    small#help-label.form-text.text-muted 請填寫卡片寄件人。
+  .form-group.my-2
+    label(for="vcard-body") 卡片內容
+    textarea#vcard-body.form-control.form-control-sm(type="text", v-model="vcard.body", style="min-height: 200px")
+    small#help-label.form-text.text-muted 請填寫卡片內容。
+
+block before-vue
+  script.
+    window.vueData = {
+      designs: {
+        MsgAcademy00: 'MsgAcademy00',
+        MsgActive00: '塗鴉卡片',
+        MsgActive01: '星星卡片',
+        MsgBaby00: '嬰兒用品卡片',
+        MsgBank00: 'MsgBank00',
+        MsgBirthday00: '生日蛋糕卡片',
+        MsgBirthday01: '蝴蝶結卡片',
+        MsgBirthday02: '氣球卡片',
+        MsgChristmas00: '大樹卡片',
+        MsgChristmas01: '聖誕卡片',
+        MsgChristmas02: '溫暖針織衫卡片',
+        MsgCool00: '酷感卡片',
+        MsgCool01: '迷彩卡片',
+        MsgCute00: '少女情懷卡片',
+        MsgCute01: '奇幻星星卡片',
+        MsgDal00: 'MsgDal00',
+        MsgEaster00: '復活節卡片',
+        MsgElegant00: '寶石卡片',
+        MsgElegant01: '優雅玫瑰卡片',
+        MsgEncourage00: '幸福幸運草卡片',
+        MsgFall00: '芒草與紅蜻蜓卡片',
+        MsgFall01: '落葉地毯卡片',
+        MsgFall02: '蘑菇卡片',
+        MsgFall03: '橡栗卡片',
+        MsgFather00: '父親節卡片',
+        MsgFish00: 'MsgFish00',
+        MsgGorgeous00: '天鵝絨卡片',
+        MsgGorgeous01: '裝飾風格卡片',
+        MsgGraduate00: '畢業卡片',
+        MsgHalloween00: '南瓜卡片',
+        MsgHalloween01: '萬聖節卡片',
+        MsgInsect00: 'MsgInsect00',
+        MsgLove00: '甜美愛心卡片',
+        MsgMilage00: 'msgmilage00',
+        MsgMother00: '母親節卡片',
+        MsgNewyear00: 'MsgNewyear00',
+        MsgNewyear01: 'MsgNewyear01',
+        MsgOther00: '和風卡片',
+        MsgOther01: '航空郵件卡片',
+        MsgOther03: '文具卡片',
+        MsgOther04: '齒輪卡片',
+        MsgOther05: '愛心滿滿卡片',
+        MsgOther06: '藍天卡片',
+        MsgShopping00: '禮物卡片',
+        MsgSimple00: '常見卡片',
+        MsgSimple01: '撕下的卡片',
+        MsgSnowfes00: '雪人卡片',
+        MsgSpring00: '櫻花紛飛卡片',
+        MsgSpring01: '蒲公英卡片',
+        MsgSpring02: '繁花綻放卡片',
+        MsgStar00: '流星卡片',
+        MsgSummer00: '金魚卡片',
+        MsgSummer01: '積雨雲卡片',
+        MsgSummer02: '扶桑花卡片',
+        MsgSummer03: '沙灘卡片',
+        MsgSympathy00: '絆創帶卡片',
+        MsgThanksgiving00: '感謝祭卡片',
+        MsgThankyou00: '捧花卡片',
+        MsgThankyou01: '幾何圖形卡片',
+        MsgTotakeke00: 'MsgTotakeke00',
+        MsgTsunekichi00: 'MsgTsunekichi00',
+        MsgValentine00: '愛心巧克力卡片',
+        MsgValentine01: '巧克力卡片',
+        MsgWedding00: '結婚卡片',
+        MsgWinter00: '雪花卡片',
+        MsgWinter01: '冬季山茶花卡片',
+        MsgWinter02: '城市景色卡片',
+      },
+      vcard: {
+        body: '我之前在岸邊散步時，\n突然冒出了新的 DIY 靈感！\n今天我就特別優待！\n把這個方程式告訴你吧！\n至於要怎麼做，就全看你自己了！',
+        design: 'MsgAcademy00',
+        from: '將希望寄託於你的帕塔雅  筆',
+        template: '#{baseUrl}cards/acnh-postcard-1.txt',
+        to: '給偶然撿到這個瓶子的你',
+      },
+    }

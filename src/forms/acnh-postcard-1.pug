@@ -27,7 +27,7 @@ block form
     select#vcard-design.form-control.d-sm-none(v-model="vcard.design")
       option(v-for="(design, id) of designs", :value="id") {{ design.name }}
     small#help-label.form-text.text-muted.d-sm-none 請選擇卡片的底圖。
-    img.my-2.rounded.d-block.d-sm-none.mx-auto(v-if="vcard.design", :src="`https://i.imgur.com/${designs[vcard.design].imgur}m.png`", style="max-width: 320px")
+    img.my-2.rounded.d-block.d-sm-none.mx-auto(v-if="vcard.design", :src="`https://i.imgur.com/${_.get(designs, [vcard.design, 'imgur'])}m.png`", style="max-width: 320px")
     #designs.ml-0.row.row-cols-2.row-cols-sm-3.row-cols-lg-4.row-cols-xl-5.d-none.d-sm-flex
       .col.mb-1.pl-0(v-for="(design, id) of designs")
         .card

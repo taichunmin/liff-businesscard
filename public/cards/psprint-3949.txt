@@ -1,16 +1,17 @@
 <%
-function r4 () {
-  return _.padStart(_.random(65535).toString(16), 4, '0')
-}
-function randomUuid () {
-  return `${r4()}${r4()}-${r4()}-${r4()}-${r4()}-${r4()}${r4()}${r4()}`
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
 }
 function gaScreenView (vcard) {
+  const CARD_NAME = 'Right Align-2020/07/16'
   return `https://www.google-analytics.com/collect?${Qs.stringify({
     an: 'LINE 數位版名片',
-    cd: `Right Align-2020/07/16-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
-    cid: randomUuid(), // uuid
+    cd: `${CARD_NAME}-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
     ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
     t: 'screenview',
     tid: 'UA-39556213-12', // GA 追蹤代碼
     ul: 'zh-tw', // locale

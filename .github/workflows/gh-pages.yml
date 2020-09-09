@@ -9,18 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      name: Checkout 原始碼
+    - name: Checkout 原始碼
+      uses: actions/checkout@v2
 
-    - uses: borales/actions-yarn@v2.0.0
-      name: 安裝相依性套件
+    - name: 安裝相依性套件
+      uses: borales/actions-yarn@v2.0.0
       with:
         cmd: install
 
-    - uses: borales/actions-yarn@v2.0.0
-      name: 編譯 github pages
+    - name: 編譯 github pages
+      uses: borales/actions-yarn@v2.0.0
       with:
         cmd: build
+
+    - name: 建立 CNAME 檔案
+      if: ${{ secrets.CNAME }}
+      run: echo $CNAME > dist/CNAME
+      shell: bash
+      env:
+        CNAME: ${{ secrets.CNAME }}
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3

@@ -13,6 +13,12 @@ A Bussiness Card For LINE Using LINE Front-end Framework (LIFF) API.
 * [Google Maps Universal cross-platform URL](https://developers.google.com/maps/documentation/urls/guide)
 * [Lodash 函式庫文件](https://lodash.com/docs/)
 
+## Install
+
+1. Fork
+2. Set GitHub Actions Secret (e.g. `example.env`)
+3. Trigger GitHub Actions "github pages" workflow
+
 ## CONTRIBUTING
 
 Please See [CONTRIBUTING.md](./CONTRIBUTING.md) before making a contribution.

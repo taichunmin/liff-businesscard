@@ -10,7 +10,11 @@ block script
   script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
   script.
     (async () => {
-      await liff.init({ liffId: '#{liffidShareCsv}' })
+      await liff.init({ liffId: '#{liffidFull}' })
       if (window.getSearchParam('liff.state')) return
-      location.href = `https://liff.line.me/#{liffidFull}/share-csv.html${new URL(location).search}`
+      const liffLoginRedirect = sessionStorage.getItem('liffLoginRedirect')
+      if (_.isString(liffLoginRedirect)) {
+        sessionStorage.removeItem('liffLoginRedirect')
+        location.href = liffLoginRedirect
+      }
     })()

@@ -2,7 +2,7 @@ extends /layout-forms
 
 block beforehtml
   - const title = 'LINE 數位版名片 (CSV)'
-  - const liffId = liffIdShareCsv // for layout-forms.pug
+  - const liffid = liffidShareCsv // for layout-forms.pug
 
 block meta
   meta(property="fb:app_id", content="2133031763635285")
@@ -34,13 +34,18 @@ block form
     input#vcard-value.form-control.form-control-sm(type="text", v-model="vcard.value")
     small#help-label.form-text.text-muted 請填寫您想要比對的名片資料欄位內容。
 
-block before-vue
+block vue-config
   script.
-    window.vueData = {
-      vcard: {
-        template: '#{baseUrl}cards/chatbot-tw-coscup-2020.txt',
-        csv: '#{baseUrl}csv/chatbot-tw-coscup-2020.csv',
-        key: 'id',
-        value: '1',
-      },
+    /* global httpBuildQuery, encodeBase64url */
+    const cfg = window.vueConfig
+    cfg.computed.shortcut = function () {
+      const params = httpBuildQuery(_.mapValues(this.vcard, encodeBase64url))
+      if (!_.isString(params) || !params.length) return
+      return `https://liff.line.me/#{liffidFull}/share-csv.html?${params}`
+    }
+    cfg.data.vcard = {
+      template: '#{baseUrl}cards/chatbot-tw-coscup-2020.txt',
+      csv: '#{baseUrl}csv/chatbot-tw-coscup-2020.csv',
+      key: 'id',
+      value: '1',
     }

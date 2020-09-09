@@ -45,17 +45,15 @@ block form
     input#vcard-email.form-control.form-control-sm(type="email", v-model="vcard.email")
     small#help-label.form-text.text-muted 請填寫公司信箱。
 
-block before-vue
+block vue-config
   script.
-    window.vueData = {
-      vcard: {
-        email: 'mei@program.com.tw',
-        ext: '000',
-        mobile: '0000000000',
-        name_en: 'Mei Wang',
-        name_tw: '王小美',
-        template: '#{baseUrl}cards/microprogram.txt',
-        title_en: 'Marketing',
-        title_tw: '行銷企劃',
-      },
+    window.vueConfig.data.vcard = {
+      email: 'mei@program.com.tw',
+      ext: '000',
+      mobile: '0000000000',
+      name_en: 'Mei Wang',
+      name_tw: '王小美',
+      template: '#{baseUrl}cards/microprogram.txt',
+      title_en: 'Marketing',
+      title_tw: '行銷企劃',
     }

@@ -1,7 +1,4 @@
 module.exports = {
-  plugins: [
-    'pug',
-  ],
   env: {
     browser: true,
     es6: true,
@@ -27,7 +24,6 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'eol-last': ['error', 'never'],
     'no-return-await': 0, // 0 = off, 1 = warn, 2 = error
     'spaced-comment': ['error', 'always', { markers: ['-'] }],
     'comma-dangle': ['error', {

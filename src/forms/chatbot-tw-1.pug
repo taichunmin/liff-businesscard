@@ -25,12 +25,10 @@ block form
     input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
     small#help-label.form-text.text-muted 請填寫您想要顯示在名片上的暱稱。
 
-block before-vue
+block vue-config
   script.
-    window.vueData = {
-      vcard: {
-        name: '小美',
-        template: '#{baseUrl}cards/chatbot-tw-1.txt',
-        title: '小萌新',
-      },
+    window.vueConfig.data.vcard = {
+      name: '小美',
+      template: '#{baseUrl}cards/chatbot-tw-1.txt',
+      title: '小萌新',
     }

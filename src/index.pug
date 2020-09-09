@@ -45,10 +45,10 @@ block script
       },
       async mounted () {
         try {
+          window.gtagInit()
           window.gtagScreenView('瀏覽免費樣板列表網頁')
-          window.gtagTiming('mounted start')
-          this.businesscards = await getCsv('businesscards.csv')
-          window.gtagTiming('mounted end')
+          this.businesscards = await getCsv('#{baseUrl}businesscards.csv')
+          window.gtagTiming('after mounted')
         } catch (err) {
           window.gtagError(err, true)
         }

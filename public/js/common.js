@@ -54,3 +54,5 @@ window.beautifyFlex = obj => {
 }
 
 window.sleep = t => new Promise(resolve => { setTimeout(resolve, t) })
+
+window.getSearchParam = key => (new URL(window.location).searchParams.get(key))

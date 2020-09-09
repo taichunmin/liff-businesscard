@@ -1,0 +1,183 @@
+extends /layout-default
+
+block beforehtml
+  - const title = '分享 LINE 數位版名片'
+
+block style
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="請開啟本連結並按一下「選擇分享對象」來透過 LINE 分享名片")
+  meta(property="og:image:height", content="315")
+  meta(property="og:image:width", content="600")
+  meta(property="og:image", content="https://i.imgur.com/PqLcIKj.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=`https://liff.line.me/${liffidFull}/share.html`)
+  style
+    :sass
+      [v-cloak]
+        display: none
+block content
+  #app.container.my-4.text-monospace(v-cloak)
+    h2.my-3.text-center= title
+    #share(v-if="page === 'share'")
+      p 請按一下「選擇分享對象」來透過 LINE 分享名片吧！
+      button.btn.btn-lg.btn-success.btn-block.my-2(type="button", @click="btnShare") 選擇分享對象
+      button.btn.btn-lg.btn-info.btn-block.my-2(type="button", @click="btnSend") 傳送到目前聊天視窗
+      .form-group.my-2
+        label(for="i-result") 本頁網址
+        input.form-control.form-control-sm(type="text", :value="shortcut", ref="result", readonly)
+      button.btn.btn-lg.btn-secondary.btn-block.my-2(type="button", @click="btnCopy") 複製名片網址#[br](建議存在 LINE Keep 中)
+    #loading(v-if="page === 'loading'")
+      .text-center.py-3 載入名片資料中，請稍候…
+
+block script
+  script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
+  script.
+    /* global decodeBase64url */
+    const loginPromise = (async () => {
+      await liff.init({ liffId: '#{liffidFull}' })
+      if (window.getSearchParam('liff.state')) await new Promise(resolve => {}) // 永遠不會結束的 Promise
+      if (!liff.isLoggedIn()) {
+        sessionStorage.setItem('liffLoginRedirect', location.href)
+        liff.login()
+        await new Promise(resolve => {}) // 永遠不會結束的 Promise
+      }
+      const profile = await liff.getProfile()
+      window.gtagInit(_.get(profile, 'userId'))
+      return profile
+    })()
+    window.vueConfig = {
+      el: '#app',
+      data: {
+        error: null,
+        page: 'loading',
+        render: null,
+        vcard: null,
+      },
+      async mounted () {
+        try {
+          await loginPromise
+          window.gtagScreenView('瀏覽分享名片網頁')
+          window.gtagTiming('after loginPromise')
+          await Promise.all([
+            this.getTpl(),
+            this.getVcard(),
+          ])
+          this.page = 'share'
+          window.gtagTiming('after mounted')
+        } catch (err) {
+          console.error(err)
+          this.handleError(err)
+        }
+      },
+      computed: {
+        shortcut () {
+          return `https://liff.line.me/#{liffidFull}/share.html${new URL(location).search}`
+        },
+      },
+      methods: {
+        paramBase64url (key) {
+          const base64 = window.getSearchParam(key)
+          return base64 ? decodeBase64url(base64) : null
+        },
+        handleError (err) {
+          window.gtagError(err, true)
+          Swal.fire({
+            icon: 'error',
+            title: '發生錯誤',
+            text: err.message,
+          })
+        },
+        canSendMessages () {
+          if (!liff.isInClient()) return false
+          const contextType = _.get(liff.getContext(), 'type')
+          if (!_.includes(['utou', 'room', 'group', 'square_chat'], contextType)) return false
+          return true
+        },
+        getRenderedMsgs () {
+          let msg = JSON5.parse(this.render({ vcard: this.vcard, _, Qs, CryptoJS }))
+          if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
+            msg = { type: 'flex', altText: '請在手機上查看數位版名片。', contents: msg }
+          }
+          if (!_.isArray(msg)) msg = [msg]
+          console.log('msg =', JSON.stringify(msg))
+          return msg
+        },
+        async getTpl () {
+          try {
+            const tpl = this.paramBase64url('template')
+            if (!tpl) throw new Error('template is required.')
+            this.render = _.template(_.get(await axios.get(tpl, {
+              params: { cachebust: +new Date() },
+              transformResponse: [],
+            }), 'data'))
+            if (!_.isFunction(this.render)) throw new Error('')
+            window.gtagTiming('after getTpl')
+          } catch (err) {
+            err.message = err.message ? `名片樣板獲取失敗: ${err.message}` : '名片樣板獲取失敗'
+            this.render = null
+            throw err
+          }
+        },
+        async getVcard () {
+          this.vcard = _.mapValues(_.omit(_.fromPairs([...new URL(location).searchParams]), [
+            'code',
+            'liffClientId',
+            'liffRedirectUri',
+            'state',
+            'template',
+          ]), decodeBase64url)
+          window.gtagTiming('after getVcard')
+        },
+        async btnShare () {
+          try {
+            window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
+            if (!liff.isApiAvailable('shareTargetPicker')) throw new Error('不支援 shareTargetPicker，請嘗試更新應用程式版本。')
+            const beforeShare = new Date()
+            await liff.shareTargetPicker(this.getRenderedMsgs())
+            const afterShare = new Date()
+            await Swal.fire({
+              icon: 'success',
+              title: '名片已分享',
+            })
+            if (afterShare - beforeShare > 1e3) liff.closeWindow()
+          } catch (err) {
+            this.handleError(err)
+          }
+        },
+        async btnSend () {
+          try {
+            window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
+            if (!this.canSendMessages()) throw new Error('沒有傳訊訊息的權限，請在聊天視窗內開啟。')
+            await liff.sendMessages(this.getRenderedMsgs())
+            await Swal.fire({
+              icon: 'success',
+              title: '名片已傳送',
+            })
+            liff.closeWindow()
+          } catch (err) {
+            this.handleError(err)
+          }
+        },
+        async btnCopy () {
+          window.gtagEvent('瀏覽分享名片網頁', 'btnCopy', this.vcard.template)
+          const copyText = this.$refs.result
+          copyText.select()
+          copyText.setSelectionRange(0, 999999) // For mobile devices
+          document.execCommand('copy')
+          await Swal.fire({
+            icon: 'success',
+            title: '複製成功',
+          })
+        },
+      },
+    }
+  //- 給予修改 vueConfig 的機會
+  block vue-config
+  script.
+    (async () => {
+      if (_.isFunction(window.beforeVueCreate)) await window.beforeVueCreate()
+      window.vm = new Vue(window.vueConfig)
+    })()

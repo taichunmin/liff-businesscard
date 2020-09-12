@@ -67,6 +67,7 @@ block script
           ])
           this.page = 'share'
           window.gtagTiming('after mounted')
+          await this.swalFire()
         } catch (err) {
           console.error(err)
           this.handleError(err)
@@ -171,6 +172,12 @@ block script
             icon: 'success',
             title: '複製成功',
           })
+        },
+        async swalFire () {
+          const swalFire = window.parseJsonOrDefault(sessionStorage.getItem('swalFire'))
+          sessionStorage.removeItem('swalFire')
+          if (_.isNil(swalFire)) return
+          await Swal.fire(swalFire)
         },
       },
     }

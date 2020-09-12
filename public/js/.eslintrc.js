@@ -9,15 +9,10 @@ module.exports = {
   globals: {
     _: 'readonly',
     axios: 'readonly',
-    CryptoJS: 'readonly',
+    Base64: 'readonly',
     JSON5: 'readonly',
-    liff: 'readonly',
-    moment: 'readonly',
     Papa: 'readonly',
     Qs: 'readonly',
-    Swal: 'readonly',
-    VConsole: 'readonly',
-    Vue: 'readonly',
   },
   parserOptions: {
     ecmaVersion: 2018,

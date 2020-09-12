@@ -7,16 +7,16 @@ if GA_MEASUREMENT_ID
     function gtag () { window.dataLayer.push(arguments) }
     gtag('js', new Date())
     gtag('config', 'UA-39556213-3')
-    window.gtagInit = async lineId => {
+    window.gtagInit = lineId => {
       const config = {
         app_name: 'LINE 數位版名片網站',
         groups: 'liff',
         send_page_view: false,
         transport_type: 'beacon',
       }
-      if (/^U[0-9a-fA-F]{32}$/.test(lineId)) { // 如果有 lineId 代表是在 LIFF 內
-        config.app_name = `LINE 數位版名片 LIFF ${liff.getOS()}`
-        config.user_id = lineId
+      if (window.liff) { // 如果是在 LIFF 內
+        config.app_name = `LIFF ${liff.getOS()} ${liff.getVersion()}`
+        if (/^U[0-9a-f]{32}$/.test(lineId)) config.user_id = lineId
         if (liff.isInClient()) config.app_version = liff.getLineVersion()
       }
       gtag('config', GA_MEASUREMENT_ID, config)

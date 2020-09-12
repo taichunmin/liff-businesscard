@@ -30,7 +30,7 @@ block form
     img.my-2.rounded.d-block.d-sm-none.mx-auto(v-if="vcard.design", :src="`https://i.imgur.com/${_.get(designs, [vcard.design, 'imgur'])}m.png`", style="max-width: 320px")
     #designs.ml-0.row.row-cols-2.row-cols-sm-3.row-cols-lg-4.row-cols-xl-5.d-none.d-sm-flex
       .col.mb-1.pl-0(v-for="(design, id) of designs")
-        .card
+        .card(@click="vcard.design = id")
           img.card-img-top(:src="`https://i.imgur.com/${design.imgur}m.png`")
           .card-body.p-1
             button.btn.btn-primary.btn-block.btn-sm.px-1(type="button", v-if="vcard.design === id", disabled) 已選擇「{{ design.name }}」

@@ -1,5 +1,3 @@
-/* global _, axios, Papa, Qs, Base64 */
-
 window.errorToJson = (() => {
   const ERROR_KEYS = [
     'address',
@@ -56,3 +54,12 @@ window.beautifyFlex = obj => {
 window.sleep = t => new Promise(resolve => { setTimeout(resolve, t) })
 
 window.getSearchParam = key => (new URL(window.location).searchParams.get(key))
+
+window.parseJsonOrDefault = (str, defaultValue) => {
+  try {
+    if (!_.isString(str)) return defaultValue
+    return JSON5.parse(str)
+  } catch (err) {
+    return defaultValue
+  }
+}

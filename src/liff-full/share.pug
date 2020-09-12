@@ -44,7 +44,10 @@ block script
         liff.login()
         await new Promise(resolve => {}) // 永遠不會結束的 Promise
       }
-      const profile = await liff.getProfile()
+      let profile
+      try {
+        profile = await liff.getProfile()
+      } catch (err) {}
       window.gtagInit(_.get(profile, 'userId'))
       return profile
     })()
@@ -67,6 +70,7 @@ block script
           ])
           this.page = 'share'
           window.gtagTiming('after mounted')
+          await this.swalFire()
         } catch (err) {
           console.error(err)
           this.handleError(err)
@@ -171,6 +175,12 @@ block script
             icon: 'success',
             title: '複製成功',
           })
+        },
+        async swalFire () {
+          const swalFire = window.parseJsonOrDefault(localStorage.getItem('swalFire'))
+          localStorage.removeItem('swalFire')
+          if (_.isNil(swalFire)) return
+          await Swal.fire(swalFire)
         },
       },
     }

@@ -12,5 +12,12 @@ block script
     (async () => {
       await liff.init({ liffId: '#{liffidShare}' })
       if (window.getSearchParam('liff.state')) return
-      location.href = `https://liff.line.me/#{liffidFull}/share.html${new URL(location).search}`
+      localStorage.setItem('swalFire', JSON5.stringify({
+        icon: 'warning',
+        title: '請更換名片網址',
+        text: '你之前使用的名片網址即將失效，請在本頁面複製新名片網址。',
+      }))
+      const url = `https://liff.line.me/#{liffidFull}/share.html${new URL(location).search}`
+      if (liff.isInClient()) liff.openWindow({ url })
+      else location.href = url
     })()

@@ -27,9 +27,9 @@ exports.build = async () => {
     GA_MEASUREMENT_ID: getenv('GA_MEASUREMENT_ID', 'UA-39556213-12'),
     NODE_ENV: getenv('NODE_ENV', 'production'),
     ..._.fromPairs(_.map([
-      'LIFFID_SHARE',
-      'LIFFID_SHARE_CSV',
       'LIFFID_FULL',
+      'LIFFID_SHARE_CSV',
+      'LIFFID_SHARE',
     ], k => [_.camelCase(k), getenv(k)])),
   }
 

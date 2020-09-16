@@ -26,7 +26,7 @@ block form
     label(for="vcard-design") 卡片底圖
     select#vcard-design.form-control.d-sm-none(v-model="vcard.design")
       option(v-for="(design, id) of designs", :value="id") {{ design.name }}
-    small#help-label.form-text.text-muted.d-sm-none 請選擇卡片的底圖。
+    small.form-text.text-muted.d-sm-none 請選擇卡片的底圖。
     img.my-2.rounded.d-block.d-sm-none.mx-auto(v-if="vcard.design", :src="`https://i.imgur.com/${_.get(designs, [vcard.design, 'imgur'])}m.png`", style="max-width: 320px")
     #designs.ml-0.row.row-cols-2.row-cols-sm-3.row-cols-lg-4.row-cols-xl-5.d-none.d-sm-flex
       .col.mb-1.pl-0(v-for="(design, id) of designs")
@@ -38,15 +38,15 @@ block form
   .form-group.my-2
     label(for="vcard-to") 收件人
     input#vcard-to.form-control.form-control-sm(type="text", v-model="vcard.to")
-    small#help-label.form-text.text-muted 請填寫卡片收件人。
+    small.form-text.text-muted 請填寫卡片收件人。
   .form-group.my-2
     label(for="vcard-from") 寄件人
     input#vcard-from.form-control.form-control-sm(type="text", v-model="vcard.from")
-    small#help-label.form-text.text-muted 請填寫卡片寄件人。
+    small.form-text.text-muted 請填寫卡片寄件人。
   .form-group.my-2
     label(for="vcard-body") 卡片內容
     textarea#vcard-body.form-control.form-control-sm(type="text", v-model="vcard.body", style="min-height: 200px")
-    small#help-label.form-text.text-muted 請填寫卡片內容。
+    small.form-text.text-muted 請填寫卡片內容。
 
 block vue-config
   script.

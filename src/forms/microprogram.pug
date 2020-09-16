@@ -17,33 +17,44 @@ block meta
 
 block form
   .form-group.my-2
-    label(for="vcard-title-tw") 中文職稱
-    input#vcard-title-tw.form-control.form-control-sm(type="text", v-model="vcard.title_tw")
-    small#help-label.form-text.text-muted 請填寫中文職稱。
-  .form-group.my-2
-    label(for="vcard-name-tw") 中文姓名
-    input#vcard-name-tw.form-control.form-control-sm(type="text", v-model="vcard.name_tw")
-    small#help-label.form-text.text-muted 請填寫中文姓名。
-  .form-group.my-2
-    label(for="vcard-title-en") 英文職稱
-    input#vcard-title-en.form-control.form-control-sm(type="text", v-model="vcard.title_en")
-    small#help-label.form-text.text-muted 請填寫英文職稱。
-  .form-group.my-2
-    label(for="vcard-name-en") 英文姓名
-    input#vcard-name-en.form-control.form-control-sm(type="text", v-model="vcard.name_en")
-    small#help-label.form-text.text-muted 請填寫英文姓名。
-  .form-group.my-2
-    label(for="vcard-mobile") 手機號碼
-    input#vcard-mobile.form-control.form-control-sm(type="tel", v-model="vcard.mobile")
-    small#help-label.form-text.text-muted 請填寫手機號碼。
-  .form-group.my-2
-    label(for="vcard-ext") 分機號碼
-    input#vcard-ext.form-control.form-control-sm(type="tel", v-model="vcard.ext")
-    small#help-label.form-text.text-muted 請填寫分機號碼。
+    label(for="vcard-template") 名片樣版
+    select#vcard-template.form-control.form-control-sm(type="text", v-model="vcard.template")
+      option(value="https://gist.githubusercontent.com/taichunmin/4c3931a5ef5168b8ddab341c770b151e/raw/microprogram-default.txt") 白色
+      option(value="https://gist.githubusercontent.com/taichunmin/4c3931a5ef5168b8ddab341c770b151e/raw/microprogram-red-mobile.txt") 紅白色
+      option(value="https://gist.githubusercontent.com/taichunmin/4c3931a5ef5168b8ddab341c770b151e/raw/microprogram-no-mobile.txt") 白色無手機
+      option(value="https://gist.githubusercontent.com/taichunmin/4c3931a5ef5168b8ddab341c770b151e/raw/microprogram-red-no-mobile.txt") 紅白色無手機
+    small.form-text.text-muted 請選擇名片樣版。
+  .row
+    .col
+      .form-group.my-2
+        label(for="vcard-title-tw") 中文職稱
+        input#vcard-title-tw.form-control.form-control-sm(type="text", v-model="vcard.title_tw")
+        small.form-text.text-muted 請填寫中文職稱。
+      .form-group.my-2
+        label(for="vcard-name-tw") 中文姓名
+        input#vcard-name-tw.form-control.form-control-sm(type="text", v-model="vcard.name_tw")
+        small.form-text.text-muted 請填寫中文姓名。
+      .form-group.my-2
+        label(for="vcard-mobile") 手機號碼
+        input#vcard-mobile.form-control.form-control-sm(type="tel", v-model="vcard.mobile")
+        small.form-text.text-muted 請填寫手機號碼。
+    .col
+      .form-group.my-2
+        label(for="vcard-title-en") 英文職稱
+        input#vcard-title-en.form-control.form-control-sm(type="text", v-model="vcard.title_en")
+        small.form-text.text-muted 請填寫英文職稱。
+      .form-group.my-2
+        label(for="vcard-name-en") 英文姓名
+        input#vcard-name-en.form-control.form-control-sm(type="text", v-model="vcard.name_en")
+        small.form-text.text-muted 請填寫英文姓名。
+      .form-group.my-2
+        label(for="vcard-ext") 分機號碼
+        input#vcard-ext.form-control.form-control-sm(type="tel", v-model="vcard.ext")
+        small.form-text.text-muted 請填寫分機號碼。
   .form-group.my-2
     label(for="vcard-email") 公司信箱
     input#vcard-email.form-control.form-control-sm(type="email", v-model="vcard.email")
-    small#help-label.form-text.text-muted 請填寫公司信箱。
+    small.form-text.text-muted 請填寫公司信箱。
 
 block vue-config
   script.
@@ -53,7 +64,7 @@ block vue-config
       mobile: '0000000000',
       name_en: 'Mei Wang',
       name_tw: '王小美',
-      template: '#{baseUrl}cards/microprogram.txt',
+      template: 'https://gist.githubusercontent.com/taichunmin/4c3931a5ef5168b8ddab341c770b151e/raw/microprogram-default.txt',
       title_en: 'Marketing',
       title_tw: '行銷企劃',
     }

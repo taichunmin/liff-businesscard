@@ -19,19 +19,19 @@ block form
   .form-group.my-2
     label(for="vcard-avator") 大頭照
     input#vcard-avator.form-control.form-control-sm(type="text", v-model="vcard.avator")
-    small#help-label.form-text.text-muted 請填寫大頭照圖片網址，比例為 #[code 1:1]。 #[a(href="https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4/edit#gid=1696242249", target="_blank") 居民大頭貼請點此]
+    small.form-text.text-muted 請填寫大頭照圖片網址，比例為 #[code 1:1]。 #[a(href="https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4/edit#gid=1696242249", target="_blank") 居民大頭貼請點此]
   .form-group.my-2
     label(for="vcard-title") 頭銜
     input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
-    small#help-label.form-text.text-muted 請填寫頭銜。
+    small.form-text.text-muted 請填寫頭銜。
   .form-group.my-2
     label(for="vcard-name") 名稱
     input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
-    small#help-label.form-text.text-muted 請填寫角色名稱。
+    small.form-text.text-muted 請填寫角色名稱。
   .form-group.my-2
     label(for="vcard-island") 島名
     input#vcard-island.form-control.form-control-sm(type="text", v-model="vcard.island")
-    small#help-label.form-text.text-muted 請填寫無人島名稱。
+    small.form-text.text-muted 請填寫無人島名稱。
   .form-group.my-2
     label(for="vcard-fruit") 水果
     select#vcard-fruit.form-control.form-control-sm(v-model="vcard.fruit")
@@ -40,11 +40,11 @@ block form
       option(value="Orange") 橘子 Orange
       option(value="Peach") 桃子 Peach
       option(value="Pear") 梨子 Pear
-    small#help-label.form-text.text-muted 請選擇無人島上的水果。
+    small.form-text.text-muted 請選擇無人島上的水果。
   .form-group.my-2
     label(for="vcard-nso") NSO
     input#vcard-nso.form-control.form-control-sm(type="url", v-model="vcard.nso")
-    small#help-label.form-text.text-muted 請填寫 NSO 的好友代碼。
+    small.form-text.text-muted 請填寫 NSO 的好友代碼。
 
 block vue-config
   script.

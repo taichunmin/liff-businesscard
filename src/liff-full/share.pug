@@ -22,13 +22,24 @@ block content
   #app.container.my-4.text-monospace(v-cloak)
     h2.my-3.text-center= title
     #share(v-if="page === 'share'")
-      p 請按一下「選擇分享對象」來透過 LINE 分享名片吧！
-      button.btn.btn-lg.btn-success.btn-block.my-2(type="button", @click="btnShare") 選擇分享對象
-      button.btn.btn-lg.btn-info.btn-block.my-2(type="button", @click="btnSend") 傳送到目前聊天視窗
-      .form-group.my-2
-        label(for="i-result") 本頁網址
+      .form-group.my-3
+        button.btn.btn-lg.btn-success.btn-block.my-2(type="button", @click="btnShare") 分享好友
+        small.form-text.text-muted 點一下「分享好友」按鈕，可以一次選擇多個好友分享名片。
+      .form-group.my-3
+        button.btn.btn-lg.btn-info.btn-block.my-2(type="button", @click="btnSend") 直接傳送
+        small.form-text.text-muted 點一下「直接傳送」按鈕，可以把名片直接傳送到聊天室。
+      .form-group.my-3
         input.form-control.form-control-sm(type="text", :value="shortcut", ref="result", readonly)
-      button.btn.btn-lg.btn-secondary.btn-block.my-2(type="button", @click="btnCopy") 複製名片網址#[br](建議存在 LINE Keep 中)
+        button.btn.btn-lg.btn-secondary.btn-block.my-2(type="button", @click="btnCopy") 複製網址
+        small.form-text.text-muted 點一下「複製網址」按鈕，可以把名片網址儲存在 LINE Keep 中，方便隨時分享。
+      hr
+      p 如果在「分享好友」的清單中找不到好友，你可以嘗試以下步驟：
+      ol
+        li 點一下「複製網址」按鈕
+        li 把網址「傳送」到好友的聊天室中
+        li 在好友的聊天室中「開啟」名片網址
+        li 點一下「直接傳送」按鈕傳送名片
+        li 在好友的聊天室中「收回」名片網址
     #loading(v-if="page === 'loading'")
       .text-center.py-3 載入名片資料中，請稍候…
 
@@ -140,7 +151,8 @@ block script
             window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
             if (!liff.isApiAvailable('shareTargetPicker')) throw new Error('不支援 shareTargetPicker，請嘗試更新應用程式版本。')
             const beforeShare = new Date()
-            await liff.shareTargetPicker(this.getRenderedMsgs())
+            const res = await liff.shareTargetPicker(this.getRenderedMsgs())
+            if (_.get(res, 'status') !== 'success') throw new Error('傳送失敗')
             const afterShare = new Date()
             await Swal.fire({
               icon: 'success',

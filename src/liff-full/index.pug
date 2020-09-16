@@ -1,20 +1,19 @@
-extends /layout-default
-
-block beforehtml
-  - const title = '分享 LINE 數位版名片'
-
-//- disable gtag
-block compoment-gtag
-
-block script
-  script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
-  script.
-    (async () => {
-      await liff.init({ liffId: '#{liffidFull}' })
-      if (window.getSearchParam('liff.state')) return
-      const liffLoginRedirect = sessionStorage.getItem('liffLoginRedirect')
-      if (_.isString(liffLoginRedirect)) {
-        sessionStorage.removeItem('liffLoginRedirect')
-        location.href = liffLoginRedirect
-      }
-    })()
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no")
+    title 分享 LINE 數位版名片
+  body
+    script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
+    script.
+      (async () => {
+        await liff.init({ liffId: '#{liffidFull}' })
+        if (new URL(window.location).searchParams.get('liff.state')) return
+        const liffLoginRedirect = sessionStorage.getItem('liffLoginRedirect')
+        if (_.isString(liffLoginRedirect)) {
+          sessionStorage.removeItem('liffLoginRedirect')
+          location.href = liffLoginRedirect
+        }
+      })()

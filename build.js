@@ -3,10 +3,12 @@ require('dotenv').config()
 const _ = require('lodash')
 const fg = require('fast-glob')
 const fsPromises = require('fs').promises
+const htmlMinifier = require('html-minifier').minify
 const log = require('debug')('app:index')
 const ncp = require('ncp').ncp
 const path = require('path')
 const pug = require('pug')
+const UglifyJS = require('uglify-es')
 
 ncp.limit = 16
 
@@ -33,6 +35,27 @@ exports.build = async () => {
     ], k => [_.camelCase(k), getenv(k)])),
   }
 
+  const htmlMinifierOptions = {
+    caseSensitive: true,
+    collapseBooleanAttributes: true,
+    collapseInlineTagWhitespace: true,
+    collapseWhitespace: true,
+    conservativeCollapse: true,
+    decodeEntities: true,
+    minifyCSS: true,
+    minifyJS: code => UglifyJS.minify(code).code,
+    removeCDATASectionsFromCDATA: true,
+    removeComments: true,
+    removeCommentsFromCDATA: true,
+    removeEmptyAttributes: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true,
+    removeStyleLinkTypeAttributes: true,
+    sortAttributes: true,
+    sortClassName: true,
+    useShortDoctype: true,
+  }
+
   // copy public files
   await ncpAsync('public', 'dist', {
     stopOnErr: true,
@@ -46,7 +69,7 @@ exports.build = async () => {
 
   for (const file of pugFiles) {
     try {
-      const html = pug.renderFile(path.resolve(__dirname, 'src', file), PUG_OPTIONS)
+      const html = htmlMinifier(pug.renderFile(path.resolve(__dirname, 'src', file), PUG_OPTIONS), htmlMinifierOptions)
       const dist = path.resolve(__dirname, 'dist', file.replace(/\.pug$/, '.html'))
       await fsPromises.mkdir(path.dirname(dist), { recursive: true })
       await fsPromises.writeFile(dist, html)

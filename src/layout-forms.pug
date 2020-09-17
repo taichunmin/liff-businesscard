@@ -73,7 +73,7 @@ html
             try {
               const saved = JSON5.parse(localStorage.getItem(location.pathname))
               _.each(saved, (v, k) => {
-                if (k === 'template' || _.isNil(v) || !_.hasIn(this.vcard, k)) return
+                if (_.isNil(v) || !_.hasIn(this.vcard, k)) return
                 _.set(this.vcard, k, v)
               })
             } catch (err) {}

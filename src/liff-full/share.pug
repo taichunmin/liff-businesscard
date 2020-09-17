@@ -112,7 +112,14 @@ block script
           return true
         },
         getRenderedMsgs () {
-          let msg = JSON5.parse(this.render({ vcard: this.vcard, _, Qs, CryptoJS }))
+          let msg = JSON5.parse(this.render({
+            _,
+            CryptoJS,
+            dayjs,
+            liffLink: this.shortcut,
+            Qs,
+            vcard: this.vcard,
+          }))
           if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
             msg = { type: 'flex', altText: '請在手機上查看數位版名片。', contents: msg }
           }

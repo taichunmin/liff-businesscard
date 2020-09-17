@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const _ = require('lodash')
+const { getenv } = require('./utils')
 const fg = require('fast-glob')
 const fsPromises = require('fs').promises
 const htmlMinifier = require('html-minifier').minify
@@ -18,14 +19,10 @@ function ncpAsync (source, destination, options) {
   })
 }
 
-function getenv (key, defaultval) {
-  return _.get(process, ['env', key], defaultval)
-}
-
 exports.build = async () => {
   const PUG_OPTIONS = {
     basedir: path.resolve(__dirname, 'src'),
-    baseUrl: _.trimEnd(getenv('BASEURL', 'https://taichunmin.idv.tw/liff-businesscard/'), '/') + '/',
+    baseUrl: _.trimEnd(getenv('BASEURL', 'https://localhost:3000/'), '/') + '/',
     GA_MEASUREMENT_ID: getenv('GA_MEASUREMENT_ID', 'UA-39556213-12'),
     NODE_ENV: getenv('NODE_ENV', 'production'),
     ..._.fromPairs(_.map([

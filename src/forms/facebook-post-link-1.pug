@@ -1,0 +1,74 @@
+extends /layout-forms
+
+block beforehtml
+  - const title = 'Facebook Post Link'
+
+block meta
+  meta(property="fb:app_id", content="2133031763635285")
+  meta(property="og:description", content="點此連結來模擬 Facebook 的分享連結！")
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/H9liWK4.png")
+  meta(property="og:locale", content="zh_TW")
+  meta(property="og:site_name", content="筆記國度")
+  meta(property="og:title", content=title)
+  meta(property="og:type", content="website")
+  meta(property="og:url", content=baseUrl+"forms/facebook-post-link-1.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-altText") 替代文字
+    input#vcard-altText.form-control.form-control-sm(type="text", v-model="vcard.altText")
+    small.form-text.text-muted 請填寫 Flex 訊息的替代文字。
+  .form-group.my-2
+    label(for="vcard-avatar") 大頭貼
+    input#vcard-avatar.form-control.form-control-sm(type="url", v-model="vcard.avatar")
+    small.form-text.text-muted 請填寫大頭貼圖片網址，長寬比為 #[code 1:1]。
+  .form-group.my-2
+    label(for="vcard-author") 姓名
+    input#vcard-author.form-control.form-control-sm(type="text", v-model="vcard.author")
+    small.form-text.text-muted 請填寫姓名。
+  .form-group.my-2
+    label(for="vcard-website") 姓名區塊網址
+    input#vcard-website.form-control.form-control-sm(type="url", v-model="vcard.website")
+    small.form-text.text-muted 請填寫姓名區塊點擊後會打開的網址。
+  .form-group.my-2
+    label(for="vcard-action") 姓名區塊動作
+    input#vcard-action.form-control.form-control-sm(type="text", v-model="vcard.action")
+    small.form-text.text-muted 請填寫姓名區塊接在姓名後面的文字。
+  .form-group.my-2
+    label(for="vcard-image") 預覽圖
+    input#vcard-image.form-control.form-control-sm(type="url", v-model="vcard.image")
+    small.form-text.text-muted 請填寫連結的預覽圖。
+  .form-group.my-2
+    label(for="vcard-ratio") 預覽圖的長寬比
+    input#vcard-ratio.form-control.form-control-sm(type="text", v-model="vcard.ratio")
+    small.form-text.text-muted 請填寫連結預覽圖的長寬比。
+  .form-group.my-2
+    label(for="vcard-link") 連結
+    input#vcard-link.form-control.form-control-sm(type="url", v-model="vcard.link")
+    small.form-text.text-muted 請填寫連結。你可以使用 #[a(target="_blank", href="https://ga-dev-tools.appspot.com/campaign-url-builder/") UTM Builder] 以及 #[code &amp;openExternalBrowser=1] 另開瀏覽器。
+  .form-group.my-2
+    label(for="vcard-title") 連結標題
+    input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
+    small.form-text.text-muted 請填寫連結標題。
+  .form-group.my-2
+    label(for="vcard-desc") 連結說明
+    textarea#vcard-desc.form-control.form-control-sm(v-model="vcard.desc")
+    small.form-text.text-muted 請填寫連結說明。
+
+block vue-config
+  script.
+    window.vueConfig.data.vcard = {
+      action: '分享了 1 個連結。',
+      altText: '王小明分享了 1 個連結。',
+      author: '王小明',
+      avatar: 'https://i.imgur.com/ceV22WT.png',
+      desc: '從 CSV 讀取名片資料來產生名片',
+      image: 'https://i.imgur.com/CU3myIc.png',
+      link: 'https://taichunmin.idv.tw/liff-businesscard/forms/csv.html',
+      ratio: '1280:640',
+      template: '#{baseUrl}cards/facebook-post-link-1.txt',
+      title: '從 CSV 讀取名片資料來產生名片',
+      website: 'https://taichunmin.idv.tw/',
+    }

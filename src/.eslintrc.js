@@ -13,6 +13,7 @@ module.exports = {
     _: 'readonly',
     axios: 'readonly',
     CryptoJS: 'readonly',
+    dayjs: 'readonly',
     JSON5: 'readonly',
     liff: 'readonly',
     moment: 'readonly',

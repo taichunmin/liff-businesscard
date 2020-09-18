@@ -1,6 +1,7 @@
 form,name,author,lang,preview,description
 forms/google-sheet.html,Google Sheet,taichunmin,zh_TW,https://i.imgur.com/Jdb68bE.png,從 Google Sheet 讀取名片資料來產生名片
 forms/csv.html,CSV,taichunmin,zh_TW,https://i.imgur.com/CU3myIc.png,從 CSV 讀取名片資料來產生名片
+forms/facebook-post-link-1.html,Facebook Post Link,taichunmin,zh_TW,https://i.imgur.com/H9liWK4.png,模仿 Facebook 分享連結
 forms/psprint-3949.html,Right Align,taichunmin,zh_TW,https://i.imgur.com/g8GdiVN.png,PsPrint Right Align One
 forms/acnh-passport-1.html,動物森友會護照,taichunmin,zh_TW,https://i.imgur.com/YqW1e5j.png,「集合吧！動物森友會」的護照
 forms/acnh-postcard-1.html,動物森友會心意卡,taichunmin,zh_TW,https://i.imgur.com/3WhiaK2.png,「集合吧！動物森友會」的心意卡

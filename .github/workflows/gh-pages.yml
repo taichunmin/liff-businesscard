@@ -9,18 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout 原始碼
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+
+    - name: 安裝 Node.js 與 yarn
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: 取得 yarn 的快取資料夾路徑
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: 讓 yarn 使用快取機制
+      uses: actions/cache@v2
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: 安裝相依性套件
-      uses: borales/actions-yarn@v2.0.0
-      with:
-        cmd: install
+      run: yarn install
 
-    - name: 編譯 github pages
-      uses: borales/actions-yarn@v2.0.0
-      with:
-        cmd: build
+    - name: 編譯網頁
+      run: yarn build
       env:
         BASEURL: ${{ secrets.BASEURL }}
         LIFFID_FULL: ${{ secrets.LIFFID_FULL }}
@@ -33,7 +46,7 @@ jobs:
       env:
         CNAME: ${{ secrets.CNAME }}
 
-    - name: Deploy
+    - name: 把網頁放到 GitHub Pages 的專屬分支上
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}

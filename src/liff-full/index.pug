@@ -8,7 +8,4 @@ html
   body
     script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
     script.
-      (async () => {
-        await liff.init({ liffId: '#{liffidFull}' })
-        if (new URL(window.location).searchParams.get('liff.state')) return
-      })()
+      liff.init({ liffId: '#{liffidFull}' })

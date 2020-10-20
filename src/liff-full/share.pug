@@ -94,11 +94,26 @@ block script
         },
         handleError (err) {
           window.gtagError(err, true)
-          Swal.fire({
+          if (!err.message) {
+            return Swal.fire({
+              icon: 'error',
+              title: '發生錯誤',
+              html: this.handleErrorStackHtml(err),
+            })
+          }
+          return Swal.fire({
             icon: 'error',
             title: '發生錯誤',
             text: err.message,
           })
+        },
+        handleErrorStackHtml (err) {
+          const dom = document.createElement('textarea')
+          dom.readonly = true
+          dom.classList.add('form-control')
+          dom.classList.add('text-left')
+          dom.textContent = err.stack
+          return dom.outerHTML
         },
         canSendMessages () {
           if (!liff.isInClient()) return false

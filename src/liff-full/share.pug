@@ -29,7 +29,7 @@ block content
         button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend") #[i.fa.mr-2.fa-paper-plane-o] 直接傳送
         small.form-text.text-muted 點一下「直接傳送」按鈕，可以把名片直接傳送到聊天室。
       .form-group.my-3
-        input.form-control.form-control-sm(type="text", :value="shortcut", ref="result", readonly)
+        input.form-control.form-control-sm(type="text", :value="liffLink", ref="result", readonly)
         button.btn.btn-lg.btn-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy") #[i.fa.mr-2.fa-clipboard] 複製網址
         small.form-text.text-muted 點一下「複製網址」按鈕，然後把網址存在 LINE Keep。
       hr
@@ -51,8 +51,7 @@ block script
       await liff.init({ liffId: '#{liffidFull}' })
       if (window.getSearchParam('liff.state')) await new Promise(resolve => {}) // 永遠不會結束的 Promise
       if (!liff.isLoggedIn()) {
-        sessionStorage.setItem('liffLoginRedirect', location.href)
-        liff.login()
+        liff.login({ redirectUri: location.href })
         await new Promise(resolve => {}) // 永遠不會結束的 Promise
       }
       let profile
@@ -75,6 +74,7 @@ block script
           await loginPromise
           window.gtagScreenView('瀏覽分享名片網頁')
           window.gtagTiming('after loginPromise')
+          this.liffLink = liff.permanentLink.createUrl()
           await Promise.all([
             this.getTpl(),
             this.getVcard(),
@@ -86,11 +86,6 @@ block script
           console.error(err)
           this.handleError(err)
         }
-      },
-      computed: {
-        shortcut () {
-          return `https://liff.line.me/#{liffidFull}/share.html${new URL(location).search}`
-        },
       },
       methods: {
         paramBase64url (key) {
@@ -116,7 +111,7 @@ block script
             _,
             CryptoJS,
             dayjs,
-            liffLink: this.shortcut,
+            liffLink: this.liffLink,
             Qs,
             vcard: this.vcard,
           }))

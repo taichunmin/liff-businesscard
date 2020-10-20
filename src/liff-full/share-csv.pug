@@ -4,9 +4,6 @@ block vue-config
   script.
     /* global getCsv */
     const cfg = window.vueConfig
-    cfg.computed.shortcut = function () {
-      return `https://liff.line.me/#{liffidFull}/share-csv.html${new URL(location).search}`
-    }
     cfg.methods.getVcard = async function () {
       try {
         const args = _.fromPairs(_.map(['csv', 'key', 'value'], k => [k, this.paramBase64url(k)]))

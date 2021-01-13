@@ -7,7 +7,7 @@ block vue-config
     cfg.methods.getVcard = async function () {
       try {
         const args = _.fromPairs(_.map(['csv', 'key', 'value'], k => [k, this.paramBase64url(k)]))
-        this.vcard = _.find(await getCsv(args.csv), [args.key, args.value])
+        this.vcard = args.csv ? _.find(await getCsv(args.csv), [args.key, args.value]) : {}
         window.gtagTiming('after getVcard')
       } catch (err) {
         err.message = err.message ? `名片資料獲取失敗: ${err.message}` : '名片資料獲取失敗'

@@ -21,116 +21,115 @@ function gaScreenView (vcard) {
 %>
 
 {
-  "size": "giga",
-  "type": "bubble",
-  "body": {
-    "layout": "horizontal",
-    "spacing": "md",
-    "type": "box",
-    "contents": [
-      {
-        "aspectMode": "cover",
-        "aspectRatio": "1:1",
-        "flex": 1,
-        "size": "full",
-        "type": "image",
-        "url": "${vcard.logo}"
-      },
-      {
-        "flex": 4,
-        "layout": "vertical",
-        "type": "box",
-        "contents": [
-          {
-            "align": "end",
-            "size": "xxl",
-            "text": "${vcard.name}",
-            "type": "text",
-            "weight": "bold"
-          },
-          {
-            "align": "end",
-            "size": "sm",
-            "text": "${vcard.title}",
-            "type": "text"
-          },
-          {
-            "align": "end",
-            "margin": "xxl",
-            "size": "lg",
-            "text": "${vcard.company}",
-            "type": "text",
-            "weight": "bold",
-            "action": {
-              "label": "action",
-              "type": "uri",
-              "uri": "${vcard.maps}"
-            }
-          },
-          {
-            "align": "end",
-            "size": "sm",
-            "text": "${vcard.address}",
-            "type": "text",
-            "action": {
-              "label": "action",
-              "type": "uri",
-              "uri": "${vcard.maps}"
-            }
-          },
-          {
-            "align": "end",
-            "margin": "xxl",
-            "text": "${vcard.tel}",
-            "type": "text",
-            "action": {
-              "label": "action",
-              "type": "uri",
-              "uri": "tel:${vcard.tel}"
-            }
-          },
-          {
-            "align": "end",
-            "text": "${vcard.email}",
-            "type": "text",
-            "action": {
-              "label": "action",
-              "type": "uri",
-              "uri": "mailto:${vcard.email}"
-            }
-          },
-          {
-            "align": "end",
-            "text": "${vcard.url}",
-            "type": "text",
-            "action": {
-              "label": "action",
-              "type": "uri",
-              "uri": "${vcard.url}"
-            }
-          },
-          {
-            "height": "1px",
-            "layout": "vertical",
-            "offsetStart": "0px",
-            "offsetTop": "0px",
-            "position": "absolute",
-            "type": "box",
-            "width": "1px",
-            "contents": [
-              {
-                "align": "center",
-                "aspectMode": "cover",
-                "aspectRatio": "1:1",
-                "gravity": "center",
-                "size": "full",
-                "type": "image",
-                "url": "${gaScreenView(vcard)}"
+  "altText": "請在手機上查看「${vcard.name}」的名片。",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "layout": "horizontal",
+      "spacing": "md",
+      "type": "box",
+      "contents": [
+        {
+          "aspectMode": "cover",
+          "aspectRatio": "1:1",
+          "flex": 1,
+          "size": "full",
+          "type": "image",
+          "url": "${vcard.logo}"
+        },
+        {
+          "flex": 4,
+          "layout": "vertical",
+          "type": "box",
+          "contents": [
+            {
+              "align": "end",
+              "size": "xxl",
+              "text": "${vcard.name}",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "align": "end",
+              "size": "sm",
+              "text": "${vcard.title}",
+              "type": "text"
+            },
+            {
+              "align": "end",
+              "margin": "xxl",
+              "size": "lg",
+              "text": "${vcard.company}",
+              "type": "text",
+              "weight": "bold",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.maps}"
               }
-            ]
-          }
-        ]
-      }
-    ]
+            },
+            {
+              "align": "end",
+              "size": "sm",
+              "text": "${vcard.address}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.maps}"
+              }
+            },
+            {
+              "align": "end",
+              "margin": "xxl",
+              "text": "${vcard.tel}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "tel:${vcard.tel}"
+              }
+            },
+            {
+              "align": "end",
+              "text": "${vcard.email}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "mailto:${vcard.email}"
+              }
+            },
+            {
+              "align": "end",
+              "text": "${vcard.url}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.url}"
+              }
+            },
+            {
+              "height": "1px",
+              "layout": "vertical",
+              "offsetStart": "0px",
+              "offsetTop": "0px",
+              "position": "absolute",
+              "type": "box",
+              "width": "1px",
+              "contents": [
+                {
+                  "align": "center",
+                  "aspectMode": "cover",
+                  "aspectRatio": "1:1",
+                  "gravity": "center",
+                  "size": "full",
+                  "type": "image",
+                  "url": "${gaScreenView(vcard)}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }

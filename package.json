@@ -19,7 +19,7 @@
     "jstransformer-sass": "^1.0.0",
     "ncp": "^2.0.0",
     "node-sass": "^5.0.0",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "uglify-es": "^3.3.9"
   },
   "devDependencies": {

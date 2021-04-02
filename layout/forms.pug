@@ -1,16 +1,22 @@
+-
+  const cachebust = +new Date()
+  let title = 'LINE 數位版名片'
+  let description = '請點此建立 LINE 數位版名片，如果沒有想要的樣式，歡迎一起貢獻名片樣板。'
 doctype html
 block beforehtml
-- const cachebust = +new Date()
 html
   head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no")
-    block meta
     title= title
+    meta(name="description", content=description)
+    meta(property="og:description", content=description)
+    meta(property="og:title", content=title)
+    meta(property="og:type", content="website")
+    block meta
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css")
-    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css")
     link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap")
     style
       :sass
@@ -22,30 +28,31 @@ html
           font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace!important
     block style
   body
-    include /compoment-livereload
-    include /compoment-gtag
-    include /compoment-navbar
+    include /component/livereload
+    block compoment-gtag
+      include /component/gtag
+    include /component/navbar
     #app.container.my-4(v-cloak)
       h2.my-3.text-center= title
       block form
-      a.btn.btn-primary.btn-block.my-2(:href="shortcut", target="_blank") 建立名片
-      button.btn.btn-danger.btn-block.my-2(type="button", @click="btnReset") 重設為預設資料
+      .row
+        .col: button.btn.btn-danger.btn-block.my-2(type="button", @click="btnReset") #[i.fa.mr-2.fa-repeat] 重設表單
+        .col: a.btn.btn-primary.btn-block.my-2(:href="shortcut", target="_blank") #[i.fa.mr-2.fa-id-card-o] 建立名片
     script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://cdn.jsdelivr.net/npm/crypto-js@3/crypto-js.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js")
     script(src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js")
     script(src="https://cdn.jsdelivr.net/npm/js-base64@3/base64.min.js")
     script(src="https://cdn.jsdelivr.net/npm/json5@2/dist/index.min.js")
     script(src="https://cdn.jsdelivr.net/npm/lodash@4/lodash.min.js")
     script(src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js")
     script(src="https://cdn.jsdelivr.net/npm/popper.js@1/dist/umd/popper.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js")
     script(src="https://cdn.jsdelivr.net/npm/qs@6/dist/qs.min.js")
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@10")
     script(src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js")
-    // bootstrap require jquery and pupper
+    //- bootstrap require jquery and pupper
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js")
-    script(src=`${baseUrl}js/common.js?cachebust=${cachebust}`)
+    script(src=`${baseurl}js/common.js?cachebust=${cachebust}`)
     script.
       /* global httpBuildQuery, encodeBase64url */
       window.vueConfig = {

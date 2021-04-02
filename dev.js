@@ -1,6 +1,5 @@
-const _ = require('lodash')
 const { build } = require('./build')
-const { getenv } = require('./utils')
+const { getBaseurl } = require('./utils')
 const finalhandler = require('finalhandler')
 const https = require('https')
 const livereload = require('livereload')
@@ -12,10 +11,9 @@ const watch = require('node-watch')
 
 async function main () {
   const publicDir = path.resolve(__dirname, 'dist')
-  const baseUrl = _.trimEnd(getenv('BASEURL', 'https://taichunmin.idv.tw/liff-businesscard/'), '/') + '/'
-
+  const baseurl = getBaseurl()
   await build()
-  log(`build finish. Visit: ${baseUrl}`)
+  log(`build finish. Visit: ${baseurl}`)
 
   const livereloadServer = livereload.createServer({
     delay: 1000,
@@ -26,13 +24,13 @@ async function main () {
       })(req, res, finalhandler(req, res))
     }),
   })
-  livereloadServer.watch(publicDir)
 
-  watch(['./src', './public'], { recursive: true }, async (e, name) => {
+  watch(['./src', './layout', './component'], { recursive: true }, async (e, name) => {
     const match = name.match(/^src[\\/](.+)\.pug$/)
     await build()
     if (!match) log(`"${name}" changed.`)
-    else log(`${baseUrl}${match[1].replace(/\\/g, '/')}.html`)
+    else log(`${baseurl}${match[1].replace(/\\/g, '/')}.html`)
+    livereloadServer.refresh('')
   })
 }
 

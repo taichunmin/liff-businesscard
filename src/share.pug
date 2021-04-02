@@ -1,7 +1,9 @@
-extends /layout-default
+extends /layout/default
 
 block beforehtml
-  - const title = '分享 LINE 數位版名片'
+  -
+    title = '分享 LINE 數位版名片'
+    description = '請開啟本連結並按一下「選擇分享對象」來透過 LINE 分享名片'
 
 //- disable gtag
 block compoment-gtag

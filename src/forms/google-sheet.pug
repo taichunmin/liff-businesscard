@@ -1,45 +1,40 @@
-extends /layout-forms
+extends /layout/forms
 
 block beforehtml
-  - const title = 'LINE 數位版名片 (Google Sheet)'
-  - const liffid = liffidShareCsv // for layout-forms.pug
+  -
+    title = 'LINE 數位版名片 (Google Sheet)'
+    description = '點此連結來製作自己的 LINE 數位版名片吧！'
 
 block meta
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="點此連結來製作自己的 LINE 數位版名片吧！")
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
   meta(property="og:image", content="https://i.imgur.com/Jdb68bE.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
-  meta(property="og:url", content=baseUrl+"forms/google-sheet.html")
+  meta(property="og:url", content=baseurl+"forms/google-sheet.html")
 
 block form
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-template") 名片樣板
-    input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", v-model="vcard.template")
+    input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.template")
     small.form-text.text-muted 請填寫名片樣板網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-apiKey") Google Sheets API 金鑰
-    input#vcard-apiKey.form-control.form-control-sm(type="password", v-model="vcard.apiKey")
+    input#vcard-apiKey.form-control.form-control-sm(type="password", required, pattern="[0-9A-Za-z_-]{30,}", v-model="vcard.apiKey")
     small.form-text.text-muted 請參考官方文件#[a(href="https://developers.google.com/sheets/api/guides/authorizing#APIKey", target="_blank") 「取得 API 金鑰」]，你可以幫這個 API 金鑰加上一些適當的限制避免濫用，如：限制金鑰只能呼叫「Google Sheets API」。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-spreadsheetId") spreadsheetId
-    input#vcard-spreadsheetId.form-control.form-control-sm(type="text", v-model="vcard.spreadsheetId")
+    input#vcard-spreadsheetId.form-control.form-control-sm(type="text", required, pattern="[0-9A-Za-z_-]{30,}", v-model="vcard.spreadsheetId")
     small.form-text.text-muted 請先將指定的工作表改成「任何知道連結的使用者都能查看」，然後從網址列取得 Google 試算表的 spreadsheetId 並填在此處，通常網址格式會像是這樣：#[code https://docs.google.com/spreadsheets/d/{spreadsheetId}/edit#gid=0]。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-range") 工作表名稱
-    input#vcard-range.form-control.form-control-sm(type="text", v-model="vcard.range")
+    input#vcard-range.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.range")
     small.form-text.text-muted 請填寫 Google 試算表的工作表名稱。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-key") 比對欄位
-    input#vcard-key.form-control.form-control-sm(type="text", v-model="vcard.key")
+    input#vcard-key.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.key")
     small.form-text.text-muted 請填寫您想要比對的名片資料欄位。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-value") 比對資料
-    input#vcard-value.form-control.form-control-sm(type="text", v-model="vcard.value")
+    input#vcard-value.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.value")
     small.form-text.text-muted 請填寫您想要比對的名片資料欄位內容。
 
 block vue-config
@@ -56,6 +51,6 @@ block vue-config
       key: 'id',
       range: '工作表1',
       spreadsheetId: '1Bu3Kg7_RPxOq51ELYI3NzHtc_rXStcezlf7d_RoPBXQ',
-      template: '#{baseUrl}cards/chatbot-tw-coscup-2020.txt',
+      template: '#{baseurl}cards/chatbot-tw-coscup-2020.txt',
       value: '6',
     }

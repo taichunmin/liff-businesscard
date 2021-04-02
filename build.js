@@ -1,28 +1,19 @@
 require('dotenv').config()
 
 const _ = require('lodash')
-const { getenv } = require('./utils')
+const { getBaseurl, getenv, ncp } = require('./utils')
 const fg = require('fast-glob')
 const fsPromises = require('fs').promises
 const htmlMinifier = require('html-minifier').minify
 const log = require('debug')('app:index')
-const ncp = require('ncp').ncp
 const path = require('path')
 const pug = require('pug')
 const UglifyJS = require('uglify-es')
 
-ncp.limit = 16
-
-function ncpAsync (source, destination, options) {
-  return new Promise((resolve, reject) => {
-    ncp(source, destination, options, err => err ? reject(err) : resolve())
-  })
-}
-
 exports.build = async () => {
   const PUG_OPTIONS = {
-    basedir: path.resolve(__dirname, 'src'),
-    baseUrl: _.trimEnd(getenv('BASEURL', 'https://localhost:3000/'), '/') + '/',
+    basedir: path.resolve(__dirname),
+    baseurl: getBaseurl(),
     GA_MEASUREMENT_ID: getenv('GA_MEASUREMENT_ID', 'UA-39556213-12'),
     NODE_ENV: getenv('NODE_ENV', 'production'),
     ..._.fromPairs(_.map([
@@ -54,15 +45,13 @@ exports.build = async () => {
   }
 
   // copy public files
-  await ncpAsync('public', 'dist', {
+  await ncp('src', 'dist', {
     stopOnErr: true,
+    filter: filename => !/\.pug$/.test(filename), // 複製除了 .pug 之外的檔案
   })
 
   // compile pug files
-  const pugFiles = _.map(_.filter(await fg('src/**/*.pug'), file => {
-    if (/\/(layout|compoment)-[^/]+\.pug$/.test(file)) return false
-    return true
-  }), file => file.slice(4))
+  const pugFiles = _.map(await fg('src/**/*.pug'), file => file.slice(4))
 
   for (const file of pugFiles) {
     try {

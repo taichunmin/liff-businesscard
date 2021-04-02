@@ -1,18 +1,14 @@
-extends /layout-default
+extends /layout/default
 
 block beforehtml
-  - const title = '分享 LINE 數位版名片'
+  -
+    title = '分享 LINE 數位版名片'
+    description = '請開啟本連結並按一下「選擇分享對象」來透過 LINE 分享名片'
 
 block style
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="請開啟本連結並按一下「選擇分享對象」來透過 LINE 分享名片")
   meta(property="og:image:height", content="315")
   meta(property="og:image:width", content="600")
   meta(property="og:image", content="https://i.imgur.com/PqLcIKj.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
   meta(property="og:url", content=`https://liff.line.me/${liffidFull}/share.html`)
   style
     :sass
@@ -29,7 +25,7 @@ block content
         button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend") #[i.fa.mr-2.fa-paper-plane-o] 直接傳送
         small.form-text.text-muted 點一下「直接傳送」按鈕，可以把名片直接傳送到聊天室。
       .form-group.my-3
-        input.form-control.form-control-sm(type="text", :value="liffLink", ref="result", readonly)
+        input.form-control.form-control-sm(type="text", :value="liffLink", ref="result", readonly, @click="btnCopy")
         button.btn.btn-lg.btn-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy") #[i.fa.mr-2.fa-clipboard] 複製網址
         small.form-text.text-muted 點一下「複製網址」按鈕，然後把網址存在 LINE Keep。
       hr
@@ -94,17 +90,14 @@ block script
         },
         handleError (err) {
           window.gtagError(err, true)
-          if (!err.message) {
-            return Swal.fire({
-              icon: 'error',
-              title: '發生錯誤',
-              html: this.handleErrorStackHtml(err),
-            })
-          }
           return Swal.fire({
             icon: 'error',
             title: '發生錯誤',
-            text: err.message,
+            ...(err.message ? {
+              text: err.message,
+            } : {
+              html: this.handleErrorStackHtml(err),
+            }),
           })
         },
         handleErrorStackHtml (err) {
@@ -133,7 +126,7 @@ block script
           if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
             msg = { type: 'flex', altText: '請在手機上查看數位版名片。', contents: msg }
           }
-          if (!_.isArray(msg)) msg = [msg]
+          msg = _.castArray(msg)
           console.log('msg =', JSON.stringify(msg))
           return msg
         },
@@ -183,7 +176,7 @@ block script
         async btnSend () {
           try {
             window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
-            if (!this.canSendMessages()) throw new Error('沒有傳訊訊息的權限，請在聊天視窗內開啟。')
+            if (!this.canSendMessages()) throw new Error('請先按「複製網址」，然後在聊天視窗內貼上並開啟本連結，就可以直接傳送名片囉！')
             await liff.sendMessages(this.getRenderedMsgs())
             await Swal.fire({
               icon: 'success',

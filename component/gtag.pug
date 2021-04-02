@@ -37,7 +37,7 @@ if GA_MEASUREMENT_ID
         send_to: 'liff',
       })
     })
-    window.gtagError = async (err, fatal = false) => new Promise(resolve => {
+    window.gtagError = (err, fatal = false) => new Promise(resolve => {
       gtag('event', 'exception', {
         description: err.message || '',
         event_callback: resolve,

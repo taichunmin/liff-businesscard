@@ -1,19 +1,15 @@
-extends /layout-forms
+extends /layout/forms
 
 block beforehtml
-  - const title = 'PsPrint Corporate Buzz'
+  -
+    title = 'PsPrint Corporate Buzz'
+    description = 'PsPrint Corporate Buzz'
 
 block meta
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="PsPrint Corporate Buzz")
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
   meta(property="og:image", content="https://i.imgur.com/sohhnA0.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
-  meta(property="og:url", content=baseUrl + "forms/psprint-592.html")
+  meta(property="og:url", content=baseurl + "forms/psprint-592.html")
 
 block form
   .form-group.my-2
@@ -23,37 +19,37 @@ block form
       option(value="2") 藍灰色
       option(value="3") 暗紅色
     small.form-text.text-muted 請選擇背景顏色。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-name") 姓名
-    input#vcard-name.form-control.form-control-sm(type="text", v-model="vcard.name")
+    input#vcard-name.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.name")
     small.form-text.text-muted 請填寫姓名。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-title") 公司及職稱
-    input#vcard-title.form-control.form-control-sm(type="text", v-model="vcard.title")
+    input#vcard-title.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.title")
     small.form-text.text-muted 請填寫公司名稱及職稱。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-tel1") 電話 1
-    input#vcard-tel.form-control.form-control-sm(type="tel", inputmode="tel", v-model="vcard.tel1")
+    input#vcard-tel.form-control.form-control-sm(type="tel", required, pattern="[0-9,+-]+", inputmode="tel", v-model="vcard.tel1")
     small.form-text.text-muted 請填寫公司電話或手機號碼，如果有分機號碼請用半形逗號 #[code ,] 分隔。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-tel2") 電話 2
-    input#vcard-tel.form-control.form-control-sm(type="tel", inputmode="tel2", v-model="vcard.tel2")
+    input#vcard-tel.form-control.form-control-sm(type="tel", required, pattern="[0-9,+-]+", inputmode="tel2", v-model="vcard.tel2")
     small.form-text.text-muted 請填寫公司電話或手機號碼，如果有分機號碼請用半形逗號 #[code ,] 分隔。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-email") 信箱
-    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", v-model="vcard.email")
+    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", required, pattern=".+", v-model="vcard.email")
     small.form-text.text-muted 請填寫公司信箱。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-address") 地址 (請分兩行避免過長)
-    textarea#vcard-address.form-control.form-control-sm(v-model="vcard.address", rows="2")
+    textarea#vcard-address.form-control.form-control-sm(required, pattern=".+", v-model="vcard.address", rows="2")
     small.form-text.text-muted 請填寫公司地址。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-maps") Google 地圖
-    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", v-model="vcard.maps", rows="3")
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.maps", rows="3")
     small.form-text.text-muted 請填寫公司的 Google 地圖網址。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-url") 網址
-    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", v-model="vcard.url")
+    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.url")
     small.form-text.text-muted 請填寫公司網址。
 
 block vue-config
@@ -66,7 +62,7 @@ block vue-config
       name: '王小美',
       tel1: '0900000000',
       tel2: '04-23692699,000',
-      template: '#{baseUrl}cards/psprint-592.txt',
+      template: '#{baseurl}cards/psprint-592.txt',
       title: '行銷企劃 | 微程式資訊',
       url: 'https://www.program.com.tw',
     }

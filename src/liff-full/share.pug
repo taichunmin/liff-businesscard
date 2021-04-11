@@ -10,37 +10,41 @@ block style
   meta(property="og:image:width", content="600")
   meta(property="og:image", content="https://i.imgur.com/PqLcIKj.png")
   meta(property="og:url", content=`https://liff.line.me/${liffidFull}/share.html`)
+  link(rel="stylesheet", href="https://cdn.jsdelivr.net/gh/PamornT/flex2html@main/css/flex2html.css")
   style
     :sass
       [v-cloak]
         display: none
+
 block content
   #app.container.my-4.text-monospace(v-cloak)
     h2.my-3.text-center= title
-    #share(v-if="page === 'share'")
-      .form-group.my-3
-        button.btn.btn-lg.btn-success.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnShare") #[i.fa.mr-2.fa-share-square-o] 分享好友
-        small.form-text.text-muted 點一下「分享好友」按鈕，可以一次選擇多個好友分享名片。
-      .form-group.my-3
-        button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend") #[i.fa.mr-2.fa-paper-plane-o] 直接傳送
-        small.form-text.text-muted 點一下「直接傳送」按鈕，可以把名片直接傳送到聊天室。
-      .form-group.my-3
-        input.form-control.form-control-sm(type="text", :value="liffLink", ref="result", readonly, @click="btnCopy")
-        button.btn.btn-lg.btn-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy") #[i.fa.mr-2.fa-clipboard] 複製網址
-        small.form-text.text-muted 點一下「複製網址」按鈕，然後把網址存在 LINE Keep。
-      hr
-      p 如果在「分享好友」的清單中找不到好友，你可以嘗試以下步驟：
-      ol
-        li 點一下「複製網址」按鈕
-        li 把網址「傳送」到好友的聊天室中
-        li 在好友的聊天室中「開啟」名片網址
-        li 點一下「直接傳送」按鈕傳送名片
-        li 在好友的聊天室中「收回」名片網址
-    #loading(v-if="page === 'loading'")
-      .text-center.py-3 載入名片資料中，請稍候…
+    .form-group.my-3
+      button.btn.btn-lg.btn-success.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnShare") #[i.fa.mr-2.fa-share-square-o] 分享好友
+      small.form-text.text-muted 點一下「分享好友」按鈕，可以一次選擇多個好友分享名片。
+    .form-group.my-3
+      button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend") #[i.fa.mr-2.fa-paper-plane-o] 直接傳送
+      small.form-text.text-muted 點一下「直接傳送」按鈕，可以把名片直接傳送到聊天室。
+    .form-group.my-3
+      input.form-control.form-control-sm(type="text", :value="liffLink", ref="result", readonly, @click="btnCopy")
+      button.btn.btn-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy") #[i.fa.mr-2.fa-clipboard] 複製網址
+      a.btn.btn-outline-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(target="_blank", href="https://line.me/R/nv/keep") #[i.fa.mr-2.fa-bookmark] LINE Keep
+      small.form-text.text-muted 點一下「複製網址」按鈕，然後把網址存在 LINE Keep。
+    .table-responsive(style="background-color: #849ebf")
+      .chatbox.pt-3
+        #flex2html(ref="flex2html")
+    hr
+    p 如果在「分享好友」的清單中找不到好友，你可以嘗試以下步驟：
+    ol
+      li 點一下「複製網址」按鈕
+      li 把網址「傳送」到好友的聊天室中
+      li 在好友的聊天室中「開啟」名片網址
+      li 點一下「直接傳送」按鈕傳送名片
+      li 在好友的聊天室中「收回」名片網址
 
 block script
   script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
+  script(src="https://cdn.jsdelivr.net/gh/PamornT/flex2html@main/js/flex2html.min.js")
   script.
     /* global decodeBase64url */
     const loginPromise = (async () => {
@@ -60,13 +64,14 @@ block script
     window.vueConfig = {
       el: '#app',
       data: {
-        error: null,
-        page: 'loading',
+        liffLink: null,
+        msgs: null,
         render: null,
         vcard: null,
       },
       async mounted () {
         try {
+          this.showLoading('請稍候', '頁面初始化中')
           await loginPromise
           window.gtagScreenView('瀏覽分享名片網頁')
           window.gtagTiming('after loginPromise')
@@ -75,61 +80,22 @@ block script
             this.getTpl(),
             this.getVcard(),
           ])
-          this.page = 'share'
+          this.msgs = this.getRenderedMsgs()
+          console.log(this.msgs)
+          for (const msg of this.msgs) {
+            window.flex2html('flex2html', msg)
+          }
+          this.hideLoading()
           window.gtagTiming('after mounted')
-          await this.swalFire()
+          await this.showSavedAlert()
         } catch (err) {
+          err.message = _.get(err, 'response.data.message', err.message)
           console.error(err)
-          this.handleError(err)
+          window.gtagError(err, true)
+          await Swal.fire({ icon: 'error', title: '頁面初始化失敗', text: err.message })
         }
       },
       methods: {
-        paramBase64url (key) {
-          const base64 = window.getSearchParam(key)
-          return base64 ? decodeBase64url(base64) : null
-        },
-        handleError (err) {
-          window.gtagError(err, true)
-          return Swal.fire({
-            icon: 'error',
-            title: '發生錯誤',
-            ...(err.message ? {
-              text: err.message,
-            } : {
-              html: this.handleErrorStackHtml(err),
-            }),
-          })
-        },
-        handleErrorStackHtml (err) {
-          const dom = document.createElement('textarea')
-          dom.readonly = true
-          dom.classList.add('form-control')
-          dom.classList.add('text-left')
-          dom.textContent = err.stack
-          return dom.outerHTML
-        },
-        canSendMessages () {
-          if (!liff.isInClient()) return false
-          const contextType = _.get(liff.getContext(), 'type')
-          if (!_.includes(['utou', 'room', 'group', 'square_chat'], contextType)) return false
-          return true
-        },
-        getRenderedMsgs () {
-          let msg = JSON5.parse(this.render({
-            _,
-            CryptoJS,
-            dayjs,
-            liffLink: this.liffLink,
-            Qs,
-            vcard: this.vcard,
-          }))
-          if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
-            msg = { type: 'flex', altText: '請在手機上查看數位版名片。', contents: msg }
-          }
-          msg = _.castArray(msg)
-          console.log('msg =', JSON.stringify(msg))
-          return msg
-        },
         async getTpl () {
           try {
             const tpl = this.paramBase64url('template')
@@ -161,30 +127,30 @@ block script
             window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
             if (!liff.isApiAvailable('shareTargetPicker')) throw new Error('不支援 shareTargetPicker，請嘗試更新應用程式版本。')
             const beforeShare = new Date()
-            const res = await liff.shareTargetPicker(this.getRenderedMsgs())
-            if (_.get(res, 'status') !== 'success') throw new Error('傳送失敗')
+            const res = await liff.shareTargetPicker(this.msgs)
+            if (_.get(res, 'status') !== 'success') throw new Error('使用者取消分享')
             const afterShare = new Date()
-            await Swal.fire({
-              icon: 'success',
-              title: '名片已分享',
-            })
+            await Swal.fire({ icon: 'success', title: '分享成功' })
             if (afterShare - beforeShare > 1e3) liff.closeWindow()
           } catch (err) {
-            this.handleError(err)
+            err.message = _.get(err, 'response.data.message', err.message)
+            console.error(err)
+            window.gtagError(err, true)
+            await Swal.fire({ icon: 'error', title: '分享失敗', text: err.message })
           }
         },
         async btnSend () {
           try {
             window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
-            if (!this.canSendMessages()) throw new Error('請先按「複製網址」，然後在聊天視窗內貼上並開啟本連結，就可以直接傳送名片囉！')
-            await liff.sendMessages(this.getRenderedMsgs())
-            await Swal.fire({
-              icon: 'success',
-              title: '名片已傳送',
-            })
+            if (!this.canSendMessages()) throw new Error('請先按「複製網址」，然後在 LINE 聊天視窗內貼上並開啟該網址，才有辦法使用「直接傳送」功能喔！')
+            await liff.sendMessages(this.msgs)
+            await Swal.fire({ icon: 'success', title: '傳送成功' })
             liff.closeWindow()
           } catch (err) {
-            this.handleError(err)
+            err.message = _.get(err, 'response.data.message', err.message)
+            console.error(err)
+            window.gtagError(err, true)
+            await Swal.fire({ icon: 'error', title: '傳送失敗', text: err.message })
           }
         },
         async btnCopy () {
@@ -193,16 +159,50 @@ block script
           copyText.select()
           copyText.setSelectionRange(0, 999999) // For mobile devices
           document.execCommand('copy')
-          await Swal.fire({
-            icon: 'success',
-            title: '複製成功',
-          })
+          await Swal.fire({ icon: 'success', title: '複製成功' })
         },
-        async swalFire () {
+        async showSavedAlert () {
           const swalFire = window.parseJsonOrDefault(localStorage.getItem('swalFire'))
           localStorage.removeItem('swalFire')
           if (_.isNil(swalFire)) return
           await Swal.fire(swalFire)
+        },
+        getRenderedMsgs () {
+          let msg = JSON5.parse(this.render({
+            _,
+            CryptoJS,
+            dayjs,
+            liffLink: this.liffLink,
+            Qs,
+            vcard: this.vcard,
+          }))
+          if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
+            msg = { type: 'flex', altText: '請在手機上查看數位版名片。', contents: msg }
+          }
+          msg = _.castArray(msg)
+          return msg
+        },
+        canSendMessages () {
+          if (!liff.isInClient()) return false
+          const contextType = _.get(liff.getContext(), 'type')
+          if (!_.includes(['utou', 'room', 'group', 'square_chat'], contextType)) return false
+          return true
+        },
+        paramBase64url (key) {
+          const base64 = window.getSearchParam(key)
+          return base64 ? decodeBase64url(base64) : null
+        },
+        showLoading (title, text) {
+          Swal.fire({
+            title,
+            text,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => { Swal.showLoading() },
+          })
+        },
+        hideLoading () {
+          Swal.close()
         },
       },
     }

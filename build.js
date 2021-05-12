@@ -1,14 +1,15 @@
 require('dotenv').config()
 
 const _ = require('lodash')
-const { getBaseurl, getenv, ncp } = require('./utils')
+const { errToPlainObj, getBaseurl, getenv, ncp } = require('./utils')
+const { inspect } = require('util')
 const fg = require('fast-glob')
 const fsPromises = require('fs').promises
 const htmlMinifier = require('html-minifier').minify
 const log = require('debug')('app:index')
 const path = require('path')
 const pug = require('pug')
-const UglifyJS = require('uglify-es')
+const UglifyJS = require('uglify-js')
 
 exports.build = async () => {
   const PUG_OPTIONS = {
@@ -53,6 +54,7 @@ exports.build = async () => {
   // compile pug files
   const pugFiles = _.map(await fg('src/**/*.pug'), file => file.slice(4))
 
+  let pugErrors = 0
   for (const file of pugFiles) {
     try {
       const html = htmlMinifier(pug.renderFile(path.resolve(__dirname, 'src', file), PUG_OPTIONS), htmlMinifierOptions)
@@ -60,8 +62,10 @@ exports.build = async () => {
       await fsPromises.mkdir(path.dirname(dist), { recursive: true })
       await fsPromises.writeFile(dist, html)
     } catch (err) {
-      log(file, err)
-      throw err
+      _.set(err, 'data.src', `./src/${file}`)
+      log(`Failed to render pug, err = ${inspect(errToPlainObj(err), { depth: 100, sorted: true })}`)
+      pugErrors++
     }
   }
+  if (pugErrors) throw new Error(`Failed to render ${pugErrors} pug files.`)
 }

@@ -14,3 +14,28 @@ exports.ncp = (() => {
     ncp(source, destination, options, err => err ? reject(err) : resolve())
   })
 })()
+
+exports.errToPlainObj = (() => {
+  const ERROR_KEYS = [
+    'address',
+    'code',
+    'data',
+    'dest',
+    'errno',
+    'info',
+    'message',
+    'name',
+    'path',
+    'port',
+    'reason',
+    'response.data',
+    'response.headers',
+    'response.status',
+    'stack',
+    'status',
+    'statusCode',
+    'statusMessage',
+    'syscall',
+  ]
+  return err => _.pick(err, ERROR_KEYS)
+})()

@@ -17,10 +17,10 @@
     "fast-glob": "^3.2.5",
     "html-minifier": "^4.0.0",
     "jstransformer-sass": "^1.0.0",
+    "jstransformer-scss": "https://github.com/taichunmin/jstransformer-scss.git",
     "ncp": "^2.0.0",
-    "node-sass": "^6.0.0",
     "pug": "^3.0.2",
-    "uglify-es": "^3.3.9"
+    "uglify-js": "^3.13.6"
   },
   "devDependencies": {
     "eslint": "^7.26.0",
@@ -29,7 +29,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-pug": "^1.2.3",
-    "eslint-plugin-standard": "^5.0.0",
     "finalhandler": "^1.1.2",
     "livereload": "^0.9.3",
     "node-watch": "^0.7.1",
@@ -37,7 +36,6 @@
     "serve-static": "^1.14.1"
   },
   "resolutions": {
-    "**/kind-of": "^6.0.3",
-    "**/node-sass": "^4.14.1"
+    "**/jstransformer-scss": "https://github.com/taichunmin/jstransformer-scss.git"
   }
 }

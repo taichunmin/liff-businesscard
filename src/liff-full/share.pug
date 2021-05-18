@@ -125,6 +125,7 @@ block script
         },
         async btnShare () {
           try {
+            this.showLoading('請稍候', '正在分享名片…')
             window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
             if (!liff.isApiAvailable('shareTargetPicker')) throw new Error('不支援 shareTargetPicker，請嘗試更新應用程式版本。')
             const beforeShare = new Date()
@@ -142,6 +143,7 @@ block script
         },
         async btnSend () {
           try {
+            this.showLoading('請稍候', '正在傳送名片…')
             window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
             if (!this.canSendMessages()) throw new Error('請先按「複製網址」，然後在 LINE 聊天視窗內貼上並開啟該網址，才有辦法使用「直接傳送」功能喔！')
             await liff.sendMessages(this.msgs)

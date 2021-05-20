@@ -6,7 +6,7 @@ block vue-config
     cfg.methods.getVcard = async function () {
       try {
         const args = _.fromPairs(_.map(['apiKey', 'spreadsheetId', 'range', 'key', 'value'], k => [k, this.paramBase64url(k)]))
-        if (!_.isString(args.apiKey) || !args.apiKey) throw new Error('無效的 Google Sheets API 金鑰')
+        if (!_.isString(args.apiKey) || !args.apiKey) throw new Error(this.$t('googlesheet.invalidApiKey'))
 
         const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${args.spreadsheetId}/values/${encodeURIComponent(args.range)}`
         const rows = _.get(await axios.get(sheetUrl, { params: { key: args.apiKey } }), 'data.values', [])
@@ -14,11 +14,11 @@ block vue-config
 
         console.log(rows)
         const keyIdx = rows[0].indexOf(args.key)
-        if (keyIdx < 0) throw new Error(`在試算表的第一列中找不到「${args.key}」`)
+        if (keyIdx < 0) throw new Error(this.$t('googlesheet.keyNotFound', { key: args.key }))
         this.vcard = _.zipObject(rows[0], _.find(rows.slice(1), row => row[keyIdx] === args.value))
         window.gtagTiming('after getVcard')
       } catch (err) {
-        err.message = err.message ? `無法從 Google 試算表讀取資料: ${err.message}` : '無法從 Google 試算表讀取資料'
+        err.message = `${this.$t('googlesheet.getVcardFail')}${err.message ? ': ' + err.message : ''}`
         this.render = null
         throw err
       }

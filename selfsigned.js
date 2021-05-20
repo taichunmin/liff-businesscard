@@ -1,7 +1,12 @@
+const fs = require('fs')
+const path = require('path')
 const selfsigned = require('selfsigned')
+const { inspect } = require('util')
 
 // @see https://github.com/digitalbazaar/forge#x509
+const CERTIFICATE_FILE = './.certificate.json'
 module.exports = () => {
+  if (fs.existsSync(path.join(__dirname, CERTIFICATE_FILE))) return require(CERTIFICATE_FILE)
   const pems = selfsigned.generate([
     { shortName: 'CN', value: 'localhost' },
     { shortName: 'C', value: 'TW' },
@@ -11,7 +16,7 @@ module.exports = () => {
     { shortName: 'OU', value: 'Test' },
   ], {
     algorithm: 'sha256',
-    days: 3650,
+    days: 36500,
     keySize: 2048,
     extensions: [
       { name: 'basicConstraints', cA: true },
@@ -40,6 +45,8 @@ module.exports = () => {
       },
     ],
   })
-  // console.log(JSON.stringify(pems))
-  return { cert: pems.cert, key: pems.private }
+  console.log(`Generate new selfsigned certificate and save to "${CERTIFICATE_FILE}": ${inspect(pems)}`)
+  const certificate = { cert: pems.cert, key: pems.private }
+  fs.writeFileSync(path.join(__dirname, CERTIFICATE_FILE), JSON.stringify(certificate, null, 2))
+  return certificate
 }

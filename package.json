@@ -13,26 +13,26 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "debug": "^4.3.1",
-    "dotenv": "^9.0.2",
+    "dotenv": "^10.0.0",
     "fast-glob": "^3.2.5",
     "html-minifier": "^4.0.0",
     "jstransformer-sass": "^1.0.0",
     "jstransformer-scss": "https://github.com/taichunmin/jstransformer-scss.git",
     "ncp": "^2.0.0",
+    "node-forge": "^0.10.0",
     "pug": "^3.0.2",
-    "uglify-js": "^3.13.6"
+    "uglify-js": "^3.13.9"
   },
   "devDependencies": {
-    "eslint": "^7.26.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^7.28.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-pug": "^1.2.3",
     "finalhandler": "^1.1.2",
     "livereload": "^0.9.3",
     "node-watch": "^0.7.1",
-    "selfsigned": "^1.10.11",
     "serve-static": "^1.14.1"
   },
   "resolutions": {

@@ -1,40 +1,50 @@
+const forge = require('node-forge')
 const fs = require('fs')
 const path = require('path')
-const selfsigned = require('selfsigned')
-const { inspect } = require('util')
 
-// @see https://github.com/digitalbazaar/forge#x509
-const CERTIFICATE_FILE = './.certificate.json'
-module.exports = () => {
+exports.createRsaCert = ({ attrs, extensions }) => {
+  // generate cert
+  const pki = forge.pki
+  const keypair = pki.rsa.generateKeyPair(4096)
+  const cert = pki.createCertificate()
+  cert.publicKey = keypair.publicKey
+  cert.serialNumber = '01'
+  cert.validity.notAfter.setFullYear(cert.validity.notBefore.getFullYear() + 100)
+
+  if (!attrs) throw TypeError('attrs is required')
+  cert.setSubject(attrs)
+  cert.setIssuer(attrs)
+  if (extensions) cert.setExtensions(extensions)
+  cert.sign(keypair.privateKey, forge.md.sha256.create())
+
+  return {
+    cert: pki.certificateToPem(cert),
+    key: pki.privateKeyToPem(keypair.privateKey),
+  }
+}
+
+exports.getCertOrCreate = () => {
+  const CERTIFICATE_FILE = './.certificate.json'
   if (fs.existsSync(path.join(__dirname, CERTIFICATE_FILE))) return require(CERTIFICATE_FILE)
-  const pems = selfsigned.generate([
-    { shortName: 'CN', value: 'localhost' },
-    { shortName: 'C', value: 'TW' },
-    { shortName: 'ST', value: 'Taipei' },
-    { shortName: 'L', value: 'Taipei' },
-    { shortName: 'O', value: 'Test' },
-    { shortName: 'OU', value: 'Test' },
-  ], {
-    algorithm: 'sha256',
-    days: 36500,
-    keySize: 2048,
+  const cert = exports.createRsaCert({
+    attrs: [
+      { shortName: 'CN', value: 'localhost' },
+      { shortName: 'C', value: 'TW' },
+      { shortName: 'ST', value: 'Taipei' },
+      { shortName: 'L', value: 'Taipei' },
+      { shortName: 'O', value: 'Test' },
+      { shortName: 'OU', value: 'Test' },
+    ],
     extensions: [
       { name: 'basicConstraints', cA: true },
       {
+        cRLSign: true,
         dataEncipherment: true,
         digitalSignature: true,
         keyCertSign: true,
         keyEncipherment: true,
         name: 'keyUsage',
         nonRepudiation: true,
-      },
-      {
-        clientAuth: true,
-        codeSigning: true,
-        emailProtection: true,
-        name: 'extKeyUsage',
-        serverAuth: true,
-        timeStamping: true,
       },
       {
         name: 'subjectAltName',
@@ -45,8 +55,6 @@ module.exports = () => {
       },
     ],
   })
-  console.log(`Generate new selfsigned certificate and save to "${CERTIFICATE_FILE}": ${inspect(pems)}`)
-  const certificate = { cert: pems.cert, key: pems.private }
-  fs.writeFileSync(path.join(__dirname, CERTIFICATE_FILE), JSON.stringify(certificate, null, 2))
-  return certificate
+  fs.writeFileSync(path.join(__dirname, CERTIFICATE_FILE), JSON.stringify(cert, null, 2))
+  return cert
 }

@@ -158,7 +158,7 @@ function gaScreenView (vcard) {
     }
   },
   {
-    "text": "貼心提醒：名片上有超連結",
+    "text": "貼心提醒：名片上有連結可以開啟",
     "type": "text"
   }
 ]

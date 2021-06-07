@@ -55,7 +55,12 @@ block script
         liff.login({ redirectUri: location.href })
         await new Promise(resolve => {}) // 永遠不會結束的 Promise
       }
-      const profile = await liff.getProfile().catch(() => ({}))
+      let profile = {}
+      try {
+        profile = await liff.getProfile()
+      } catch (err) {
+        console.error(err)
+      }
       window.gtagInit(profile.userId)
       return profile
     })()

@@ -6,6 +6,6 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no")
     title 分享 LINE 數位版名片
   body
-    script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/@line/liff@2/dist/lib/index.js")
     script.
       liff.init({ liffId: '#{liffidFull}' })

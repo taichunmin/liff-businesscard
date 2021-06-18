@@ -31,10 +31,9 @@ block form
 
 block vue-config
   script.
-    /* global httpBuildQuery, encodeBase64url */
     const cfg = window.vueConfig
     cfg.computed.shortcut = function () {
-      const params = httpBuildQuery(_.mapValues(this.vcard, encodeBase64url))
+      const params = window.httpBuildQuery(_.mapValues(this.vcard, window.encodeBase64url))
       if (!_.isString(params) || !params.length) return
       return `https://liff.line.me/#{liffidFull}/share-csv.html?${params}`
     }

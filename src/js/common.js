@@ -26,11 +26,11 @@ window.errorToJson = (() => {
   }, {})
 })()
 
-window.getCsv = async (csv) => {
-  const res = _.trim(_.get(await axios.get(csv, {
-    params: { cachebust: +new Date() },
+window.getCsv = async (url, cachetime = 3e4) => {
+  const csv = _.trim(_.get(await axios.get(url, {
+    params: { cachebust: _.floor(Date.now() / cachetime) },
   }), 'data'))
-  return _.get(Papa.parse(res, {
+  return _.get(Papa.parse(csv, {
     encoding: 'utf8',
     header: true,
   }), 'data', [])

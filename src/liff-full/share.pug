@@ -35,19 +35,19 @@ block content
       button.btn.btn-lg.btn-secondary.btn-block.dropdown-toggle(type="button", data-toggle="dropdown") {{ $t('dropdown.btn') }}
       .dropdown-menu
         a.dropdown-item(target="_blank", href="https://line.me/R/nv/QRCodeReader") #[i.fa.fa-fw.fa-qrcode] {{ $t('dropdown.qrcodeReader') }}
-        a.dropdown-item(target="_blank", href="https://line.me/R/nv/addFriends") #[i.fa.fa-fw.fa-address-card] {{ $t('dropdown.addFriends') }}
+        a.dropdown-item(target="_blank", href="https://line.me/R/nv/addFriends") #[i.fa.fa-fw.fa-users] {{ $t('dropdown.addFriends') }}
         a.dropdown-item(target="_blank", href="https://line.me/R/nv/keep") #[i.fa.fa-fw.fa-bookmark] {{ $t('dropdown.keep') }}
-        a.dropdown-item(target="_blank", href="https://fb.me/taichunmin") #[i.fa.fa-fw.fa-facebook-official] {{ $t('dropdown.author') }}
+        a.dropdown-item(target="_blank", href=baseurl+'?openExternalBrowser=1') #[i.fa.fa-fw.fa-address-card] {{ $t('dropdown.create') }}
+        a.dropdown-item(target="_blank", href="https://fb.me/taichunmin?openExternalBrowser=1") #[i.fa.fa-fw.fa-facebook-official] {{ $t('dropdown.author') }}
         button.dropdown-item(type="button", @click="btnFriendMissing") #[i.fa.fa-fw.fa-question-circle] {{ $t('dropdown.friendMissing') }}
     .table-responsive(style="background-color: #849ebf")
       .chatbox.pt-3
         #flex2html(ref="flex2html")
 
 block script
-  script(src="https://static.line-scdn.net/liff/edge/2/sdk.js")
-  script(src="https://cdn.jsdelivr.net/gh/PamornT/flex2html@main/js/flex2html.min.js")
+  script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/@line/liff@2/dist/lib/index.js")
+  script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/gh/PamornT/flex2html@main/js/flex2html.min.js")
   script.
-    /* global decodeBase64url */
     const loginPromise = (async () => {
       await liff.init({ liffId: '#{liffidFull}' })
       if (window.getSearchParam('liff.state')) await new Promise(resolve => {}) // 永遠不會結束的 Promise
@@ -128,7 +128,7 @@ block script
             'liffRedirectUri',
             'state',
             'template',
-          ]), decodeBase64url)
+          ]), window.decodeBase64url)
           window.gtagTiming('after getVcard')
         },
         async btnShare () {
@@ -186,14 +186,16 @@ block script
           })
         },
         getRenderedMsgs () {
-          let msg = JSON5.parse(this.render({
+          let msg = this.render({
             _,
             CryptoJS,
             dayjs,
             liffLink: this.liffLink,
             Qs,
             vcard: this.vcard,
-          }))
+          })
+          console.log(msg)
+          msg = JSON5.parse(msg)
           if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
             msg = { type: 'flex', altText: this.$t('flexAltText'), contents: msg }
           }
@@ -208,7 +210,7 @@ block script
         },
         paramBase64url (key) {
           const base64 = window.getSearchParam(key)
-          return base64 ? decodeBase64url(base64) : null
+          return base64 ? window.decodeBase64url(base64) : null
         },
         showLoading (title, text) {
           Swal.fire({

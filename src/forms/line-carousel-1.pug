@@ -1,0 +1,306 @@
+extends /layout/forms
+
+block beforehtml
+  -
+    title = '多頁訊息 1'
+    description = '點此連結來製作自己的 LINE 的多頁訊息吧！'
+
+block meta
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/0pbirUY.png")
+  meta(property="og:url", content=baseurl + "forms/line-carousel-1.html")
+  style
+    :sass
+      li.nav-item > button.nav-link
+        color: #007bff
+        background-color: transparent
+      .form-control-color
+        max-width: 3rem
+        height: auto
+        padding: .375rem
+        &:not(:disabled):not([readonly])
+          cursor: pointer
+
+block form
+  .card.my-2
+    .card-header
+      ul.nav.nav-tabs.card-header-tabs
+        li.nav-item: button.nav-link(type="button", @click="vcard.page = 'setting'", :class="{active: (vcard.page === 'setting')}") 設定
+        li.nav-item(v-for="cardIdx in cardsLen")
+          button.nav-link(type="button", @click="vcard.page = cardIdx-1", :class="{active: (vcard.page === cardIdx-1)}") {{ circleNum[cardIdx-1] }}
+        li.nav-item(v-if="cardsLen < 13"): button.nav-link(type="button", @click="btnNewCard") #[i.fa.fa-plus-circle] 新卡片
+    .card-body(v-if="vcard.page === 'setting'")
+      .form-group.was-validated.mb-2
+        label(for="vcard-altText") 替代文字
+        input#vcard-altText.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.json5.altText")
+        small.form-text.text-muted 無法顯示 Flex 訊息時（如：通知中心）的替代文字。
+      .form-group.was-validated.mb-2
+        label(for="vcard-ratio") 圖片的長寬比
+        input#vcard-ratio.form-control.form-control-sm(type="text", required, pattern="\\d+:\\d+", v-model="vcard.json5.ratio")
+        small.form-text.text-muted 請填寫頁面圖片的長寬比。
+      .form-group.was-validated.mb-2
+        label(for="vcard-titleSize") 標題文字大小
+        .input-group.input-group-sm
+          input#vcard-titleSize.form-control.form-control-sm(type="text", required, pattern="[0-9a-zA-Z]+", v-model="vcard.json5.titleSize")
+          .input-group-append
+            button.btn.btn-outline-secondary.dropdown-toggle(type="button", data-toggle="dropdown") 請選擇文字大小
+            .dropdown-menu.py-0
+              button.dropdown-item(type="button", v-for="fontSize in fontSizes", @click="vcard.json5.titleSize = fontSize", :class="{active: (vcard.json5.titleSize === fontSize)}") {{ fontSize }}
+        small.form-text.text-muted 請填寫卡片標題的文字大小。
+      .form-group.was-validated.mb-2
+        label(for="vcard-descSize") 說明文字大小
+        .input-group.input-group-sm
+          input#vcard-descSize.form-control.form-control-sm(type="text", required, pattern="[0-9a-zA-Z]+", v-model="vcard.json5.descSize")
+          .input-group-append
+            button.btn.btn-outline-secondary.dropdown-toggle(type="button", data-toggle="dropdown") 請選擇文字大小
+            .dropdown-menu.py-0
+              button.dropdown-item(type="button", v-for="fontSize in fontSizes", @click="vcard.json5.descSize = fontSize", :class="{active: (vcard.json5.descSize === fontSize)}") {{ fontSize }}
+        small.form-text.text-muted 請填寫卡片說明的文字大小。
+      .form-group.mb-0
+        label(for="vcard-btnHeight") 按鈕大小
+        select.form-control.form-control-sm(v-model="vcard.json5.btnHeight")
+          option(v-for="btnHeight in btnHeights", :value="btnHeight") {{ btnHeight }}
+        small.form-text.text-muted 請選擇卡片下方的按鈕大小。
+    template(v-if="curCard")
+      .card-body
+        .row
+          .col-sm-6
+            .form-group.was-validated.mb-2
+              label(for="vcard-title") 卡片標題
+              input#vcard-title.form-control.form-control-sm(type="text", required, pattern=".+", v-model="curCard.title")
+              small.form-text.text-muted 請填寫卡片標題。
+            .form-group.was-validated.mb-2
+              label(for="vcard-titleColor") 標題文字顏色
+              input.form-control(id="vcard-titleColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.titleColor")
+              small.form-text.text-muted 請填寫卡片標題文字的顏色。
+            .form-group.was-validated.mb-2
+              label(for="vcard-desc") 卡片說明
+              textarea#vcard-desc.form-control.form-control-sm(required, pattern=".+", v-model="curCard.desc")
+              small.form-text.text-muted 請填寫卡片說明。
+            .form-group.was-validated.mb-2
+              label(for="vcard-descColor") 說明文字顏色
+              input.form-control(id="vcard-descColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.descColor")
+              small.form-text.text-muted 請填寫卡片說明文字的顏色。
+            .form-group.was-validated.mb-0
+              label(for="vcard-link") 卡片連結
+              input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="curCard.link")
+              small.form-text.text-muted 你可以使用 #[a(target="_blank", href="https://ga-dev-tools.appspot.com/campaign-url-builder/") UTM Builder] 以及 #[code &amp;openExternalBrowser=1] 另開瀏覽器，如果需要加上再次分享連結，請用能修改跳轉網址的短網址服務 #[a(target="_blank", href="https://app.lihi.io/admin/login") (如: Lihi)]。
+          .col-sm-6
+            .form-group.mb-2.mb-2
+              label(for="vcard-control") 控制卡片
+              .btn-group.d-flex.mb-1
+                button.btn.btn-sm.btn-outline-info(type="button", @click="btnMoveCard(-1)") #[i.fa.fa-arrow-left] 前移
+                button.btn.btn-sm.btn-outline-info(type="button", @click="btnMoveCard(1)") #[i.fa.fa-arrow-right] 後移
+                button.btn.btn-sm.btn-outline-danger(type="button", @click="btnDelCard") #[i.fa.fa-trash] 刪除
+              small.form-text.text-muted 你可以點選前後移按鈕來移動卡片。
+            .form-group.was-validated.mb-2
+              label(for="vcard-bgColor") 卡片底色
+              input.form-control(id="vcard-bgColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.bgColor")
+              small.form-text.text-muted 請填寫卡片的底色。
+            .form-group.was-validated.mb-0
+              label(for="vcard-image") 卡片圖片網址 (長寬比 #[code {{ vcard.json5.ratio }}])
+              input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="curCard.image")
+              small.form-text.text-muted 請填寫卡片圖片網址，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
+              a.d-block.mt-2(v-if="curCardImgPreview", target="_blank", :href="curCardImgPreview")
+                img(:src="curCardImgPreview", style="width: 100%; max-width: 200px")
+      ul.list-group.list-group-flush
+        li.list-group-item(v-for="btn, btnIdx in curCard.btns", :key="btnIdx")
+          .row
+            .col-sm-6
+              .form-group.was-validated.mb-2
+                label(:for="`cardbtn-text-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 文字
+                input.form-control.form-control-sm(:id="`cardbtn-text-${btnIdx}`", type="text", required, pattern=".+", v-model="btn.text")
+              .form-group.was-validated.mb-0
+                label(:for="`cardbtn-link-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 連結
+                input.form-control.form-control-sm(:id="`cardbtn-link-${btnIdx}`", type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="btn.link")
+            .col-sm-6
+              .form-group.mb-2
+                label(:for="`cardbtn-color-${btnIdx}`") 控制按鈕 {{ circleNum[btnIdx] }}
+                .btn-group.d-flex.mb-1
+                  button.btn.btn-sm.btn-outline-info(type="button", @click="arrMove(curCard.btns, btnIdx, btnIdx-1)") #[i.fa.fa-arrow-up] 上移
+                  button.btn.btn-sm.btn-outline-info(type="button", @click="arrMove(curCard.btns, btnIdx, btnIdx+1)") #[i.fa.fa-arrow-down] 下移
+                  button.btn.btn-sm.btn-outline-danger(type="button", @click="btnDelBtn(btnIdx)") #[i.fa.fa-trash] 刪除
+              .form-group.was-validated.mb-0
+                label(:for="`cardbtn-color-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 樣式及顏色
+                .input-group.input-group-sm
+                  .input-group-prepend
+                    button.btn.btn-outline-secondary.dropdown-toggle(type="button", data-toggle="dropdown") {{ btnStyles[btn.style] }}
+                    .dropdown-menu.py-0
+                      button.dropdown-item(type="button", v-for="btnStyleName, btnStyle in btnStyles", @click="btn.style = btnStyle", :class="{active: (btn.style === btnStyle)}") {{ btnStyleName }}
+                  input.form-control(:id="`cardbtn-color-${btnIdx}`", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="btn.color")
+        li.list-group-item(v-if="curCard.btns.length < 4")
+          button.btn.btn-outline-success(type="button", @click="btnNewBtn") #[i.fa.fa-plus-circle] 新按鈕
+
+block vue-config
+  script.
+    const cfg = window.vueConfig
+    cfg.data = {
+      btnHeights: ['sm', 'md'],
+      btnStyles: { link: '文字有指定顏色', primary: '白字與指定底色', secondary: '黑字與指定底色' },
+      circleNum: '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳', // https://www.unicode.org/charts/nameslist/n_2460.html
+      fontSizes: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', '3xl', '4xl', '5xl'],
+      vcard: {
+        template: '#{baseurl}cards/line-carousel-1.txt',
+        page: 'setting',
+        json5: {
+          altText: '請在手機上查看數位版名片。',
+          btnHeight: 'sm',
+          descSize: 'xs',
+          ratio: '20:13',
+          titleSize: 'xl',
+          cards: [
+            {
+              bgColor: '#ffffff',
+              desc: '售價：USD $49.99',
+              descColor: '#000000',
+              image: 'https://i.imgur.com/yBjZFmf.png',
+              link: 'https://taichunmin.idv.tw/liff-businesscard/',
+              title: 'Arm Chair, White',
+              titleColor: '#000000',
+              btns: [
+                {
+                  color: '#17c950',
+                  link: 'https://taichunmin.idv.tw/liff-businesscard/',
+                  style: 'primary',
+                  text: 'Add to Cart',
+                },
+                {
+                  color: '#42659a',
+                  link: 'https://taichunmin.idv.tw/liff-businesscard/',
+                  style: 'link',
+                  text: 'Add to wishlist',
+                },
+              ],
+            },
+            {
+              bgColor: '#ffffff',
+              desc: '售價：USD $11.99 (暫時缺貨)',
+              descColor: '#000000',
+              image: 'https://i.imgur.com/9w8tesj.png',
+              link: 'https://taichunmin.idv.tw/liff-businesscard/',
+              title: 'Metal Desk Lamp',
+              titleColor: '#000000',
+              btns: [
+                {
+                  color: '#aaaaaa',
+                  link: 'https://taichunmin.idv.tw/liff-businesscard/',
+                  style: 'primary',
+                  text: 'Add to Cart',
+                },
+                {
+                  color: '#42659a',
+                  link: 'https://taichunmin.idv.tw/liff-businesscard/',
+                  style: 'link',
+                  text: 'Add to wishlist',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    }
+    cfg.computed = {
+      ...cfg.computed,
+      shortcut () {
+        const params = window.httpBuildQuery({
+          template: window.encodeBase64url(this.vcard.template),
+          json5base64: window.encodeBase64url(JSON5.stringify(this.vcard.json5)),
+        })
+        if (!_.isString(params) || !params.length) return
+        return `https://liff.line.me/#{liffidFull}/share-json5base64.html?${params}`
+      },
+      curCard () {
+        return _.get(this, ['vcard', 'json5', 'cards', this.vcard.page])
+      },
+      curCardImgPreview () {
+        try {
+          const url = new URL(this.curCard.image)
+          return url.href
+        } catch (err) {
+          console.error(err)
+        }
+      },
+      cardsLen () {
+        return _.get(this, 'vcard.json5.cards.length', 0)
+      },
+    }
+    cfg.methods = {
+      ...cfg.methods,
+      async btnNewCard () {
+        if (!_.hasIn(this, 'vcard.json5.cards')) await this.btnReset(false)
+        const cards = this.vcard.json5.cards
+        cards.push({
+          image: '',
+          link: 'https://taichunmin.idv.tw/liff-businesscard/',
+          desc: '',
+          title: '',
+          btns: [{
+            color: '#ffffff',
+            link: 'https://taichunmin.idv.tw/liff-businesscard/',
+            text: '',
+            style: 'primary',
+          }],
+        })
+        this.vcard.page = cards.length - 1
+      },
+      async btnNewBtn () {
+        const btns = _.get(this, 'curCard.btns')
+        if (!_.isArray(btns)) return
+        btns.push({
+          color: '#ffffff',
+          link: 'https://taichunmin.idv.tw/liff-businesscard/',
+          text: '分享給好友',
+          style: 'primary',
+        })
+      },
+      btnMoveCard (offset) {
+        const arr = this.vcard.json5.cards
+        const oldIdx = _.toSafeInteger(this.vcard.page)
+        let newIdx = (oldIdx + offset) % arr.length
+        newIdx += (newIdx < 0 ? arr.length : 0)
+        this.arrMove(arr, oldIdx, newIdx)
+        this.vcard.page = newIdx
+      },
+      async btnDelCard () {
+        const idx = _.toSafeInteger(this.vcard.page)
+        const arr = _.get(this, 'vcard.json5.cards')
+        if (!_.isArray(arr)) return
+        const yn = await Swal.fire({
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: '取消',
+          confirmButtonColor: '#d33',
+          confirmButtonText: '刪除',
+          focusCancel: true,
+          icon: 'warning',
+          showCancelButton: true,
+          text: `是否刪除卡片 ${this.circleNum[idx]}？`,
+        })
+        if (!yn.value) return
+        arr.splice(idx, 1)
+        this.vcard.page = 'setting'
+      },
+      async btnDelBtn (idx) {
+        const arr = _.get(this, 'curCard.btns')
+        if (!_.isArray(arr)) return
+        const yn = await Swal.fire({
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: '取消',
+          confirmButtonColor: '#d33',
+          confirmButtonText: '刪除',
+          focusCancel: true,
+          icon: 'warning',
+          showCancelButton: true,
+          text: `是否刪除按鈕 ${this.circleNum[idx]}？`,
+        })
+        if (!yn.value) return
+        arr.splice(idx, 1)
+      },
+      arrMove (arr, oldIdx, newIdx) {
+        const len = _.get(arr, 'length', 0)
+        if (!len || !_.inRange(oldIdx, len)) return
+        newIdx %= len
+        newIdx += (newIdx < 0 ? len : 0)
+        arr.splice(newIdx, 0, ...arr.splice(oldIdx, 1))
+      },
+    }

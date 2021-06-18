@@ -33,7 +33,6 @@ block content
 
 block script
   script.
-    /* global getCsv */
     const vm = new Vue({ // eslint-disable-line
       el: '#app',
       data: {
@@ -44,7 +43,7 @@ block script
         try {
           window.gtagInit()
           window.gtagScreenView('瀏覽免費樣板列表網頁')
-          this.businesscards = await getCsv('#{baseurl}businesscards.csv')
+          this.businesscards = await window.getCsv('#{baseurl}businesscards.csv')
           window.gtagTiming('after mounted')
         } catch (err) {
           window.gtagError(err, true)

@@ -19,8 +19,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'eol-last': ['error', 'always'],
     'no-return-await': 0, // 0 = off, 1 = warn, 2 = error
-    'spaced-comment': ['error', 'always', { markers: ['-'] }],
     'comma-dangle': ['error', {
       arrays: 'always-multiline',
       objects: 'always-multiline',

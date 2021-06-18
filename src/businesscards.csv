@@ -1,4 +1,5 @@
 form,name,author,lang,preview,description
+forms/line-carousel-1.html,多頁訊息 1,taichunmin,zh_TW,https://i.imgur.com/0pbirUY.png,LINE Flex 訊息模擬器上的多頁訊息
 forms/psprint-592.html,Corporate Buzz,taichunmin,zh_TW,https://i.imgur.com/sohhnA0.png,PsPrint Corporate Buzz
 forms/google-sheet.html,Google Sheet,taichunmin,zh_TW,https://i.imgur.com/Jdb68bE.png,從 Google Sheet 讀取名片資料來產生名片
 forms/csv.html,CSV,taichunmin,zh_TW,https://i.imgur.com/CU3myIc.png,從 CSV 讀取名片資料來產生名片

@@ -205,10 +205,10 @@ block vue-config
       shortcut () {
         const params = window.httpBuildQuery({
           template: window.encodeBase64url(this.vcard.template),
-          json5base64: window.encodeBase64url(JSON5.stringify(this.vcard.json5)),
+          json5gzip: window.encodeGzip(JSON5.stringify(this.vcard.json5)),
         })
         if (!_.isString(params) || !params.length) return
-        return `https://liff.line.me/#{liffidFull}/share-json5base64.html?${params}`
+        return `https://liff.line.me/#{liffidFull}/share-json5gzip.html?${params}`
       },
       curCard () {
         return _.get(this, ['vcard', 'json5', 'cards', this.vcard.page])

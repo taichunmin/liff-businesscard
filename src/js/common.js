@@ -42,6 +42,30 @@ window.encodeBase64url = str => Base64.encode(str).replace(/[+/=]/g, c => _.get(
 
 window.decodeBase64url = str => Base64.decode(str.replace(/[-_]/g, c => _.get({ '-': '+', _: '/' }, c)))
 
+window.encodeGzip = (() => {
+  const cBase64 = CryptoJS.enc.Base64
+  const WordArray = CryptoJS.lib.WordArray
+  const base64ToUrl = str => str.replace(/[+/=]/g, c => _.get({ '+': '-', '/': '_', '=': '' }, c))
+  const deflate = window.pako.deflate
+  return str => base64ToUrl(cBase64.stringify(WordArray.create(deflate(str))))
+})()
+
+window.decodeGzip = (() => {
+  const cBase64 = CryptoJS.enc.Base64
+  const inflate = window.pako.inflate
+  const urlToBase64 = str => str.replace(/[-_]/g, c => _.get({ '-': '+', _: '/' }, c))
+  const wordToArrayBuffer = wordArr => {
+    const len = wordArr.words.length
+    const view = new DataView(new ArrayBuffer(len << 2))
+    for (let i = 0; i < len; i++) view.setInt32(i << 2, wordArr.words[i])
+    return view.buffer.slice(0, wordArr.sigBytes)
+  }
+  return base64 => {
+    const buffer = wordToArrayBuffer(cBase64.parse(urlToBase64(base64)))
+    return inflate(new Uint8Array(buffer), { to: 'string' })
+  }
+})()
+
 // copy(beautifyFlex())
 window.beautifyFlex = obj => {
   if (_.isArray(obj)) return _.map(obj, window.beautifyFlex)

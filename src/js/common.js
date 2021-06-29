@@ -40,7 +40,13 @@ window.httpBuildQuery = obj => Qs.stringify(obj, { arrayFormat: 'brackets' })
 
 window.encodeBase64url = str => Base64.encode(str).replace(/[+/=]/g, c => _.get({ '+': '-', '/': '_', '=': '' }, c))
 
-window.decodeBase64url = str => Base64.decode(str.replace(/[-_]/g, c => _.get({ '-': '+', _: '/' }, c)))
+window.decodeBase64url = str => {
+  try {
+    return Base64.decode(str.replace(/[-_]/g, c => _.get({ '-': '+', _: '/' }, c)))
+  } catch (err) {
+    return null
+  }
+}
 
 window.encodeGzip = (() => {
   const cBase64 = CryptoJS.enc.Base64

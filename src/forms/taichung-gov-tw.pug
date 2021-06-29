@@ -42,11 +42,11 @@ block form
     small.form-text.text-muted 請填寫單位的地址。
   .form-group.was-validated.my-2
     label(for="vcard-maps") 地圖
-    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.maps", rows="3")
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="https?://\\S+", v-model="vcard.maps", rows="3")
     small.form-text.text-muted 請填寫單位的 Google 地圖網址。
   .form-group.was-validated.my-2
     label(for="vcard-url") 網站
-    textarea#vcard-url.form-control.form-control-sm(inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.url", rows="3")
+    textarea#vcard-url.form-control.form-control-sm(inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url", rows="3")
     small.form-text.text-muted 請填寫單位網站。
 
 block vue-config

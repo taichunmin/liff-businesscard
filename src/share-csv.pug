@@ -3,13 +3,13 @@ extends /layout/default
 block beforehtml
   -
     title = '分享 LINE 數位版名片'
-    description = '請開啟本連結並按一下「選擇分享對象」來透過 LINE 分享名片'
+    description = '請開啟本連結並按一下「分享好友」來分享給好友或群組。'
 
 //- disable gtag
 block compoment-gtag
 
 block script
-  script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/@line/liff@2/dist/lib/index.js")
+  script(crossorigin="anonymous", src="https://static.line-scdn.net/liff/edge/2/sdk.js")
   script.
     (async () => {
       await liff.init({ liffId: '#{liffidShareCsv}' })

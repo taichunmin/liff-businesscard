@@ -8,7 +8,7 @@ block beforehtml
 block meta
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
-  meta(property="og:image", content="https://i.imgur.com/H9liWK4.png")
+  meta(property="og:image", content="https://i.imgur.com/hO0LAHK.png")
   meta(property="og:url", content=baseurl+"forms/facebook-post-link-1.html")
 
 block form
@@ -18,7 +18,7 @@ block form
     small.form-text.text-muted 請填寫無法顯示訊息時（如：系統通知）的替代文字。
   .form-group.was-validated.my-2
     label(for="vcard-avatar") 大頭貼
-    input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.avatar")
+    input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.avatar")
     small.form-text.text-muted 請填寫大頭貼圖片網址，長寬比為 #[code 1:1]。
   .form-group.was-validated.my-2
     label(for="vcard-author") 姓名
@@ -26,7 +26,7 @@ block form
     small.form-text.text-muted 請填寫姓名。
   .form-group.was-validated.my-2
     label(for="vcard-website") 姓名區塊網址
-    input#vcard-website.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.website")
+    input#vcard-website.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.website")
     small.form-text.text-muted 請填寫姓名區塊點擊後會打開的網址。
   .form-group.was-validated.my-2
     label(for="vcard-action") 姓名區塊動作
@@ -34,7 +34,7 @@ block form
     small.form-text.text-muted 請填寫姓名區塊接在姓名後面的文字。
   .form-group.was-validated.my-2
     label(for="vcard-image") 預覽圖
-    input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.image")
+    input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.image")
     small.form-text.text-muted 請填寫連結的預覽圖。
   .form-group.was-validated.my-2
     label(for="vcard-ratio") 預覽圖的長寬比
@@ -42,7 +42,7 @@ block form
     small.form-text.text-muted 請填寫連結預覽圖的長寬比。
   .form-group.was-validated.my-2
     label(for="vcard-link") 連結
-    input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.link")
+    input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.link")
     small.form-text.text-muted 請填寫連結。你可以使用 #[a(target="_blank", href="https://ga-dev-tools.appspot.com/campaign-url-builder/") UTM Builder] 以及 #[code &amp;openExternalBrowser=1] 另開瀏覽器。
   .form-group.was-validated.my-2
     label(for="vcard-title") 連結標題

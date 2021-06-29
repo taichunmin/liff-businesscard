@@ -14,11 +14,11 @@ block meta
 block form
   .form-group.was-validated.my-2
     label(for="vcard-template") 名片樣板
-    input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.template")
+    input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.template")
     small.form-text.text-muted 請填寫名片樣板網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
   .form-group.was-validated.my-2
     label(for="vcard-csv") CSV
-    input#vcard-csv.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.csv")
+    input#vcard-csv.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.csv")
     small.form-text.text-muted 請填寫名片資料 CSV 網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
   .form-group.was-validated.my-2
     label(for="vcard-key") 比對欄位

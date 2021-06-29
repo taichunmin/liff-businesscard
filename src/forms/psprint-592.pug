@@ -8,7 +8,7 @@ block beforehtml
 block meta
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
-  meta(property="og:image", content="https://i.imgur.com/sohhnA0.png")
+  meta(property="og:image", content="https://i.imgur.com/AjbhMam.png")
   meta(property="og:url", content=baseurl + "forms/psprint-592.html")
 
 block form
@@ -45,11 +45,11 @@ block form
     small.form-text.text-muted 請填寫公司地址。
   .form-group.was-validated.my-2
     label(for="vcard-maps") Google 地圖
-    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.maps", rows="3")
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="https?://\\S+", v-model="vcard.maps", rows="3")
     small.form-text.text-muted 請填寫公司的 Google 地圖網址。
   .form-group.was-validated.my-2
     label(for="vcard-url") 網址
-    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.url")
+    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url")
     small.form-text.text-muted 請填寫公司網址。
 
 block vue-config

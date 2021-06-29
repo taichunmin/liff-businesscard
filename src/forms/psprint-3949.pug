@@ -8,13 +8,13 @@ block beforehtml
 block meta
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
-  meta(property="og:image", content="https://i.imgur.com/g8GdiVN.png")
+  meta(property="og:image", content="https://i.imgur.com/tUvhifE.png")
   meta(property="og:url", content=baseurl + "forms/psprint-3949.html")
 
 block form
   .form-group.was-validated.my-2
     label(for="vcard-logo") LOGO
-    input#vcard-logo.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.logo")
+    input#vcard-logo.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.logo")
     small.form-text.text-muted 請填寫 LOGO，比例為 #[code 1:1]。
   .form-group.was-validated.my-2
     label(for="vcard-name") 姓名
@@ -34,7 +34,7 @@ block form
     small.form-text.text-muted 請填寫公司地址。
   .form-group.was-validated.my-2
     label(for="vcard-maps") 地圖
-    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.maps", rows="3")
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="https?://\\S+", v-model="vcard.maps", rows="3")
     small.form-text.text-muted 請填寫公司的 Google 地圖網址。
   .form-group.was-validated.my-2
     label(for="vcard-tel") 電話
@@ -46,7 +46,7 @@ block form
     small.form-text.text-muted 請填寫公司信箱。
   .form-group.was-validated.my-2
     label(for="vcard-url") 網站
-    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.url")
+    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url")
     small.form-text.text-muted 請填寫公司網站。
 
 block vue-config

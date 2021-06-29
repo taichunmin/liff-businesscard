@@ -8,13 +8,13 @@ block beforehtml
 block meta
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
-  meta(property="og:image", content="https://i.imgur.com/YqW1e5j.png")
+  meta(property="og:image", content="https://i.imgur.com/rGRMSdy.png")
   meta(property="og:url", content=baseurl+"forms/acnh-passport-1.html")
 
 block form
   .form-group.was-validated.my-2
     label(for="vcard-avator") 大頭照
-    input#vcard-avator.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="vcard.avator")
+    input#vcard-avator.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.avator")
     small.form-text.text-muted 請填寫大頭照圖片網址，比例為 #[code 1:1]。 #[a(href="https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4/edit#gid=1696242249", target="_blank") 居民大頭貼請點此]
   .form-group.was-validated.my-2
     label(for="vcard-title") 頭銜

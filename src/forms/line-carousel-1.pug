@@ -15,12 +15,28 @@ block meta
       li.nav-item > button.nav-link
         color: #007bff
         background-color: transparent
-      .form-control-color
-        max-width: 3rem
+      .form-control.form-control-color, .was-validated .form-control.form-control-color:valid
+        -moz-appearance: none
+        -webkit-appearance: none
+        appearance: none
+        background: none
+        border: 1px solid #ced4da
         height: auto
         padding: .375rem
+        width: 3rem
         &:not(:disabled):not([readonly])
           cursor: pointer
+        &::-moz-color-swatch
+          border-radius: .25rem
+          border: none
+        &::-webkit-color-swatch
+          border-radius: .25rem
+          border: none
+        &::-webkit-color-swatch-wrapper
+          padding: 0
+      .input-group-append>.form-control-color
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
 
 block form
   .card.my-2
@@ -29,7 +45,7 @@ block form
         li.nav-item: button.nav-link(type="button", @click="vcard.page = 'setting'", :class="{active: (vcard.page === 'setting')}") 設定
         li.nav-item(v-for="cardIdx in cardsLen")
           button.nav-link(type="button", @click="vcard.page = cardIdx-1", :class="{active: (vcard.page === cardIdx-1)}") {{ circleNum[cardIdx-1] }}
-        li.nav-item(v-if="cardsLen < 13"): button.nav-link(type="button", @click="btnNewCard") #[i.fa.fa-plus-circle] 新卡片
+        li.nav-item(v-if="cardsLen < 12"): button.nav-link(type="button", @click="btnNewCard") #[i.fa.fa-plus-circle] 新卡片
     .card-body(v-if="vcard.page === 'setting'")
       .form-group.was-validated.mb-2
         label(for="vcard-altText") 替代文字
@@ -38,7 +54,7 @@ block form
       .form-group.was-validated.mb-2
         label(for="vcard-ratio") 圖片的長寬比
         input#vcard-ratio.form-control.form-control-sm(type="text", required, pattern="\\d+:\\d+", v-model="vcard.json5.ratio")
-        small.form-text.text-muted 請填寫頁面圖片的長寬比。
+        small.form-text.text-muted 請填寫卡片圖片的長寬比。
       .form-group.was-validated.mb-2
         label(for="vcard-titleSize") 標題文字大小
         .input-group.input-group-sm
@@ -59,11 +75,11 @@ block form
         small.form-text.text-muted 請填寫卡片說明的文字大小。
       .form-group.mb-0
         label(for="vcard-btnHeight") 按鈕大小
-        select.form-control.form-control-sm(v-model="vcard.json5.btnHeight")
+        select#vcard-btnHeight.form-control.form-control-sm(v-model="vcard.json5.btnHeight")
           option(v-for="btnHeight in btnHeights", :value="btnHeight") {{ btnHeight }}
         small.form-text.text-muted 請選擇卡片下方的按鈕大小。
     template(v-if="curCard")
-      .card-body
+      .card-body.pt-3.pb-2
         .row
           .col-sm-6
             .form-group.was-validated.mb-2
@@ -72,7 +88,9 @@ block form
               small.form-text.text-muted 請填寫卡片標題。
             .form-group.was-validated.mb-2
               label(for="vcard-titleColor") 標題文字顏色
-              input.form-control(id="vcard-titleColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.titleColor")
+              .input-group.input-group-sm
+                input.form-control(id="vcard-titleColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.titleColor")
+                .input-group-append: input.form-control.form-control-color(type="color", v-model="curCard.titleColor")
               small.form-text.text-muted 請填寫卡片標題文字的顏色。
             .form-group.was-validated.mb-2
               label(for="vcard-desc") 卡片說明
@@ -80,15 +98,17 @@ block form
               small.form-text.text-muted 請填寫卡片說明。
             .form-group.was-validated.mb-2
               label(for="vcard-descColor") 說明文字顏色
-              input.form-control(id="vcard-descColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.descColor")
+              .input-group.input-group-sm
+                input.form-control(id="vcard-descColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.descColor")
+                .input-group-append: input.form-control.form-control-color(type="color", v-model="curCard.descColor")
               small.form-text.text-muted 請填寫卡片說明文字的顏色。
-            .form-group.was-validated.mb-0
+            .form-group.was-validated.mb-2
               label(for="vcard-link") 卡片連結
-              input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="curCard.link")
-              small.form-text.text-muted 你可以使用 #[a(target="_blank", href="https://ga-dev-tools.appspot.com/campaign-url-builder/") UTM Builder] 以及 #[code &amp;openExternalBrowser=1] 另開瀏覽器，如果需要加上再次分享連結，請用能修改跳轉網址的短網址服務 #[a(target="_blank", href="https://app.lihi.io/admin/login") (如: Lihi)]。
+              input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="curCard.link")
+              small.form-text.text-muted 你可以使用 #[code ?openExternalBrowser=1] 另開瀏覽器，如果需要加上再次分享連結，請用能修改的短網址服務 #[a(target="_blank", href="https://app.lihi.io/admin/login") (如: Lihi)]。
           .col-sm-6
             .form-group.mb-2.mb-2
-              label(for="vcard-control") 控制卡片
+              label 控制卡片
               .btn-group.d-flex.mb-1
                 button.btn.btn-sm.btn-outline-info(type="button", @click="btnMoveCard(-1)") #[i.fa.fa-arrow-left] 前移
                 button.btn.btn-sm.btn-outline-info(type="button", @click="btnMoveCard(1)") #[i.fa.fa-arrow-right] 後移
@@ -96,32 +116,34 @@ block form
               small.form-text.text-muted 你可以點選前後移按鈕來移動卡片。
             .form-group.was-validated.mb-2
               label(for="vcard-bgColor") 卡片底色
-              input.form-control(id="vcard-bgColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.bgColor")
+              .input-group.input-group-sm
+                input.form-control(id="vcard-bgColor", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="curCard.bgColor")
+                .input-group-append: input.form-control.form-control-color(type="color", v-model="curCard.bgColor")
               small.form-text.text-muted 請填寫卡片的底色。
-            .form-group.was-validated.mb-0
+            .form-group.was-validated.mb-2
               label(for="vcard-image") 卡片圖片網址 (長寬比 #[code {{ vcard.json5.ratio }}])
-              input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="curCard.image")
+              input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="curCard.image")
               small.form-text.text-muted 請填寫卡片圖片網址，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
               a.d-block.mt-2(v-if="curCardImgPreview", target="_blank", :href="curCardImgPreview")
-                img(:src="curCardImgPreview", style="width: 100%; max-width: 200px")
+                img(:src="curCardImgPreview", :key="curCardImgPreview", style="width: 100%; max-width: 200px")
       ul.list-group.list-group-flush
-        li.list-group-item(v-for="btn, btnIdx in curCard.btns", :key="btnIdx")
+        li.list-group-item.pt-3.pb-2(v-for="btn, btnIdx in curCard.btns", :key="btnIdx")
           .row
             .col-sm-6
               .form-group.was-validated.mb-2
                 label(:for="`cardbtn-text-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 文字
                 input.form-control.form-control-sm(:id="`cardbtn-text-${btnIdx}`", type="text", required, pattern=".+", v-model="btn.text")
-              .form-group.was-validated.mb-0
+              .form-group.was-validated.mb-2
                 label(:for="`cardbtn-link-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 連結
-                input.form-control.form-control-sm(:id="`cardbtn-link-${btnIdx}`", type="url", inputmode="url", required, pattern="(https?|line)://.+", v-model="btn.link")
+                input.form-control.form-control-sm(:id="`cardbtn-link-${btnIdx}`", type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="btn.link")
             .col-sm-6
               .form-group.mb-2
-                label(:for="`cardbtn-color-${btnIdx}`") 控制按鈕 {{ circleNum[btnIdx] }}
+                label 控制按鈕 {{ circleNum[btnIdx] }}
                 .btn-group.d-flex.mb-1
                   button.btn.btn-sm.btn-outline-info(type="button", @click="arrMove(curCard.btns, btnIdx, btnIdx-1)") #[i.fa.fa-arrow-up] 上移
                   button.btn.btn-sm.btn-outline-info(type="button", @click="arrMove(curCard.btns, btnIdx, btnIdx+1)") #[i.fa.fa-arrow-down] 下移
                   button.btn.btn-sm.btn-outline-danger(type="button", @click="btnDelBtn(btnIdx)") #[i.fa.fa-trash] 刪除
-              .form-group.was-validated.mb-0
+              .form-group.was-validated.mb-2
                 label(:for="`cardbtn-color-${btnIdx}`") 按鈕 {{ circleNum[btnIdx] }} 樣式及顏色
                 .input-group.input-group-sm
                   .input-group-prepend
@@ -129,6 +151,7 @@ block form
                     .dropdown-menu.py-0
                       button.dropdown-item(type="button", v-for="btnStyleName, btnStyle in btnStyles", @click="btn.style = btnStyle", :class="{active: (btn.style === btnStyle)}") {{ btnStyleName }}
                   input.form-control(:id="`cardbtn-color-${btnIdx}`", type="text", inputmode="url", required, pattern="#[0-9a-fA-F]{6}", v-model="btn.color")
+                  .input-group-append: input.form-control.form-control-color(type="color", v-model="btn.color")
         li.list-group-item(v-if="curCard.btns.length < 4")
           button.btn.btn-outline-success(type="button", @click="btnNewBtn") #[i.fa.fa-plus-circle] 新按鈕
 
@@ -141,7 +164,6 @@ block vue-config
       circleNum: '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳', // https://www.unicode.org/charts/nameslist/n_2460.html
       fontSizes: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', '3xl', '4xl', '5xl'],
       vcard: {
-        template: '#{baseurl}cards/line-carousel-1.txt',
         page: 'setting',
         json5: {
           altText: '請在手機上查看數位版名片。',
@@ -204,7 +226,7 @@ block vue-config
       ...cfg.computed,
       shortcut () {
         const params = window.httpBuildQuery({
-          template: window.encodeBase64url(this.vcard.template),
+          template: window.encodeBase64url('#{baseurl}cards/line-carousel-1.txt'),
           json5gzip: window.encodeGzip(JSON5.stringify(this.vcard.json5)),
         })
         if (!_.isString(params) || !params.length) return

@@ -1,0 +1,305 @@
+<%
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = 'Facebook分享連結-2020/09/18'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.title}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+function escapeStr (str) {
+  if (!_.isString(str)) return str
+  return JSON.stringify(str).slice(1, -1)
+}
+%>
+
+{
+  "altText": "${vcard.altText || (vcard.author + '分享了一個連結')}",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "layout": "vertical",
+      "paddingAll": "0px",
+      "type": "box",
+      "contents": [
+        {
+          "layout": "horizontal",
+          "paddingAll": "10px",
+          "spacing": "md",
+          "type": "box",
+          "action": {
+            "label": "action",
+            "type": "uri",
+            "uri": "${vcard.website}"
+          },
+          "contents": [
+            {
+              "borderColor": "#1877f2",
+              "borderWidth": "2px",
+              "cornerRadius": "20px",
+              "height": "40px",
+              "layout": "vertical",
+              "type": "box",
+              "width": "40px",
+              "contents": [
+                {
+                  "borderColor": "#ffffff",
+                  "borderWidth": "2px",
+                  "cornerRadius": "20px",
+                  "height": "36px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "width": "36px",
+                  "contents": [
+                    {
+                      "aspectMode": "cover",
+                      "aspectRatio": "1:1",
+                      "size": "full",
+                      "type": "image",
+                      "url": "${vcard.avatar}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "layout": "horizontal",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "flex": 0,
+                      "gravity": "center",
+                      "text": "${vcard.author}",
+                      "type": "text",
+                      "weight": "bold"
+                    },
+                    {
+                      "gravity": "center",
+                      "text": "${vcard.action}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "size": "xxs",
+                  "text": "${dayjs().format('M月D日 HH:mm')}",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "layout": "vertical",
+          "type": "box",
+          "action": {
+            "label": "action",
+            "type": "uri",
+            "uri": "${vcard.link}"
+          },
+          "contents": [
+            {
+              "aspectMode": "cover",
+              "aspectRatio": "${vcard.ratio}",
+              "size": "full",
+              "type": "image",
+              "url": "${vcard.image}"
+            }
+          ]
+        },
+        {
+          "layout": "vertical",
+          "paddingAll": "15px",
+          "spacing": "md",
+          "type": "box",
+          "action": {
+            "label": "action",
+            "type": "uri",
+            "uri": "${vcard.link}"
+          },
+          "contents": [
+            {
+              "size": "lg",
+              "text": "${vcard.title}",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "maxLines": 3,
+              "size": "sm",
+              "text": "${escapeStr(vcard.desc)}",
+              "type": "text",
+              "wrap": true
+            }
+          ]
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "layout": "horizontal",
+          "type": "box",
+          "contents": [
+            {
+              "flex": 1,
+              "layout": "horizontal",
+              "paddingAll": "15px",
+              "spacing": "sm",
+              "type": "box",
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "${liffLink}"
+              },
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "height": "20px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "width": "20px",
+                  "contents": [
+                    {
+                      "aspectMode": "cover",
+                      "aspectRatio": "1:1",
+                      "size": "full",
+                      "type": "image",
+                      "url": "https://i.imgur.com/IFjR25G.png"
+                    }
+                  ]
+                },
+                {
+                  "flex": 0,
+                  "gravity": "center",
+                  "text": "分享",
+                  "type": "text"
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "horizontal",
+              "paddingAll": "15px",
+              "spacing": "sm",
+              "type": "box",
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "${vcard.link}"
+              },
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "height": "20px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "width": "20px",
+                  "contents": [
+                    {
+                      "aspectMode": "cover",
+                      "aspectRatio": "1:1",
+                      "size": "full",
+                      "type": "image",
+                      "url": "https://i.imgur.com/tg4zN4R.png"
+                    }
+                  ]
+                },
+                {
+                  "flex": 0,
+                  "gravity": "center",
+                  "text": "開啟",
+                  "type": "text"
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "height": "1px",
+          "layout": "vertical",
+          "offsetStart": "0px",
+          "offsetTop": "0px",
+          "position": "absolute",
+          "type": "box",
+          "width": "1px",
+          "contents": [
+            {
+              "align": "center",
+              "aspectMode": "cover",
+              "aspectRatio": "1:1",
+              "gravity": "center",
+              "size": "full",
+              "type": "image",
+              "url": "${gaScreenView(vcard)}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

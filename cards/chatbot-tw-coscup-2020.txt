@@ -1,0 +1,248 @@
+<%
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = 'Chatbot台灣COSCUP-2020/07/24'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.title}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+function escapeStr (str) {
+  if (!_.isString(str)) return str
+  return JSON.stringify(str).slice(1, -1)
+}
+%>
+
+{
+  "altText": "「${vcard.speaker}」將為我們帶來「${vcard.title}」議程，時間是 ${vcard.time}，地點在 ${vcard.room}，歡迎大家踴躍參加！",
+  "type": "flex",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "layout": "vertical",
+      "spacing": "sm",
+      "type": "box",
+      "contents": [
+        {
+          "text": "${vcard.time}",
+          "type": "text"
+        },
+        {
+          "layout": "horizontal",
+          "spacing": "sm",
+          "type": "box",
+          "contents": [
+            {
+              "backgroundColor": "#3b9838",
+              "cornerRadius": "99px",
+              "flex": 0,
+              "layout": "vertical",
+              "paddingBottom": "2px",
+              "paddingEnd": "10px",
+              "paddingStart": "10px",
+              "paddingTop": "2px",
+              "type": "box",
+              "contents": [
+                {
+                  "color": "#ffffff",
+                  "size": "xxs",
+                  "text": "${vcard.room}",
+                  "type": "text",
+                  "weight": "bold"
+                }
+              ]
+            },
+            {
+              "backgroundColor": "#3b9838",
+              "cornerRadius": "99px",
+              "flex": 0,
+              "layout": "vertical",
+              "paddingBottom": "2px",
+              "paddingEnd": "10px",
+              "paddingStart": "10px",
+              "paddingTop": "2px",
+              "type": "box",
+              "contents": [
+                {
+                  "color": "#ffffff",
+                  "size": "xxs",
+                  "text": "${vcard.level}",
+                  "type": "text",
+                  "weight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "size": "sm",
+          "text": "${escapeStr(vcard.description)}",
+          "type": "text",
+          "wrap": true
+        }
+      ]
+    },
+    "footer": {
+      "layout": "horizontal",
+      "spacing": "md",
+      "type": "box",
+      "contents": [
+        {
+          "borderColor": "#3b9838",
+          "borderWidth": "1px",
+          "cornerRadius": "10px",
+          "layout": "vertical",
+          "paddingAll": "5px",
+          "type": "box",
+          "action": {
+            "label": "action",
+            "type": "uri",
+            "uri": "${vcard.agenda}"
+          },
+          "contents": [
+            {
+              "align": "center",
+              "color": "#3b9838",
+              "gravity": "center",
+              "text": "議程介紹",
+              "type": "text",
+              "weight": "bold"
+            }
+          ]
+        },
+        {
+          "borderColor": "#3b9838",
+          "borderWidth": "1px",
+          "cornerRadius": "10px",
+          "layout": "vertical",
+          "paddingAll": "5px",
+          "type": "box",
+          "action": {
+            "label": "action",
+            "type": "uri",
+            "uri": "${vcard.hackmd}"
+          },
+          "contents": [
+            {
+              "align": "center",
+              "color": "#3b9838",
+              "gravity": "center",
+              "text": "議程共筆",
+              "type": "text",
+              "weight": "bold"
+            }
+          ]
+        }
+      ]
+    },
+    "header": {
+      "backgroundColor": "#3b9838",
+      "layout": "horizontal",
+      "spacing": "md",
+      "type": "box",
+      "contents": [
+        {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#ffffff",
+          "borderWidth": "2px",
+          "cornerRadius": "50px",
+          "height": "100px",
+          "layout": "vertical",
+          "type": "box",
+          "width": "100px",
+          "contents": [
+            {
+              "align": "center",
+              "aspectMode": "cover",
+              "aspectRatio": "1:1",
+              "gravity": "center",
+              "size": "full",
+              "type": "image",
+              "url": "${vcard.avatar}"
+            }
+          ]
+        },
+        {
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box",
+          "contents": [
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "align": "start",
+              "color": "#ffffff",
+              "size": "xs",
+              "text": "COSCUP 2020",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "color": "#ffffff",
+              "size": "md",
+              "text": "${vcard.title}",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "color": "#DBFEB8",
+              "size": "xxs",
+              "text": "by  ${vcard.speaker}",
+              "type": "text"
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "height": "1px",
+          "layout": "vertical",
+          "offsetStart": "0px",
+          "offsetTop": "0px",
+          "position": "absolute",
+          "type": "box",
+          "width": "1px",
+          "contents": [
+            {
+              "align": "center",
+              "aspectMode": "cover",
+              "aspectRatio": "1:1",
+              "gravity": "center",
+              "size": "full",
+              "type": "image",
+              "url": "${gaScreenView(vcard)}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

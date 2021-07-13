@@ -1,0 +1,255 @@
+<%
+const DESIGNS = {
+  1: { bg1a: '#d7c6b2', bg1b: '#eae3d3', bg2a: '#41423d', bg2b: '#474745', bg3a: '#0e0f0c', bg3b: '#0e1211'},
+  2: { bg1a: '#79726b', bg1b: '#7f7c77', bg2a: '#252a26', bg2b: '#272c2b', bg3a: '#010503', bg3b: '#010506'},
+  3: { bg1a: '#682d26', bg1b: '#6e2f27', bg2a: '#230501', bg2b: '#250600', bg3a: '#000000', bg3b: '#000000'},
+}
+function escapeStr (str) {
+  if (!_.isString(str)) return str
+  return JSON.stringify(str).slice(1, -1)
+}
+function getHostname (url) {
+  return new URL(url).hostname
+}
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = 'Corporate Buzz-2021/01/14'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "altText": "請在手機上查看「${vcard.name}」的名片。",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "layout": "horizontal",
+      "paddingAll": "0px",
+      "paddingBottom": "20px",
+      "paddingTop": "20px",
+      "type": "box",
+      "background": {
+        "angle": "90deg",
+        "centerColor": "${DESIGNS[vcard.design].bg1b}",
+        "centerPosition": "50%",
+        "endColor": "${DESIGNS[vcard.design].bg1a}",
+        "startColor": "${DESIGNS[vcard.design].bg1a}",
+        "type": "linearGradient"
+      },
+      "contents": [
+        {
+          "layout": "vertical",
+          "paddingBottom": "5px",
+          "paddingTop": "5px",
+          "type": "box",
+          "background": {
+            "angle": "90deg",
+            "centerColor": "${DESIGNS[vcard.design].bg2b}",
+            "centerPosition": "50%",
+            "endColor": "${DESIGNS[vcard.design].bg2a}",
+            "startColor": "${DESIGNS[vcard.design].bg2a}",
+            "type": "linearGradient"
+          },
+          "contents": [
+            {
+              "layout": "vertical",
+              "paddingAll": "20px",
+              "paddingEnd": "40px",
+              "paddingStart": "40px",
+              "type": "box",
+              "background": {
+                "angle": "90deg",
+                "centerColor": "${DESIGNS[vcard.design].bg3b}",
+                "centerPosition": "50%",
+                "endColor": "${DESIGNS[vcard.design].bg3a}",
+                "startColor": "${DESIGNS[vcard.design].bg3a}",
+                "type": "linearGradient"
+              },
+              "contents": [
+                {
+                  "color": "#ffffff",
+                  "size": "3xl",
+                  "text": "${vcard.name}",
+                  "type": "text",
+                  "weight": "bold"
+                },
+                {
+                  "color": "#999999",
+                  "size": "lg",
+                  "text": "${vcard.title}",
+                  "type": "text"
+                },
+                {
+                  "layout": "horizontal",
+                  "margin": "xl",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "backgroundColor": "#ffffff",
+                      "cornerRadius": "9px",
+                      "height": "5px",
+                      "layout": "vertical",
+                      "type": "box",
+                      "width": "5px",
+                      "contents": []
+                    },
+                    {
+                      "layout": "vertical",
+                      "type": "box",
+                      "contents": [
+                        {
+                          "flex": 1,
+                          "layout": "vertical",
+                          "type": "box",
+                          "contents": []
+                        },
+                        {
+                          "backgroundColor": "#ffffff",
+                          "height": "1px",
+                          "layout": "vertical",
+                          "type": "box",
+                          "contents": []
+                        },
+                        {
+                          "flex": 1,
+                          "layout": "vertical",
+                          "type": "box",
+                          "contents": []
+                        }
+                      ]
+                    },
+                    {
+                      "backgroundColor": "#ffffff",
+                      "cornerRadius": "9px",
+                      "height": "5px",
+                      "layout": "vertical",
+                      "type": "box",
+                      "width": "5px",
+                      "contents": []
+                    }
+                  ]
+                },
+                {
+                  "layout": "horizontal",
+                  "margin": "xl",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "flex": 0,
+                      "layout": "vertical",
+                      "spacing": "xs",
+                      "type": "box",
+                      "contents": [
+                        {
+                          "color": "#ffffff",
+                          "size": "xs",
+                          "text": "${vcard.tel1}",
+                          "type": "text",
+                          "action": {
+                            "type": "uri",
+                            "uri": "tel:${vcard.tel1}"
+                          }
+                        },
+                        {
+                          "color": "#ffffff",
+                          "size": "xs",
+                          "text": "${vcard.tel2}",
+                          "type": "text",
+                          "action": {
+                            "type": "uri",
+                            "uri": "tel:${vcard.tel2}"
+                          }
+                        },
+                        {
+                          "color": "#ffffff",
+                          "size": "xxs",
+                          "text": "${vcard.email}",
+                          "type": "text",
+                          "action": {
+                            "type": "uri",
+                            "uri": "mailto:${vcard.email}"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "flex": 1,
+                      "layout": "vertical",
+                      "type": "box",
+                      "contents": []
+                    },
+                    {
+                      "flex": 0,
+                      "layout": "vertical",
+                      "type": "box",
+                      "contents": [
+                        {
+                          "color": "#ffffff",
+                          "flex": 1,
+                          "size": "xs",
+                          "text": "${escapeStr(vcard.address)}",
+                          "type": "text",
+                          "wrap": true,
+                          "action": {
+                            "type": "uri",
+                            "uri": "${vcard.maps}"
+                          }
+                        },
+                        {
+                          "color": "#ffffff",
+                          "size": "xxs",
+                          "text": "${getHostname(vcard.url)}",
+                          "type": "text",
+                          "action": {
+                            "type": "uri",
+                            "uri": "${vcard.url}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "height": "1px",
+              "layout": "vertical",
+              "offsetStart": "0px",
+              "offsetTop": "0px",
+              "position": "absolute",
+              "type": "box",
+              "width": "1px",
+              "contents": [
+                {
+                  "align": "center",
+                  "aspectMode": "cover",
+                  "aspectRatio": "1:1",
+                  "gravity": "center",
+                  "size": "full",
+                  "type": "image",
+                  "url": "${gaScreenView(vcard)}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

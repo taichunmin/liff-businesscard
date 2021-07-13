@@ -1,0 +1,395 @@
+<%
+const FRUIT_NAME = {
+  Apple: '蘋果',
+  Cherry: '櫻桃',
+  Orange: '橘子',
+  Peach: '桃子',
+  Pear: '梨子',
+}
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = '動物森友會護照-2020/07/17'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "altText": "大家好，我是「${vcard.island}」的「${vcard.name}」，好友代碼是 ${vcard.nso}，請加我好友。」",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "backgroundColor": "#FBF6D9",
+      "layout": "vertical",
+      "type": "box",
+      "contents": [
+        {
+          "layout": "horizontal",
+          "spacing": "xl",
+          "type": "box",
+          "contents": [
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "borderColor": "#989F7E",
+                  "borderWidth": "1px",
+                  "height": "0px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "color": "#989F7E",
+              "flex": 0,
+              "size": "sm",
+              "text": "PASSPORT",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "borderColor": "#989F7E",
+                  "borderWidth": "1px",
+                  "height": "0px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "backgroundColor": "#E7EBB9",
+          "layout": "vertical",
+          "margin": "xl",
+          "paddingAll": "20px",
+          "spacing": "xxl",
+          "type": "box",
+          "contents": [
+            {
+              "layout": "horizontal",
+              "spacing": "xxl",
+              "type": "box",
+              "contents": [
+                {
+                  "backgroundColor": "#EAEED3",
+                  "borderColor": "#F8F7D9",
+                  "borderWidth": "7px",
+                  "cornerRadius": "7px",
+                  "height": "100px",
+                  "layout": "vertical",
+                  "type": "box",
+                  "width": "100px",
+                  "contents": [
+                    {
+                      "align": "center",
+                      "aspectMode": "cover",
+                      "aspectRatio": "1:1",
+                      "gravity": "center",
+                      "size": "full",
+                      "type": "image",
+                      "url": "${vcard.avator}"
+                    }
+                  ]
+                },
+                {
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "flex": 1,
+                      "gravity": "center",
+                      "size": "lg",
+                      "text": "${vcard.title}",
+                      "type": "text",
+                      "weight": "bold"
+                    },
+                    {
+                      "backgroundColor": "#F9F9D7",
+                      "borderWidth": "2px",
+                      "cornerRadius": "3px",
+                      "height": "0px",
+                      "layout": "vertical",
+                      "type": "box",
+                      "contents": [
+                        {
+                          "type": "filler"
+                        }
+                      ]
+                    },
+                    {
+                      "flex": 1,
+                      "gravity": "center",
+                      "size": "3xl",
+                      "text": "${vcard.name}",
+                      "type": "text",
+                      "weight": "bold"
+                    },
+                    {
+                      "backgroundColor": "#F9F9D7",
+                      "borderWidth": "2px",
+                      "cornerRadius": "3px",
+                      "height": "0px",
+                      "layout": "vertical",
+                      "type": "box",
+                      "contents": [
+                        {
+                          "type": "filler"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 2,
+                  "layout": "horizontal",
+                  "spacing": "md",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "height": "24px",
+                      "layout": "vertical",
+                      "paddingAll": "3px",
+                      "type": "box",
+                      "width": "24px",
+                      "contents": [
+                        {
+                          "align": "center",
+                          "aspectMode": "cover",
+                          "aspectRatio": "1:1",
+                          "gravity": "center",
+                          "size": "full",
+                          "type": "image",
+                          "url": "https://i.imgur.com/2ebwzTk.png"
+                        }
+                      ]
+                    },
+                    {
+                      "gravity": "center",
+                      "text": "${vcard.island}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "horizontal",
+                  "spacing": "md",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "height": "24px",
+                      "layout": "vertical",
+                      "type": "box",
+                      "width": "24px",
+                      "contents": [
+                        {
+                          "align": "center",
+                          "aspectMode": "cover",
+                          "aspectRatio": "1:1",
+                          "gravity": "center",
+                          "size": "full",
+                          "type": "image",
+                          "url": "https://acnhcdn.com/latest/MenuIcon/${vcard.fruit}.png"
+                        }
+                      ]
+                    },
+                    {
+                      "gravity": "center",
+                      "text": "${FRUIT_NAME[vcard.fruit]}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "backgroundColor": "#F9F9D7",
+              "borderWidth": "2px",
+              "cornerRadius": "3px",
+              "height": "0px",
+              "layout": "vertical",
+              "margin": "sm",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 2,
+                  "layout": "horizontal",
+                  "spacing": "md",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "height": "24px",
+                      "layout": "vertical",
+                      "paddingAll": "3px",
+                      "type": "box",
+                      "width": "24px",
+                      "contents": [
+                        {
+                          "align": "center",
+                          "aspectMode": "cover",
+                          "aspectRatio": "1:1",
+                          "gravity": "center",
+                          "size": "full",
+                          "type": "image",
+                          "url": "https://i.imgur.com/m9M26rs.png"
+                        }
+                      ]
+                    },
+                    {
+                      "gravity": "center",
+                      "text": "${vcard.nso}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "backgroundColor": "#F9F9D7",
+              "borderWidth": "2px",
+              "cornerRadius": "3px",
+              "height": "0px",
+              "layout": "vertical",
+              "margin": "sm",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "height": "1px",
+              "layout": "vertical",
+              "offsetStart": "0px",
+              "offsetTop": "0px",
+              "position": "absolute",
+              "type": "box",
+              "width": "1px",
+              "contents": [
+                {
+                  "align": "center",
+                  "aspectMode": "cover",
+                  "aspectRatio": "1:1",
+                  "gravity": "center",
+                  "size": "full",
+                  "type": "image",
+                  "url": "${gaScreenView(vcard)}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

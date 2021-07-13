@@ -1,0 +1,210 @@
+<%
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = 'Chatbot台灣開發者名片-2020/07/18'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "size": "giga",
+  "type": "bubble",
+  "body": {
+    "layout": "horizontal",
+    "spacing": "lg",
+    "type": "box",
+    "contents": [
+      {
+        "layout": "vertical",
+        "type": "box",
+        "width": "100px",
+        "contents": [
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          },
+          {
+            "height": "100px",
+            "layout": "vertical",
+            "type": "box",
+            "width": "100px",
+            "contents": [
+              {
+                "align": "center",
+                "aspectMode": "cover",
+                "aspectRatio": "1:1",
+                "gravity": "center",
+                "type": "image",
+                "url": "https://i.imgur.com/OTHOZaB.png"
+              }
+            ]
+          },
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "borderColor": "#6EC4C4",
+        "borderWidth": "1px",
+        "flex": 0,
+        "height": "120px",
+        "layout": "vertical",
+        "type": "box",
+        "contents": [
+          {
+            "type": "filler"
+          }
+        ]
+      },
+      {
+        "flex": 3,
+        "layout": "vertical",
+        "type": "box",
+        "contents": [
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          },
+          {
+            "color": "#6EC4C4",
+            "size": "sm",
+            "text": "Chatbot Developers Taiwan",
+            "type": "text",
+            "weight": "bold"
+          },
+          {
+            "color": "#81C997",
+            "margin": "xxl",
+            "size": "xxs",
+            "text": "${vcard.title}",
+            "type": "text"
+          },
+          {
+            "color": "#81C997",
+            "size": "xl",
+            "text": "${vcard.name}",
+            "type": "text",
+            "weight": "bold"
+          },
+          {
+            "flex": 1,
+            "layout": "vertical",
+            "type": "box",
+            "contents": [
+              {
+                "type": "filler"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "height": "1px",
+        "layout": "vertical",
+        "offsetStart": "0px",
+        "offsetTop": "0px",
+        "position": "absolute",
+        "type": "box",
+        "width": "1px",
+        "contents": [
+          {
+            "align": "center",
+            "aspectMode": "cover",
+            "aspectRatio": "1:1",
+            "gravity": "center",
+            "size": "full",
+            "type": "image",
+            "url": "${gaScreenView(vcard)}"
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "layout": "horizontal",
+    "spacing": "md",
+    "type": "box",
+    "contents": [
+      {
+        "borderColor": "#6EC4C4",
+        "borderWidth": "1px",
+        "cornerRadius": "5px",
+        "layout": "vertical",
+        "paddingAll": "5px",
+        "type": "box",
+        "action": {
+          "label": "action",
+          "type": "uri",
+          "uri": "https://lihi1.com/UUdgg"
+        },
+        "contents": [
+          {
+            "align": "center",
+            "color": "#6EC4C4",
+            "gravity": "center",
+            "text": "加入 LINE 群",
+            "type": "text",
+            "weight": "bold"
+          }
+        ]
+      },
+      {
+        "borderColor": "#6EC4C4",
+        "borderWidth": "1px",
+        "cornerRadius": "5px",
+        "layout": "vertical",
+        "paddingAll": "5px",
+        "type": "box",
+        "contents": [
+          {
+            "align": "center",
+            "color": "#6EC4C4",
+            "gravity": "center",
+            "text": "分享給好友",
+            "type": "text",
+            "weight": "bold",
+            "action": {
+              "label": "action",
+              "type": "uri",
+              "uri": "https://lihi1.com/iVs1B"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

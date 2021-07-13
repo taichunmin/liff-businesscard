@@ -1,0 +1,245 @@
+<%
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = '微程式範例-2020/07/12'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.name_tw}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "altText": "請在手機上查看「${vcard.name_tw}」的名片。",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "layout": "horizontal",
+      "paddingAll": "20px",
+      "type": "box",
+      "contents": [
+        {
+          "flex": 314,
+          "layout": "vertical",
+          "type": "box",
+          "contents": [
+            {
+              "aspectMode": "fit",
+              "aspectRatio": "2008:639",
+              "size": "full",
+              "type": "image",
+              "url": "https://i.imgur.com/XYWFmRx.png",
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "https://www.program.com.tw?openExternalBrowser=1"
+              }
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "margin": "xl",
+              "size": "xxs",
+              "text": "${vcard.title_tw}",
+              "type": "text",
+              "wrap": true
+            },
+            {
+              "size": "lg",
+              "text": "${vcard.name_tw}",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "margin": "xl",
+              "size": "xxs",
+              "text": "${vcard.title_en}",
+              "type": "text",
+              "wrap": true
+            },
+            {
+              "size": "lg",
+              "text": "${vcard.name_en}",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            }
+          ]
+        },
+        {
+          "flex": 624,
+          "layout": "vertical",
+          "margin": "xl",
+          "spacing": "sm",
+          "type": "box",
+          "contents": [
+            {
+              "aspectMode": "fit",
+              "aspectRatio": "580:93",
+              "size": "full",
+              "type": "image",
+              "url": "https://i.imgur.com/AkL7eqf.png",
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "https://www.program.com.tw?openExternalBrowser=1"
+              }
+            },
+            {
+              "layout": "horizontal",
+              "margin": "lg",
+              "spacing": "md",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 0,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "align": "center",
+                      "color": "#E2231A",
+                      "flex": 0,
+                      "size": "sm",
+                      "text": "M",
+                      "type": "text",
+                      "weight": "bold"
+                    },
+                    {
+                      "align": "center",
+                      "color": "#E2231A",
+                      "flex": 0,
+                      "size": "sm",
+                      "text": "T",
+                      "type": "text",
+                      "weight": "bold"
+                    },
+                    {
+                      "align": "center",
+                      "color": "#E2231A",
+                      "flex": 0,
+                      "size": "sm",
+                      "text": "F",
+                      "type": "text",
+                      "weight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "size": "sm",
+                      "text": "+886 ${vcard.mobile.slice(1)}",
+                      "type": "text",
+                      "action": {
+                        "label": "action",
+                        "type": "uri",
+                        "uri": "tel:${vcard.mobile}"
+                      }
+                    },
+                    {
+                      "size": "sm",
+                      "text": "+886 4 2369 2699 #${vcard.ext}",
+                      "type": "text",
+                      "action": {
+                        "label": "action",
+                        "type": "uri",
+                        "uri": "tel:04-23692699,${vcard.ext}"
+                      }
+                    },
+                    {
+                      "size": "sm",
+                      "text": "+886 4 2258 8577",
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "margin": "lg",
+              "text": "${vcard.email}",
+              "type": "text",
+              "wrap": true,
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "mailto:${vcard.email}"
+              }
+            },
+            {
+              "margin": "lg",
+              "size": "xxs",
+              "text": "40757 台中市西屯區市政路402號7樓",
+              "type": "text",
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "https://www.google.com/maps/search/?api=1&query_place_id=ChIJAaZEqCYWaTQRMv6fuIsJEuo&query=%E5%BE%AE%E7%A8%8B%E5%BC%8F%E8%B3%87%E8%A8%8A&openExternalBrowser=1"
+              }
+            },
+            {
+              "margin": "none",
+              "size": "xxs",
+              "text": "7F, No.402, Shizheng Rd., Xitun Dist., Taichung City 407, Taiwan",
+              "type": "text",
+              "wrap": true,
+              "action": {
+                "label": "action",
+                "type": "uri",
+                "uri": "https://www.google.com/maps/search/?api=1&query_place_id=ChIJAaZEqCYWaTQRMv6fuIsJEuo&query=%E5%BE%AE%E7%A8%8B%E5%BC%8F%E8%B3%87%E8%A8%8A&openExternalBrowser=1"
+              }
+            },
+            {
+              "size": "xxs",
+              "text": "統一編號  89798198",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "height": "1px",
+          "layout": "vertical",
+          "offsetStart": "0px",
+          "offsetTop": "0px",
+          "position": "absolute",
+          "type": "box",
+          "width": "1px",
+          "contents": [
+            {
+              "aspectMode": "fit",
+              "aspectRatio": "1:1",
+              "size": "full",
+              "type": "image",
+              "url": "${gaScreenView(vcard)}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

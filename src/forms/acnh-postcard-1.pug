@@ -46,7 +46,9 @@ block form
 
 block vue-config
   script.
-    window.vueConfig.data = {
+    const cfg = window.vueConfig
+    cfg.data = {
+      ...cfg.data,
       designs: {
         Academy00: { name: '快樂家協會卡片', imgur: 'zx0bo9H', bg: '#00000000', body: '#210E0A', from: '#210E0A', to: '#210E0A' },
         Active00: { name: '塗鴉卡片', imgur: '8sVICE9', bg: '#00000000', body: '#FBFE00', from: '#06FFEE', to: '#07F5DE' },

@@ -9,6 +9,8 @@ window.errorToJson = (() => {
     'message',
     'name',
     'originalError.response.data',
+    'originalError.response.headers',
+    'originalError.response.status',
     'path',
     'port',
     'reason',
@@ -21,10 +23,14 @@ window.errorToJson = (() => {
     'statusMessage',
     'syscall',
   ]
-  return err => _.transform(ERROR_KEYS, (json, k) => {
-    if (_.hasIn(err, k)) _.set(json, k, _.get(err, k))
-  }, {})
+  return err => _.pick(err, ERROR_KEYS)
 })()
+
+window.logError = ({ err, fatal = false }) => {
+  err.message = _.get(err, 'response.data.message', err.message)
+  console.error(window.errorToJson(err))
+  if (window.gtagError) window.gtagError(err, fatal)
+}
 
 window.getCsv = async (url, cachetime = 3e4) => {
   const csv = _.trim(_.get(await axios.get(url, {

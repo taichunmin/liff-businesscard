@@ -26,6 +26,16 @@ html
           font-family: 'Noto Sans TC', sans-serif
         input, textarea
           font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace!important
+        .swal2-textarea
+          &.form-control
+            padding: .375rem .75rem
+            font-size: 1rem
+            color: #495057
+            border-radius: .25rem
+          &.form-control-sm
+            padding: .25rem .5rem
+            font-size: .875rem
+            border-radius: .2rem
     block style
   body
     include /component/livereload
@@ -35,9 +45,20 @@ html
     #app.container.my-4(v-cloak)
       h2.my-3.text-center= title
       block form
-      .row
-        .col: button.btn.btn-danger.btn-block.my-2(type="button", @click="btnReset") #[i.fa.mr-2.fa-repeat] 重設表單
-        .col: a.btn.btn-primary.btn-block.my-2(:href="shortcut", target="_blank") #[i.fa.mr-2.fa-id-card-o] 建立名片
+      .row.mx-n2.my-2.d-flex
+        button.btn.btn-danger.flex-fill.mx-2.my-1(type="button", @click="btnReset") #[i.fa.mr-2.fa-repeat] 重設表單
+        button.btn.btn-info.flex-fill.mx-2.my-1(type="button", @click="btnExport") #[i.fa.mr-2.fa-code] 匯出匯入
+        a.btn.btn-primary.flex-fill.mx-2.my-1(:href="shortcut", target="_blank") #[i.fa.mr-2.fa-id-card-o] 建立名片
+      #modal-exportimport.modal.fade(data-backdrop="static", data-keyboard="false", tabindex="-1", ref="modalExportImport")
+        .modal-dialog.modal-dialog-centered.modal-xl.align-items-stretch
+          .modal-content
+            .modal-body.d-flex.flex-column
+              textarea.form-control.form-control-sm.flex-fill(v-model="exportimport.text")
+              small.text-muted.form-text 請複製匯出的資料，或貼上之前的資料並點一下「匯入」按鈕。
+            .modal-footer
+              button.btn.btn-outline-success(type="button", @click="btnCopy(exportimport.text, $refs['modalExportImport'])") 複製
+              button.btn.btn-secondary(type="button", @click="jqModal('modalExportImport', 'hide')") 關閉
+              button.btn.btn-primary(type="button", @click="btnImport") 匯入
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/crypto-js@3/crypto-js.min.js")
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js")
@@ -49,7 +70,7 @@ html
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js")
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/popper.js@1/dist/umd/popper.min.js")
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/qs@6/dist/qs.min.js")
-    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/sweetalert2@10")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js")
     //- bootstrap require jquery and pupper
     script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js")
@@ -57,7 +78,12 @@ html
     script.
       window.vueConfig = {
         el: '#app',
-        data: {},
+        data: {
+          exportimport: {
+            text: '',
+            visible: false,
+          },
+        },
         async mounted () {
           try {
             window.gtagInit()
@@ -115,9 +141,52 @@ html
               this.$set(this, 'vcard', JSON5.parse(window.backupVcard))
               this.onloadVcard()
             } catch (err) {
-              window.gtagError(err, true)
-              console.error(err)
+              window.logError({ err, fatal: true })
             }
+          },
+          async exportVcard () {
+            return JSON.stringify(window.beautifyFlex(this.vcard), null, 2)
+          },
+          async importVcard (imported) {
+            imported = window.parseJsonOrDefault(imported)
+            if (!imported) throw new Error('無法解析匯入的 JSON5')
+            this.$set(this, 'vcard', imported)
+          },
+          async btnCopy (text, container = null) {
+            if (!container) container = document.body
+            const dom = document.createElement('textarea')
+            dom.value = text
+            container.appendChild(dom)
+            dom.select()
+            dom.setSelectionRange(0, 1e6) // For mobile devices
+            document.execCommand('copy')
+            container.removeChild(dom)
+            await Swal.fire({ icon: 'success', title: '複製成功' })
+          },
+          async btnExport () {
+            try {
+              const exported = await this.exportVcard()
+              this.exportimport.text = exported
+              this.jqModal('modalExportImport', 'show')
+            } catch (err) {
+              window.logError({ err, fatal: true })
+              await Swal.fire({ icon: 'error', title: '匯出失敗', text: err.message })
+            }
+          },
+          async btnImport () {
+            try {
+              this.jqModal('modalExportImport', 'hide')
+              const imported = _.trim(this.exportimport.text)
+              console.log({ imported })
+              await this.importVcard(imported)
+              this.exportimport.text = ''
+            } catch (err) {
+              window.logError({ err })
+              await Swal.fire({ icon: 'error', title: '匯入失敗', text: err.message })
+            }
+          },
+          jqModal (ref, action) {
+            window.jQuery(this.$refs[ref]).modal(action)
           },
         },
       }

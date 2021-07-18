@@ -159,6 +159,7 @@ block vue-config
   script.
     const cfg = window.vueConfig
     cfg.data = {
+      ...cfg.data,
       btnHeights: ['sm', 'md'],
       btnStyles: { link: '文字有指定顏色', primary: '白字與指定底色', secondary: '黑字與指定底色' },
       circleNum: '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳', // https://www.unicode.org/charts/nameslist/n_2460.html
@@ -240,7 +241,7 @@ block vue-config
           const url = new URL(this.curCard.image)
           return url.href
         } catch (err) {
-          console.error(err)
+          window.logError({ err })
         }
       },
       cardsLen () {

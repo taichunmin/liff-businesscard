@@ -26,10 +26,7 @@ block content
       button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend", :disabled="!msgs") #[i.fa.mr-2.fa-paper-plane-o] {{ $t('send.btn') }}
       small.form-text.text-muted {{ $t('send.help') }}
     .form-group.my-3
-      .input-group.input-group-lg
-        input.form-control(type="text", :value="liffLink", ref="result", readonly, @click="btnCopy")
-        .input-group-append
-          button.btn.btn-outline-secondary.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy") #[i.fa.mr-2.fa-clipboard] {{ $t('copy.btn') }}
+      button.btn.btn-lg.btn-outline-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy(liffLink)") #[i.fa.mr-2.fa-clipboard] {{ $t('copy.btn') }}
       small.form-text.text-muted {{ $t('copy.help') }}
     .dropdown.my-3
       button.btn.btn-lg.btn-secondary.btn-block.dropdown-toggle(type="button", data-toggle="dropdown") {{ $t('dropdown.btn') }}
@@ -59,7 +56,7 @@ block script
       try {
         profile = await liff.getProfile()
       } catch (err) {
-        console.error(err)
+        window.logError({ err })
       }
       window.gtagInit(profile.userId)
       return profile
@@ -92,9 +89,7 @@ block script
           window.gtagTiming('after mounted')
           await this.showSavedAlert()
         } catch (err) {
-          err.message = _.get(err, 'response.data.message', err.message)
-          console.error(err)
-          window.gtagError(err, true)
+          window.logError({ err, fatal: true })
           await Swal.fire({ icon: 'error', title: this.$t('init.fail'), text: err.message })
         }
       },
@@ -144,9 +139,7 @@ block script
             await Swal.fire({ icon: 'success', title: this.$t('share.success') })
             if (afterShare - beforeShare > 1e3) liff.closeWindow()
           } catch (err) {
-            err.message = _.get(err, 'response.data.message', err.message)
-            console.error(err)
-            window.gtagError(err, true)
+            window.logError({ err })
             await Swal.fire({ icon: 'error', title: this.$t('share.fail'), text: err.message })
           }
         },
@@ -159,18 +152,20 @@ block script
             await Swal.fire({ icon: 'success', title: this.$t('send.success') })
             liff.closeWindow()
           } catch (err) {
-            err.message = _.get(err, 'response.data.message', err.message)
-            console.error(err)
-            window.gtagError(err, true)
+            window.logError({ err })
             await Swal.fire({ icon: 'error', title: this.$t('send.fail'), text: err.message })
           }
         },
-        async btnCopy () {
+        async btnCopy (text, container = null) {
           window.gtagEvent('瀏覽分享名片網頁', 'btnCopy', this.vcard.template)
-          const copyText = this.$refs.result
-          copyText.select()
-          copyText.setSelectionRange(0, 999999) // For mobile devices
+          if (!container) container = document.body
+          const dom = document.createElement('textarea')
+          dom.value = text
+          container.appendChild(dom)
+          dom.select()
+          dom.setSelectionRange(0, 1e6) // For mobile devices
           document.execCommand('copy')
+          container.removeChild(dom)
           await Swal.fire({ icon: 'success', title: this.$t('copy.success') })
         },
         async showSavedAlert () {

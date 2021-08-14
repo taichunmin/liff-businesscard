@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const _ = require('lodash')
-const { errToPlainObj, getBaseurl, getenv, ncp } = require('./utils')
+const { errToPlainObj, genSitemap, getBaseurl, getenv, ncp } = require('./utils')
 const { inspect } = require('util')
 const fg = require('fast-glob')
 const fsPromises = require('fs').promises
@@ -12,6 +12,8 @@ const pug = require('pug')
 const UglifyJS = require('uglify-js')
 
 exports.build = async () => {
+  const sitemapUrls = []
+
   const PUG_OPTIONS = {
     basedir: path.resolve(__dirname),
     baseurl: getBaseurl(),
@@ -61,6 +63,7 @@ exports.build = async () => {
       const dist = path.resolve(__dirname, 'dist', file.replace(/\.pug$/, '.html'))
       await fsPromises.mkdir(path.dirname(dist), { recursive: true })
       await fsPromises.writeFile(dist, html)
+      sitemapUrls.push(new URL(file.replace(/\.pug$/, '.html').replace(/index\.html$/, ''), PUG_OPTIONS.baseurl).href)
     } catch (err) {
       _.set(err, 'data.src', `./src/${file}`)
       log(`Failed to render pug, err = ${inspect(errToPlainObj(err), { depth: 100, sorted: true })}`)
@@ -68,4 +71,7 @@ exports.build = async () => {
     }
   }
   if (pugErrors) throw new Error(`Failed to render ${pugErrors} pug files.`)
+
+  // sitemap
+  await genSitemap({ baseurl: PUG_OPTIONS.baseurl, dist: path.resolve(__dirname, 'dist'), urls: sitemapUrls })
 }

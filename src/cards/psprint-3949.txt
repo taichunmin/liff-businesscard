@@ -1,0 +1,135 @@
+<%
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = 'Right Align-2020/07/16'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.name}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "altText": "請在手機上查看「${vcard.name}」的名片。",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "layout": "horizontal",
+      "spacing": "md",
+      "type": "box",
+      "contents": [
+        {
+          "aspectMode": "cover",
+          "aspectRatio": "1:1",
+          "flex": 1,
+          "size": "full",
+          "type": "image",
+          "url": "${vcard.logo}"
+        },
+        {
+          "flex": 4,
+          "layout": "vertical",
+          "type": "box",
+          "contents": [
+            {
+              "align": "end",
+              "size": "xxl",
+              "text": "${vcard.name}",
+              "type": "text",
+              "weight": "bold"
+            },
+            {
+              "align": "end",
+              "size": "sm",
+              "text": "${vcard.title}",
+              "type": "text"
+            },
+            {
+              "align": "end",
+              "margin": "xxl",
+              "size": "lg",
+              "text": "${vcard.company}",
+              "type": "text",
+              "weight": "bold",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.maps}"
+              }
+            },
+            {
+              "align": "end",
+              "size": "sm",
+              "text": "${vcard.address}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.maps}"
+              }
+            },
+            {
+              "align": "end",
+              "margin": "xxl",
+              "text": "${vcard.tel}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "tel:${vcard.tel}"
+              }
+            },
+            {
+              "align": "end",
+              "text": "${vcard.email}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "mailto:${vcard.email}"
+              }
+            },
+            {
+              "align": "end",
+              "text": "${vcard.url}",
+              "type": "text",
+              "action": {
+                "type": "uri",
+                "uri": "${vcard.url}"
+              }
+            },
+            {
+              "height": "1px",
+              "layout": "vertical",
+              "offsetStart": "0px",
+              "offsetTop": "0px",
+              "position": "absolute",
+              "type": "box",
+              "width": "1px",
+              "contents": [
+                {
+                  "align": "center",
+                  "aspectMode": "cover",
+                  "aspectRatio": "1:1",
+                  "gravity": "center",
+                  "size": "full",
+                  "type": "image",
+                  "url": "${gaScreenView(vcard)}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

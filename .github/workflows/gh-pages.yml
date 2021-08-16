@@ -1,6 +1,7 @@
 name: github pages
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
 
@@ -10,11 +11,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
     - name: 安裝 Node.js 與 yarn
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
-        node-version: '12.x'
+        node-version: '14.x'
+        check-latest: true
 
     - name: 取得 yarn 的快取資料夾路徑
       id: yarn-cache-dir-path
@@ -22,16 +23,17 @@ jobs:
 
     - name: 讓 yarn 使用快取機制
       uses: actions/cache@v2
-      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      env:
+        cache-name: cache-yarn-modules
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
 
-    - name: 安裝相依性套件
-      run: yarn install
-
+    - run: yarn
     - name: 編譯網頁
       run: yarn build
       env:

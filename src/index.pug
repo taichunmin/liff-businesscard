@@ -1,53 +1,49 @@
-extends /layout-default
+extends /layout/default
 
 block beforehtml
-  - const title = '建立 LINE 數位版名片'
+  -
+    title = '免費樣版列表'
+    description = '點此連結來製作自己的 LINE 數位版名片吧！'
 
-block style
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="請點此建立 LINE 數位版名片，如果沒有想要的樣式，歡迎一起貢獻名片樣板。")
+block meta
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
   meta(property="og:image", content="https://i.imgur.com/j017Uof.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
-  meta(property="og:url", content=baseUrl)
+  meta(property="og:url", content=baseurl)
+
+block style
   style
     :sass
-      [v-cloak]
-        display: none
       #businesscards .card-body
         border-top: 1px solid rgba(0,0,0,.125)
+
 block content
-  include /compoment-navbar
+  include /component/navbar
   #app.container.my-4(v-cloak)
     h1.my-3.text-center 免費樣版列表
-    #businesscards.row.row-cols-1.row-cols-md-2.row-cols-lg-3
+    #businesscards.row.row-cols-1.row-cols-md-2.row-cols-xl-3
       .col.mb-4(v-for="card in businesscards")
-        .card
+        .card.h-100
           img.card-img-top(:src="card.preview")
-          .card-body
+          .card-body.d-flex.flex-column
             h5.card-title {{ card.name }}
             h6.card-subtitle.mb-2.text-muted By {{ card.author }}
             p.card-text {{ card.description }}
-            a.btn.btn-primary(:href='baseUrl + card.form') 點此建立名片
+            a.btn.btn-primary.mt-auto(:href='baseurl + card.form') #[i.fa.mr-2.fa-id-card-o] 點此建立名片
 
 block script
   script.
-    /* global getCsv */
     const vm = new Vue({ // eslint-disable-line
       el: '#app',
       data: {
-        baseUrl: '#{baseUrl}',
+        baseurl: '#{baseurl}',
         businesscards: [],
       },
       async mounted () {
         try {
           window.gtagInit()
           window.gtagScreenView('瀏覽免費樣板列表網頁')
-          this.businesscards = await getCsv('#{baseUrl}businesscards.csv')
+          this.businesscards = await window.getCsv('#{baseurl}businesscards.csv')
           window.gtagTiming('after mounted')
         } catch (err) {
           window.gtagError(err, true)

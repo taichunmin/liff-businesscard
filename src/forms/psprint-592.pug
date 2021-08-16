@@ -1,0 +1,68 @@
+extends /layout/forms
+
+block beforehtml
+  -
+    title = 'PsPrint Corporate Buzz'
+    description = 'PsPrint Corporate Buzz'
+
+block meta
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/AjbhMam.png")
+  meta(property="og:url", content=baseurl + "forms/psprint-592.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-design") 背景顏色
+    select#vcard-design.form-control.form-control-sm(v-model="vcard.design")
+      option(value="1") 米白色
+      option(value="2") 藍灰色
+      option(value="3") 暗紅色
+    small.form-text.text-muted 請選擇背景顏色。
+  .form-group.was-validated.my-2
+    label(for="vcard-name") 姓名
+    input#vcard-name.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.name")
+    small.form-text.text-muted 請填寫姓名。
+  .form-group.was-validated.my-2
+    label(for="vcard-title") 公司及職稱
+    input#vcard-title.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.title")
+    small.form-text.text-muted 請填寫公司名稱及職稱。
+  .form-group.was-validated.my-2
+    label(for="vcard-tel1") 電話 1
+    input#vcard-tel.form-control.form-control-sm(type="tel", required, pattern="[0-9,+-]+", inputmode="tel", v-model="vcard.tel1")
+    small.form-text.text-muted 請填寫公司電話或手機號碼，如果有分機號碼請用半形逗號 #[code ,] 分隔。
+  .form-group.was-validated.my-2
+    label(for="vcard-tel2") 電話 2
+    input#vcard-tel.form-control.form-control-sm(type="tel", required, pattern="[0-9,+-]+", inputmode="tel2", v-model="vcard.tel2")
+    small.form-text.text-muted 請填寫公司電話或手機號碼，如果有分機號碼請用半形逗號 #[code ,] 分隔。
+  .form-group.was-validated.my-2
+    label(for="vcard-email") 信箱
+    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", required, pattern=".+", v-model="vcard.email")
+    small.form-text.text-muted 請填寫公司信箱。
+  .form-group.was-validated.my-2
+    label(for="vcard-address") 地址 (請分兩行避免過長)
+    textarea#vcard-address.form-control.form-control-sm(required, pattern=".+", v-model="vcard.address", rows="2")
+    small.form-text.text-muted 請填寫公司地址。
+  .form-group.was-validated.my-2
+    label(for="vcard-maps") Google 地圖
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="https?://\\S+", v-model="vcard.maps", rows="3")
+    small.form-text.text-muted 請填寫公司的 Google 地圖網址。
+  .form-group.was-validated.my-2
+    label(for="vcard-url") 網址
+    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url")
+    small.form-text.text-muted 請填寫公司網址。
+
+block vue-config
+  script.
+    window.vueConfig.data.vcard = {
+      address: '台中市西屯區\n市政路402號7樓',
+      design: '1',
+      email: 'mei@program.com.tw',
+      maps: 'https://www.google.com/maps/search/?api=1&query_place_id=ChIJAaZEqCYWaTQRMv6fuIsJEuo&query=%E5%BE%AE%E7%A8%8B%E5%BC%8F%E8%B3%87%E8%A8%8A&openExternalBrowser=1',
+      name: '王小美',
+      tel1: '0900000000',
+      tel2: '04-23692699,000',
+      template: '#{baseurl}cards/psprint-592.txt',
+      title: '行銷企劃 | 微程式資訊',
+      url: 'https://www.program.com.tw',
+    }

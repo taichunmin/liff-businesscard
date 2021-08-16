@@ -1,19 +1,15 @@
-extends /layout-forms
+extends /layout/forms
 
 block beforehtml
-  - const title = '微程式資訊 LINE 名片'
+  -
+    title = '微程式資訊 LINE 名片'
+    description = '微程式資訊的名片範例。'
 
 block meta
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="微程式資訊的名片範例。")
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
   meta(property="og:image", content="https://i.imgur.com/NXiylpJ.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
-  meta(property="og:url", content=baseUrl + "forms/microprogram.html")
+  meta(property="og:url", content=baseurl + "forms/microprogram.html")
 
 block form
   .form-group.my-2
@@ -28,34 +24,34 @@ block form
     small.form-text.text-muted 請選擇名片樣版。
   .row
     .col
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-title-tw") 中文職稱
-        input#vcard-title-tw.form-control.form-control-sm(type="text", v-model="vcard.title_tw")
+        input#vcard-title-tw.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.title_tw")
         small.form-text.text-muted 請填寫中文職稱。
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-name-tw") 中文姓名
-        input#vcard-name-tw.form-control.form-control-sm(type="text", v-model="vcard.name_tw")
+        input#vcard-name-tw.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.name_tw")
         small.form-text.text-muted 請填寫中文姓名。
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-mobile") 手機號碼
-        input#vcard-mobile.form-control.form-control-sm(type="tel", inputmode="tel", v-model="vcard.mobile")
+        input#vcard-mobile.form-control.form-control-sm(type="tel", inputmode="tel", required, pattern="[0-9,+-]+", v-model="vcard.mobile")
         small.form-text.text-muted 請填寫手機號碼。
     .col
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-title-en") 英文職稱
-        input#vcard-title-en.form-control.form-control-sm(type="text", v-model="vcard.title_en")
+        input#vcard-title-en.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.title_en")
         small.form-text.text-muted 請填寫英文職稱。
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-name-en") 英文姓名
-        input#vcard-name-en.form-control.form-control-sm(type="text", v-model="vcard.name_en")
+        input#vcard-name-en.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.name_en")
         small.form-text.text-muted 請填寫英文姓名。
-      .form-group.my-2
+      .form-group.was-validated.my-2
         label(for="vcard-ext") 分機號碼
-        input#vcard-ext.form-control.form-control-sm(type="text", inputmode="numeric", v-model="vcard.ext")
+        input#vcard-ext.form-control.form-control-sm(type="tel", inputmode="tel", required, pattern="\\d{3}", v-model="vcard.ext")
         small.form-text.text-muted 請填寫分機號碼。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-email") 公司信箱
-    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", v-model="vcard.email")
+    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", required, pattern=".+", v-model="vcard.email")
     small.form-text.text-muted 請填寫公司信箱。
 
 block vue-config

@@ -1,19 +1,15 @@
-extends /layout-forms
+extends /layout/forms
 
 block beforehtml
-  - const title = '動物森友會心意卡'
+  -
+    title = '動物森友會心意卡'
+    description = '點此連結來製作「動物森友會」的心意卡吧！'
 
 block meta
-  meta(property="fb:app_id", content="2133031763635285")
-  meta(property="og:description", content="點此連結來製作「動物森友會」的心意卡吧！")
   meta(property="og:image:height", content="640")
   meta(property="og:image:width", content="1280")
-  meta(property="og:image", content="https://i.imgur.com/3WhiaK2.png")
-  meta(property="og:locale", content="zh_TW")
-  meta(property="og:site_name", content="筆記國度")
-  meta(property="og:title", content=title)
-  meta(property="og:type", content="website")
-  meta(property="og:url", content=baseUrl+"forms/acnh-postcard-1.html")
+  meta(property="og:image", content="https://i.imgur.com/gJASJdW.png")
+  meta(property="og:url", content=baseurl+"forms/acnh-postcard-1.html")
 
 block style
   style
@@ -35,22 +31,24 @@ block form
           .card-body.p-1
             button.btn.btn-primary.btn-block.btn-sm.px-1(type="button", v-if="vcard.design === id", disabled) 已選擇「{{ design.name }}」
             button.btn.btn-outline-primary.btn-block.btn-sm.px-1(type="button", @click="vcard.design = id", v-else) 選擇「{{ design.name }}」
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-to") 收件人
-    input#vcard-to.form-control.form-control-sm(type="text", v-model="vcard.to")
+    input#vcard-to.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.to")
     small.form-text.text-muted 請填寫卡片收件人。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-from") 寄件人
-    input#vcard-from.form-control.form-control-sm(type="text", v-model="vcard.from")
+    input#vcard-from.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.from")
     small.form-text.text-muted 請填寫卡片寄件人。
-  .form-group.my-2
+  .form-group.was-validated.my-2
     label(for="vcard-body") 卡片內容
-    textarea#vcard-body.form-control.form-control-sm(type="text", v-model="vcard.body", style="min-height: 200px")
+    textarea#vcard-body.form-control.form-control-sm(required, pattern=".+", v-model="vcard.body", style="min-height: 200px")
     small.form-text.text-muted 請填寫卡片內容。
 
 block vue-config
   script.
-    window.vueConfig.data = {
+    const cfg = window.vueConfig
+    cfg.data = {
+      ...cfg.data,
       designs: {
         Academy00: { name: '快樂家協會卡片', imgur: 'zx0bo9H', bg: '#00000000', body: '#210E0A', from: '#210E0A', to: '#210E0A' },
         Active00: { name: '塗鴉卡片', imgur: '8sVICE9', bg: '#00000000', body: '#FBFE00', from: '#06FFEE', to: '#07F5DE' },
@@ -124,7 +122,7 @@ block vue-config
         body: '我之前在岸邊散步時，\n突然冒出了新的 DIY 靈感！\n今天我就特別優待！\n把這個方程式告訴你吧！\n至於要怎麼做，就全看你自己了！',
         design: 'Active00',
         from: '將希望寄託於你的帕塔雅   筆',
-        template: '#{baseUrl}cards/acnh-postcard-1.txt',
+        template: '#{baseurl}cards/acnh-postcard-1.txt',
         to: '給偶然撿到這個瓶子的你',
       },
     }

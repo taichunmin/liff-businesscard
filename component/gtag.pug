@@ -1,7 +1,6 @@
 if GA_MEASUREMENT_ID
   script(async, src=`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`)
   script.
-    /* global GA_MEASUREMENT_ID */
     window.dataLayer = window.dataLayer || []
     window.GA_MEASUREMENT_ID = '#{GA_MEASUREMENT_ID}'
     function gtag () { window.dataLayer.push(arguments) }
@@ -19,7 +18,7 @@ if GA_MEASUREMENT_ID
         if (/^U[0-9a-f]{32}$/.test(lineId)) config.user_id = lineId
         if (liff.isInClient()) config.app_version = liff.getLineVersion()
       }
-      gtag('config', GA_MEASUREMENT_ID, config)
+      gtag('config', window.GA_MEASUREMENT_ID, config)
     }
     window.gtagEvent = (category, action, label, value = 1) => new Promise(resolve => {
       gtag('event', action, {
@@ -37,7 +36,7 @@ if GA_MEASUREMENT_ID
         send_to: 'liff',
       })
     })
-    window.gtagError = async (err, fatal = false) => new Promise(resolve => {
+    window.gtagError = (err, fatal = false) => new Promise(resolve => {
       gtag('event', 'exception', {
         description: err.message || '',
         event_callback: resolve,

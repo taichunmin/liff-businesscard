@@ -5,8 +5,7 @@ block vue-config
     const cfg = window.vueConfig
     cfg.methods.getVcard = async function () {
       try {
-        const args = _.fromPairs(_.map(['csv', 'key', 'value'], k => [k, this.paramBase64url(k)]))
-        this.vcard = args.csv ? _.find(await window.getCsv(args.csv), [args.key, args.value]) : {}
+        this.vcard = window.parseJsonOrDefault(this.paramBase64url('json5base64'), {})
         window.gtagTiming('after getVcard')
       } catch (err) {
         err.message = `${this.$t('csv.getVcardFail')}${err.message ? ': ' + err.message : ''}`

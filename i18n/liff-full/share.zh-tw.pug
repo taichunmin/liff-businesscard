@@ -1,0 +1,52 @@
+script.
+  window.i18nMessages = (window.i18nMessages || {})
+  window.i18nMessages['zh-TW'] = { // vm.$i18n.locale='zh-TW'
+    flexAltText: '請在手機上查看數位版名片。',
+    title: '分享 LINE 數位版名片',
+    wait: '請稍候',
+    copy: {
+      btn: '複製網址',
+      help: '按一下「複製網址」按鈕，然後存到 LINE Keep。',
+      success: '複製成功',
+    },
+    csv: {
+      getVcardFail: '無法從 csv 讀取資料',
+    },
+    dropdown: {
+      addFriends: '點此前往「加入好友」',
+      author: '透過 Facebook 與開發者聯絡',
+      btn: '點此查看更多功能',
+      create: '製作新的「LINE 數位版名片」',
+      friendMissing: '在「分享好友」中找不到好友？',
+      friendMissingHtml: '<small class="text-left"><p>如果在「分享好友」的清單中找不到好友，你可以嘗試以下步驟：</p><ol><li>按一下「複製網址」按鈕</li><li>進到聊天室並「貼上」網址</li><li>在好友的聊天室中「開啟」名片網址</li><li>按一下「直接傳送」按鈕傳送名片</li><li>在好友的聊天室中「收回」名片網址</li></ol></small>',
+      keep: '點此前往「LINE Keep」',
+      qrcodeReader: '點此掃描「行動條碼」',
+    },
+    googlesheet: {
+      getVcardFail: '無法從 Google 試算表讀取資料',
+      invalidApiKey: '無效的 Google API 金鑰',
+      keyNotFound: '無法從試算表的第一列中找到「{key}」',
+    },
+    init: {
+      fail: '頁面初始化失敗',
+      getTplFail: '名片樣板獲取失敗',
+      loading: '頁面初始化中…',
+    },
+    send: {
+      btn: '直接傳送',
+      fail: '傳送失敗',
+      help: '按一下「直接傳送」按鈕，可以直接傳送到聊天室。',
+      loading: '正在傳送名片…',
+      success: '傳送成功',
+      unsupported: '請先按「複製網址」，然後在 LINE 聊天視窗內貼上並開啟該網址，才有辦法使用「直接傳送」功能喔！',
+    },
+    share: {
+      btn: '分享好友',
+      canceled: '使用者取消分享',
+      fail: '分享失敗',
+      help: '按一下「分享好友」按鈕，可以分享給好友或群組。',
+      loading: '正在分享名片…',
+      success: '分享成功',
+      unsupported: '不支援 shareTargetPicker，請嘗試更新應用程式版本。',
+    },
+  }

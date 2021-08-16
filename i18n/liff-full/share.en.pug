@@ -1,0 +1,52 @@
+script.
+  window.i18nMessages = (window.i18nMessages || {})
+  window.i18nMessages.en = { // vm.$i18n.locale='en'
+    flexAltText: 'Please check the vcard on mobile.',
+    title: 'Share LINE vcard',
+    wait: 'Loading',
+    copy: {
+      btn: 'Copy URL',
+      help: 'Click the "Copy URL" button and save to "LINE Keep."',
+      success: 'Copied',
+    },
+    csv: {
+      getVcardFail: 'Fail to fetch vcard data from csv',
+    },
+    dropdown: {
+      addFriends: 'Open "Add friends"',
+      author: 'Contact author by Facebook',
+      btn: 'More features',
+      create: 'Create new "LINE vcard"',
+      friendMissing: 'Friend not found?',
+      friendMissingHtml: '<small class="text-left"><p>If you can\'t find your friends in the "Share vcard," you can try the following steps:</p><ol><li>Click the "Copy URL" button</li><li>Send the URL to any LINE chat</li><li>Open the URL in the LINE chat on mobile</li><li>Click the "Send vcard" button</li><li>Unsend URL in the LINE chat</li></ol></small>',
+      keep: 'Open "LINE Keep"',
+      qrcodeReader: 'Open "QRCode Reader"',
+    },
+    googlesheet: {
+      getVcardFail: 'Fail to fetch vcard data from google sheet',
+      invalidApiKey: 'Invalid Google api key',
+      keyNotFound: 'Fail to find the "{key}" key from first row',
+    },
+    init: {
+      fail: 'Fail to initialize',
+      getTplFail: 'Fail to fetch vcard template',
+      loading: 'Initializing…',
+    },
+    send: {
+      btn: 'Send vcard',
+      fail: 'Fail to send vcard',
+      help: 'Click the "Send vcard" button to send vcard to the chat directly.',
+      loading: 'Sending vcard…',
+      success: 'Sent',
+      unsupported: 'Please click the "Copy URL" button first, then paste and open the URL in the LINE chat on mobile.',
+    },
+    share: {
+      btn: 'Share vcard',
+      canceled: 'Share canceled',
+      fail: 'Fail to share vcard',
+      help: 'Click the "Share vcard" button to share with friends or groups.',
+      loading: 'Sharing vcard…',
+      success: 'Shared',
+      unsupported: 'The share feature is not supported, please try to update the LINE APP.',
+    },
+  }

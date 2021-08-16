@@ -1,0 +1,65 @@
+extends /layout/forms
+
+block beforehtml
+  -
+    title = '臺中市政府'
+    description = '臺中市政府'
+
+block meta
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/fNmX6oa.png")
+  meta(property="og:url", content=baseurl + "forms/taichung-gov-tw.html")
+
+block form
+  .form-group.was-validated.my-2
+    label(for="vcard-name") 姓名
+    input#vcard-name.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.name")
+    small.form-text.text-muted 請填寫姓名，每個字的中間加入空格會更美觀。
+  .form-group.was-validated.my-2
+    label(for="vcard-title") 職稱
+    input#vcard-title.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.title")
+    small.form-text.text-muted 請填寫職稱。
+  .form-group.was-validated.my-2
+    label(for="vcard-tel") 電話
+    input#vcard-tel.form-control.form-control-sm(type="tel", inputmode="tel", required, pattern="[0-9,+-]+", v-model="vcard.tel")
+    small.form-text.text-muted 請填寫單位電話。
+  .form-group.was-validated.my-2
+    label(for="vcard-fax") 傳真
+    input#vcard-fax.form-control.form-control-sm(type="tel", inputmode="tel", required, pattern="[0-9,+-]+", v-model="vcard.fax")
+    small.form-text.text-muted 請填寫單位傳真。
+  .form-group.was-validated.my-2
+    label(for="vcard-email") 信箱
+    input#vcard-email.form-control.form-control-sm(type="email", inputmode="email", required, pattern=".+", v-model="vcard.email")
+    small.form-text.text-muted 請填寫信箱。
+  .form-group.was-validated.my-2
+    label(for="vcard-unit") 單位
+    input#vcard-unit.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.unit")
+    small.form-text.text-muted 請填寫單位名稱。
+  .form-group.was-validated.my-2
+    label(for="vcard-address") 地址
+    input#vcard-address.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.address")
+    small.form-text.text-muted 請填寫單位的地址。
+  .form-group.was-validated.my-2
+    label(for="vcard-maps") 地圖
+    textarea#vcard-maps.form-control.form-control-sm(inputmode="url", required, pattern="https?://\\S+", v-model="vcard.maps", rows="3")
+    small.form-text.text-muted 請填寫單位的 Google 地圖網址。
+  .form-group.was-validated.my-2
+    label(for="vcard-url") 網站
+    textarea#vcard-url.form-control.form-control-sm(inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url", rows="3")
+    small.form-text.text-muted 請填寫單位網站。
+
+block vue-config
+  script.
+    window.vueConfig.data.vcard = {
+      address: '40341 臺中市西區民權路105號',
+      email: 'xxx@taichung.gov.tw',
+      maps: 'https://www.google.com/maps/search/?api=1&query_place_id=ChIJX-E3dG92bjQRLAnfoUA85v4&query=%E8%87%BA%E4%B8%AD%E5%B8%82%E4%B8%AD%E8%A5%BF%E5%8D%80%E8%A1%9B%E7%94%9F%E6%89%80&openExternalBrowser=1',
+      name: '王 小 美',
+      tel: '04-22223811,000',
+      fax: '04-22202852',
+      template: '#{baseurl}cards/taichung-gov-tw.txt',
+      title: '護理師',
+      unit: '臺中市中西區衛生所',
+      url: 'https://www.westcentralphc.taichung.gov.tw/?openExternalBrowser=1',
+    }

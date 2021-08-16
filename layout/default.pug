@@ -1,0 +1,53 @@
+-
+  const cachebust = Date.now()
+  let title = 'LINE 數位版名片'
+  let description = '請點此建立 LINE 數位版名片，如果沒有想要的樣式，歡迎一起貢獻名片樣板。'
+doctype html
+block beforehtml
+html
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no")
+    title= title
+    meta(name="description", content=description)
+    meta(property="fb:app_id", content="2133031763635285")
+    meta(property="og:description", content=description)
+    meta(property="og:locale", content="zh_TW")
+    meta(property="og:site_name", content="筆記國度")
+    meta(property="og:title", content=title)
+    meta(property="og:type", content="website")
+    block meta
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap")
+    style
+      :sass
+        [v-cloak]
+          display: none
+        body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6
+          font-family: 'Noto Sans TC', sans-serif
+    block style
+  body
+    include /component/livereload
+    block compoment-gtag
+      include /component/gtag
+    block content
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/crypto-js@3/crypto-js.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/js-base64@3/base64.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/json5@2/dist/index.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/lodash@4/lodash.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/pako@2/dist/pako.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/popper.js@1/dist/umd/popper.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/qs@6/dist/qs.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/vue-i18n@8/dist/vue-i18n.min.js")
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js")
+    //- bootstrap require jquery and pupper
+    script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js")
+    script(src=`${baseurl}js/common.js?cachebust=${cachebust}`)
+    block script

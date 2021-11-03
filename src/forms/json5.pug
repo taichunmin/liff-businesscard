@@ -1,0 +1,35 @@
+extends /layout/forms
+
+block beforehtml
+  -
+    title = 'LINE 數位版名片 (JSON5)'
+    description = '點此連結來製作自己的 LINE 數位版名片吧！'
+
+block meta
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/ci4T6xG.png")
+  meta(property="og:url", content=baseurl+"forms/json5.html")
+
+block form
+  .form-group.was-validated.my-2
+    label(for="vcard-template") 名片樣板
+    input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.template")
+    small.form-text.text-muted 請填寫名片樣板網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
+  .form-group.was-validated.my-2
+    label(for="vcard-json5") 資料來源 JSON5
+    input#vcard-json5.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.json5")
+    small.form-text.text-muted 請填寫名片資料 JSON5 網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
+
+block vue-config
+  script.
+    const cfg = window.vueConfig
+    cfg.computed.shortcut = function () {
+      const params = window.httpBuildQuery(_.mapValues(this.vcard, window.encodeBase64url))
+      if (!_.isString(params) || !params.length) return
+      return `https://liff.line.me/#{liffidFull}/share-json5.html?${params}`
+    }
+    cfg.data.vcard = {
+      template: '#{baseurl}cards/line-carousel-1.txt',
+      json5: '#{baseurl}json5/line-carousel-1.json5',
+    }

@@ -1,0 +1,20 @@
+extends /src/liff-full/share
+
+block vue-config
+  script.
+    const cfg = window.vueConfig
+    cfg.methods = {
+      ...cfg.methods,
+      async getVcard () {
+        try {
+          const json5url = this.paramBase64url('json5')
+          const json5 = _.get(await axios.get(json5url), 'data')
+          this.vcard = _.isString(json5) ? JSON5.parse(json5) : json
+          window.gtagTiming('after getVcard')
+        } catch (err) {
+          err.message = `${this.$t('csv.getVcardFail')}${err.message ? ': ' + err.message : ''}`
+          this.render = null
+          throw err
+        }
+      },
+    }

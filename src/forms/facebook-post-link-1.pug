@@ -18,8 +18,8 @@ block form
     small.form-text.text-muted 請填寫無法顯示訊息時（如：系統通知）的替代文字。
   .form-group.was-validated.my-2
     label(for="vcard-avatar") 大頭貼
-    input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.avatar")
-    small.form-text.text-muted 請填寫大頭貼圖片網址，長寬比為 #[code 1:1]。
+    input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model="vcard.avatar")
+    small.form-text.text-muted 請填寫大頭貼圖片網址，必須是 #[code https://] 開頭，長寬比為 #[code 1:1]。
   .form-group.was-validated.my-2
     label(for="vcard-author") 姓名
     input#vcard-author.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.author")
@@ -34,8 +34,8 @@ block form
     small.form-text.text-muted 請填寫姓名區塊接在姓名後面的文字。
   .form-group.was-validated.my-2
     label(for="vcard-image") 預覽圖
-    input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="vcard.image")
-    small.form-text.text-muted 請填寫連結的預覽圖。
+    input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model="vcard.image")
+    small.form-text.text-muted 請填寫連結的預覽圖，必須是 #[code https://] 開頭，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
   .form-group.was-validated.my-2
     label(for="vcard-ratio") 預覽圖的長寬比
     input#vcard-ratio.form-control.form-control-sm(type="text", required, pattern="\\d+:\\d+", v-model="vcard.ratio")

@@ -122,8 +122,8 @@ block form
               small.form-text.text-muted 請填寫卡片的底色。
             .form-group.was-validated.mb-2
               label(for="vcard-image") 卡片圖片網址 (長寬比 #[code {{ vcard.json5.ratio }}])
-              input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model="curCard.image")
-              small.form-text.text-muted 請填寫卡片圖片網址，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
+              input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model="curCard.image")
+              small.form-text.text-muted 請填寫卡片圖片網址，必須是 #[code https://] 開頭，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
               a.d-block.mt-2(v-if="curCardImgPreview", target="_blank", :href="curCardImgPreview")
                 img(:src="curCardImgPreview", :key="curCardImgPreview", style="width: 100%; max-width: 200px")
       ul.list-group.list-group-flush

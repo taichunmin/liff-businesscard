@@ -24,7 +24,7 @@ block content
     #businesscards.row.row-cols-1.row-cols-md-2.row-cols-xl-3
       .col.mb-4(v-for="card in businesscards")
         .card.h-100
-          img.card-img-top(:src="card.preview")
+          img.card-img-top(:src="card.preview", style="aspect-ratio: 1280/640")
           .card-body.d-flex.flex-column
             h5.card-title {{ card.name }}
             h6.card-subtitle.mb-2.text-muted By {{ card.author }}

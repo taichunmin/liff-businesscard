@@ -8,7 +8,7 @@ block vue-config
       async getVcard () {
         try {
           const json5url = this.paramBase64url('json5')
-          const json5 = _.get(await axios.get(json5url), 'data')
+          const json5 = json5url ? _.get(await axios.get(json5url), 'data') : {}
           this.vcard = _.isString(json5) ? JSON5.parse(json5) : json
           window.gtagTiming('after getVcard')
         } catch (err) {

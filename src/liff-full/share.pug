@@ -157,7 +157,8 @@ block script
           }
         },
         async btnCopy (text, container = null) {
-          window.gtagEvent('瀏覽分享名片網頁', 'btnCopy', this.vcard.template)
+          const template = _.get(this, 'vcard.template')
+          if (template) window.gtagEvent('瀏覽分享名片網頁', 'btnCopy', template)
           if (!container) container = document.body
           const dom = document.createElement('textarea')
           dom.value = text

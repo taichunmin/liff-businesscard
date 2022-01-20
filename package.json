@@ -20,7 +20,7 @@
     "jstransformer-sass": "^1.0.0",
     "jstransformer-scss": "https://github.com/taichunmin/jstransformer-scss.git",
     "ncp": "^2.0.0",
-    "node-forge": "^0.10.0",
+    "node-forge": "^1.0.0",
     "pug": "^3.0.2",
     "uglify-js": "^3.14.5"
   },

@@ -80,8 +80,9 @@ block script
             this.getTpl(),
             this.getVcard(),
           ])
+          console.log('vcard', this.vcard)
           this.msgs = this.getRenderedMsgs()
-          console.log(this.msgs)
+          console.log('msgs', this.msgs)
           for (const msg of this.msgs) {
             window.flex2html('flex2html', msg)
           }
@@ -184,7 +185,6 @@ block script
         },
         getRenderedMsgs () {
           let msg = this.render({ vcard: this.vcard })
-          console.log(msg)
           msg = JSON5.parse(msg)
           if (_.includes(['bubble', 'carousel'], _.get(msg, 'type'))) {
             msg = { type: 'flex', altText: this.$t('flexAltText'), contents: msg }

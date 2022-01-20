@@ -229,7 +229,7 @@ block vue-config
       shortcut () {
         const params = window.httpBuildQuery({
           template: window.encodeBase64url('#{baseurl}cards/line-carousel-1.txt'),
-          json5gzip: window.encodeGzip(JSON5.stringify(this.vcard.json5)),
+          json5gzip: window.encodeGzip(JSON5.stringify(window.beautifyFlex(this.vcard.json5))),
         })
         if (!_.isString(params) || !params.length) return
         return `https://liff.line.me/#{liffidFull}/share-json5gzip.html?${params}`

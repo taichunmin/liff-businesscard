@@ -12,7 +12,6 @@ block vue-config
         const rows = _.get(await axios.get(sheetUrl, { params: { key: args.apiKey } }), 'data.values', [])
         if (!_.isArray(rows) || !rows.length) throw new Error('空的試算表')
 
-        console.log(rows)
         const keyIdx = rows[0].indexOf(args.key)
         if (keyIdx < 0) throw new Error(this.$t('googlesheet.keyNotFound', { key: args.key }))
         this.vcard = _.zipObject(rows[0], _.find(rows.slice(1), row => row[keyIdx] === args.value))

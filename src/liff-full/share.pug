@@ -17,7 +17,7 @@ block style
         display: none
 
 block content
-  #app.container.my-4.text-monospace(v-cloak)
+  #app.container.my-4.text-monospace(v-cloak, v-show="!loading")
     h3.my-3.text-center {{ $t('title') }}
     .form-group.my-3
       button.btn.btn-lg.btn-success.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnShare", :disabled="!msgs") #[i.fa.mr-2.fa-share-square-o] {{ $t('share.btn') }}
@@ -65,6 +65,7 @@ block script
       el: '#app',
       data: {
         liffLink: null,
+        loading: true,
         msgs: null,
         render: null,
         vcard: null,
@@ -93,6 +94,8 @@ block script
           window.logError({ err, fatal: true })
           await Swal.fire({ icon: 'error', title: this.$t('init.fail'), text: err.message })
         }
+        if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) await this.btnShare()
+        this.loading = false
       },
       computed: {
         locale: {

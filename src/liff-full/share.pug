@@ -35,7 +35,7 @@ block content
         a.dropdown-item(target="_blank", href="https://line.me/R/nv/addFriends") #[i.fa.fa-fw.fa-users] {{ $t('dropdown.addFriends') }}
         a.dropdown-item(target="_blank", href="https://line.me/R/nv/keep") #[i.fa.fa-fw.fa-bookmark] {{ $t('dropdown.keep') }}
         a.dropdown-item(target="_blank", href=baseurl+'?openExternalBrowser=1') #[i.fa.fa-fw.fa-address-card] {{ $t('dropdown.create') }}
-        a.dropdown-item(target="_blank", href="https://fb.me/taichunmin?openExternalBrowser=1") #[i.fa.fa-fw.fa-facebook-official] {{ $t('dropdown.author') }}
+        a.dropdown-item(target="_blank", href="https://lihi1.com/CVjIx/liffshare") #[i.fa.fa-fw.fa-comments] {{ $t('dropdown.discuss') }}
         button.dropdown-item(type="button", @click="btnFriendMissing") #[i.fa.fa-fw.fa-question-circle] {{ $t('dropdown.friendMissing') }}
     .table-responsive(style="background-color: #849ebf")
       .chatbox.pt-3
@@ -92,7 +92,7 @@ block script
           await this.showSavedAlert()
         } catch (err) {
           window.logError({ err, fatal: true })
-          await Swal.fire({ icon: 'error', title: this.$t('init.fail'), text: err.message })
+          await this.swalFire({ icon: 'error', title: this.$t('init.fail'), text: err.message })
         }
         if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) await this.btnShare()
         this.loading = false
@@ -140,11 +140,11 @@ block script
             const res = await liff.shareTargetPicker(this.msgs)
             if (_.get(res, 'status') !== 'success') throw new Error(this.$t('share.canceled'))
             const afterShare = Date.now()
-            await Swal.fire({ icon: 'success', title: this.$t('share.success') })
+            await this.swalFire({ icon: 'success', title: this.$t('share.success') })
             if (afterShare - beforeShare > 1e3) liff.closeWindow()
           } catch (err) {
             window.logError({ err })
-            await Swal.fire({ icon: 'error', title: this.$t('share.fail'), text: err.message })
+            await this.swalFire({ icon: 'error', title: this.$t('share.fail'), text: err.message })
           }
         },
         async btnSend () {
@@ -153,11 +153,11 @@ block script
             window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
             if (!this.canSendMessages()) throw new Error(this.$t('send.unsupported'))
             await liff.sendMessages(this.msgs)
-            await Swal.fire({ icon: 'success', title: this.$t('send.success') })
+            await this.swalFire({ icon: 'success', title: this.$t('send.success') })
             liff.closeWindow()
           } catch (err) {
             window.logError({ err })
-            await Swal.fire({ icon: 'error', title: this.$t('send.fail'), text: err.message })
+            await this.swalFire({ icon: 'error', title: this.$t('send.fail'), text: err.message })
           }
         },
         async btnCopy (text, container = null) {
@@ -171,20 +171,24 @@ block script
           dom.setSelectionRange(0, 1e6) // For mobile devices
           document.execCommand('copy')
           container.removeChild(dom)
-          await Swal.fire({ icon: 'success', title: this.$t('copy.success') })
+          await this.swalFire({ icon: 'success', title: this.$t('copy.success') })
         },
         async showSavedAlert () {
           const swalFire = window.parseJsonOrDefault(localStorage.getItem('swalFire'))
           localStorage.removeItem('swalFire')
           if (_.isNil(swalFire)) return
-          await Swal.fire(swalFire)
+          await this.swalFire(swalFire)
         },
         async btnFriendMissing () {
-          await Swal.fire({
+          await this.swalFire({
             padding: '0',
             customClass: { actions: 'mt-0 mb-2', content: 'pt-3 px-3' },
             html: this.$t('dropdown.friendMissingHtml'),
           })
+        },
+        async swalFire (args) {
+          if (_.isPlainObject(args)) args = { footer: this.$t('swalFooter'), ...args }
+          return await Swal.fire(args)
         },
         getRenderedMsgs () {
           let msg = this.render({ vcard: this.vcard })

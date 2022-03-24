@@ -59,7 +59,8 @@ exports.build = async () => {
   let pugErrors = 0
   for (const file of pugFiles) {
     try {
-      const html = htmlMinifier(pug.renderFile(path.resolve(__dirname, 'src', file), PUG_OPTIONS), htmlMinifierOptions)
+      let html = pug.renderFile(path.resolve(__dirname, 'src', file), PUG_OPTIONS)
+      if (PUG_OPTIONS.NODE_ENV === 'production') html = htmlMinifier(html, htmlMinifierOptions)
       const dist = path.resolve(__dirname, 'dist', file.replace(/\.pug$/, '.html'))
       await fsPromises.mkdir(path.dirname(dist), { recursive: true })
       await fsPromises.writeFile(dist, html)

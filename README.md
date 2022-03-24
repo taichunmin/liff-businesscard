@@ -6,6 +6,8 @@
 
 A Bussiness Card For LINE Using LINE Front-end Framework (LIFF) API.
 
+* [點此加入「數位版名片技術討論群」](https://lihi1.com/CVjIx/github)
+
 ## Usage 使用教學
 
 * [看起來很專業的 LINE 數位版名片](https://taichunmin.idv.tw/blog/2020-07-12-liff-businesscard.html)

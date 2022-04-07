@@ -20,14 +20,19 @@ block content
   #app.container.my-4.text-monospace(v-cloak, v-show="!loading")
     h3.my-3.text-center {{ $t('title') }}
     .form-group.my-3
-      button.btn.btn-lg.btn-success.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnShare", :disabled="!msgs") #[i.fa.mr-2.fa-share-square-o] {{ $t('share.btn') }}
-      small.form-text.text-muted {{ $t('share.help') }}
+      button.btn.btn-lg.btn-success.btn-block.d-flex.justify-content-center.align-items-center(type="button", @click="btnShare", :disabled="!msgs") #[i.fa.mr-2.fa-share-square-o] {{ $t('share.btn') }}
+      small.form-text.text-muted.mt-2 {{ $t('share.help') }}
     .form-group.my-3
-      button.btn.btn-lg.btn-info.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend", :disabled="!msgs") #[i.fa.mr-2.fa-paper-plane-o] {{ $t('send.btn') }}
-      small.form-text.text-muted {{ $t('send.help') }}
+      button.btn.btn-lg.btn-info.btn-block.d-flex.justify-content-center.align-items-center(type="button", @click="btnSend", :disabled="!msgs") #[i.fa.mr-2.fa-paper-plane-o] {{ $t('send.btn') }}
+      small.form-text.text-muted.mt-2 {{ $t('send.help') }}
     .form-group.my-3
-      button.btn.btn-lg.btn-outline-secondary.btn-block.my-2.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy(liffLink)") #[i.fa.mr-2.fa-clipboard] {{ $t('copy.btn') }}
-      small.form-text.text-muted {{ $t('copy.help') }}
+      .btn-group.btn-group-lg.w-100
+        button.btn.btn-outline-secondary.btn-block.d-flex.justify-content-center.align-items-center(type="button", @click="btnCopy(linkLiffV2)") #[i.fa.mr-2.fa-clipboard] {{ $t('copy.btn') }}
+        button.btn.btn-outline-secondary.dropdown-toggle.dropdown-toggle-split(type="button", data-toggle="dropdown")
+        .dropdown-menu.dropdown-menu-right
+          button.dropdown-item(type="button", @click="btnCopy(linkLiffV1)") {{ $t('copy.btn') }} (LIFF v1)
+          button.dropdown-item(type="button", @click="btnCopy(linkLihi)") {{ $t('copy.btn') }} (lihi1.com)
+      small.form-text.text-muted.mt-2 {{ $t('copy.help') }}
     .dropdown.my-3
       button.btn.btn-lg.btn-secondary.btn-block.dropdown-toggle(type="button", data-toggle="dropdown") {{ $t('dropdown.btn') }}
       .dropdown-menu
@@ -64,7 +69,9 @@ block script
     window.vueConfig = {
       el: '#app',
       data: {
-        liffLink: null,
+        linkLiffV1: null,
+        linkLiffV2: null,
+        linkLihi: null,
         loading: true,
         msgs: null,
         render: null,
@@ -76,7 +83,8 @@ block script
           await loginPromise
           window.gtagScreenView('瀏覽分享名片網頁')
           window.gtagTiming('after loginPromise')
-          this.liffLink = liff.permanentLink.createUrl()
+          this.linkLiffV2 = liff.permanentLink.createUrl()
+          this.setOtherLinksByLiffV2(this.linkLiffV2)
           await Promise.all([
             this.getTpl(),
             this.getVcard(),
@@ -94,7 +102,7 @@ block script
           window.logError({ err, fatal: true })
           await this.swalFire({ icon: 'error', title: this.$t('init.fail'), text: err.message })
         }
-        if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) await this.btnShare()
+        if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) await this.btnShare(true)
         this.loading = false
       },
       computed: {
@@ -113,7 +121,8 @@ block script
               transformResponse: [],
             }), 'data'))
             if (!_.isFunction(render)) throw new Error('')
-            this.render = options => render({ _, dayjs, Qs, liffLink: this.liffLink, ...options })
+            const liffLink = this.isInOpenChat() ? this.linkLiffV1 : this.linkLiffV2
+            this.render = options => render({ _, dayjs, Qs, liffLink, ...options })
             window.gtagTiming('after getTpl')
           } catch (err) {
             err.message = `${this.$t('init.getTplFail')}${err.message ? ': ' + err.message : ''}`
@@ -131,20 +140,25 @@ block script
           ]), window.decodeBase64url)
           window.gtagTiming('after getVcard')
         },
-        async btnShare () {
+        async btnShare (slient = false) {
           try {
             this.showLoading(this.$t('wait'), this.$t('share.loading'))
             window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
             if (!liff.isApiAvailable('shareTargetPicker')) throw new Error(this.$t('share.unsupported'))
             const beforeShare = Date.now()
             const res = await liff.shareTargetPicker(this.msgs)
-            if (_.get(res, 'status') !== 'success') throw new Error(this.$t('share.canceled'))
             const afterShare = Date.now()
+            if (_.get(res, 'status') !== 'success') {
+              if (!slient) throw new Error(this.$t('share.canceled'))
+              return
+            }
             await this.swalFire({ icon: 'success', title: this.$t('share.success') })
             if (afterShare - beforeShare > 1e3) liff.closeWindow()
           } catch (err) {
             window.logError({ err })
             await this.swalFire({ icon: 'error', title: this.$t('share.fail'), text: err.message })
+          } finally {
+            this.hideLoading()
           }
         },
         async btnSend () {
@@ -212,6 +226,16 @@ block script
         paramGzip (key) {
           const base64 = window.getSearchParam(key)
           return base64 ? window.decodeGzip(base64) : null
+        },
+        setOtherLinksByLiffV2 (v2) {
+          const match = v2.match(/^.*?\/(\d+-[^/]+)\/(.*)$/)
+          const path = encodeURIComponent(match[2])
+          this.linkLiffV1 = `https://line.me/R/app/${match[1]}?redirect=${path}`
+          this.linkLihi = `https://lihi1.com/hFW7P/${path}`
+        },
+        isInOpenChat () {
+          const context = liff.getContext()
+          return _.get(context, 'type') === 'square_chat'
         },
         showLoading (title, text) {
           Swal.fire({

@@ -8,4 +8,9 @@ html
   body
     script(crossorigin="anonymous", src="https://static.line-scdn.net/liff/edge/2/sdk.js")
     script.
-      liff.init({ liffId: '#{liffidFull}' })
+      ;(async () => {
+        await liff.init({ liffId: '#{liffidFull}' })
+        const redirect = new URL(location).searchParams.get('redirect')
+        if (typeof redirect === 'string') location.href = new URL(redirect, location).href
+      })()
+

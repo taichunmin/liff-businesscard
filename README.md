@@ -22,11 +22,14 @@ A Bussiness Card For LINE Using LINE Front-end Framework (LIFF) API.
 * [Google Maps Universal cross-platform URL](https://developers.google.com/maps/documentation/urls/guide)
 * [Lodash 函式庫文件](https://lodash.com/docs/)
 
-## Self-hosted
+# 使用 mkcert 設定開發環境 HTTPS
 
-1. Fork
-2. Set GitHub Actions Secret (e.g. `example.env`)
-3. Trigger GitHub Actions "github pages" workflow
+[安裝 mkcert](https://github.com/FiloSottile/mkcert) 後執行以下指令
+
+```
+yarn mkcert
+yarn dev
+```
 
 ## CONTRIBUTING
 

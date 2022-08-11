@@ -14,7 +14,7 @@ block meta
 block form
   .form-group.was-validated.my-2
     label(for="vcard-logo") LOGO
-    input#vcard-logo.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model="vcard.logo")
+    input#vcard-logo.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model.trim="vcard.logo")
     small.form-text.text-muted 請填寫 LOGO 圖片網址，必須是 #[code https://] 開頭，比例為 #[code 1:1]，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
   .form-group.was-validated.my-2
     label(for="vcard-name") 姓名
@@ -46,7 +46,7 @@ block form
     small.form-text.text-muted 請填寫公司信箱。
   .form-group.was-validated.my-2
     label(for="vcard-url") 網站
-    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model="vcard.url")
+    input#vcard-url.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model.trim="vcard.url")
     small.form-text.text-muted 請填寫公司網站。
 
 block vue-config

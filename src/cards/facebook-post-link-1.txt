@@ -43,7 +43,7 @@ function escapeStr (str) {
           "action": {
             "label": "action",
             "type": "uri",
-            "uri": "${vcard.website}"
+            "uri": "${_.trim(vcard.website)}"
           },
           "contents": [
             {
@@ -122,7 +122,7 @@ function escapeStr (str) {
           "action": {
             "label": "action",
             "type": "uri",
-            "uri": "${vcard.link}"
+            "uri": "${_.trim(vcard.link)}"
           },
           "contents": [
             {
@@ -142,7 +142,7 @@ function escapeStr (str) {
           "action": {
             "label": "action",
             "type": "uri",
-            "uri": "${vcard.link}"
+            "uri": "${_.trim(vcard.link)}"
           },
           "contents": [
             {
@@ -231,7 +231,7 @@ function escapeStr (str) {
               "action": {
                 "label": "action",
                 "type": "uri",
-                "uri": "${vcard.link}"
+                "uri": "${_.trim(vcard.link)}"
               },
               "contents": [
                 {

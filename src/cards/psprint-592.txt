@@ -159,31 +159,31 @@ function gaScreenView (vcard) {
                         {
                           "color": "#ffffff",
                           "size": "xs",
-                          "text": "${vcard.tel1}",
+                          "text": "${_.trim(vcard.tel1)}",
                           "type": "text",
                           "action": {
                             "type": "uri",
-                            "uri": "tel:${vcard.tel1}"
+                            "uri": "tel:${_.trim(vcard.tel1)}"
                           }
                         },
                         {
                           "color": "#ffffff",
                           "size": "xs",
-                          "text": "${vcard.tel2}",
+                          "text": "${_.trim(vcard.tel2)}",
                           "type": "text",
                           "action": {
                             "type": "uri",
-                            "uri": "tel:${vcard.tel2}"
+                            "uri": "tel:${_.trim(vcard.tel2)}"
                           }
                         },
                         {
                           "color": "#ffffff",
                           "size": "xxs",
-                          "text": "${vcard.email}",
+                          "text": "${_.trim(vcard.email)}",
                           "type": "text",
                           "action": {
                             "type": "uri",
-                            "uri": "mailto:${vcard.email}"
+                            "uri": "mailto:${_.trim(vcard.email)}"
                           }
                         }
                       ]
@@ -208,17 +208,17 @@ function gaScreenView (vcard) {
                           "wrap": true,
                           "action": {
                             "type": "uri",
-                            "uri": "${vcard.maps}"
+                            "uri": "${_.trim(vcard.maps)}"
                           }
                         },
                         {
                           "color": "#ffffff",
                           "size": "xxs",
-                          "text": "${getHostname(vcard.url)}",
+                          "text": "${getHostname(_.trim(vcard.url))}",
                           "type": "text",
                           "action": {
                             "type": "uri",
-                            "uri": "${vcard.url}"
+                            "uri": "${_.trim(vcard.url)}"
                           }
                         }
                       ]

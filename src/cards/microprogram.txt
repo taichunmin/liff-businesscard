@@ -153,22 +153,22 @@ function gaScreenView (vcard) {
                   "contents": [
                     {
                       "size": "sm",
-                      "text": "+886 ${vcard.mobile.slice(1)}",
+                      "text": "+886 ${_.trim(vcard.mobile).slice(1)}",
                       "type": "text",
                       "action": {
                         "label": "action",
                         "type": "uri",
-                        "uri": "tel:${vcard.mobile}"
+                        "uri": "tel:${_.trim(vcard.mobile)}"
                       }
                     },
                     {
                       "size": "sm",
-                      "text": "+886 4 2369 2699 #${vcard.ext}",
+                      "text": "+886 4 2369 2699 #${_.trim(vcard.ext)}",
                       "type": "text",
                       "action": {
                         "label": "action",
                         "type": "uri",
-                        "uri": "tel:04-23692699,${vcard.ext}"
+                        "uri": "tel:04-23692699,${_.trim(vcard.ext)}"
                       }
                     },
                     {
@@ -182,13 +182,13 @@ function gaScreenView (vcard) {
             },
             {
               "margin": "lg",
-              "text": "${vcard.email}",
+              "text": "${_.trim(vcard.email)}",
               "type": "text",
               "wrap": true,
               "action": {
                 "label": "action",
                 "type": "uri",
-                "uri": "mailto:${vcard.email}"
+                "uri": "mailto:${_.trim(vcard.email)}"
               }
             },
             {

@@ -108,7 +108,7 @@ function escapeStr (str) {
           "action": {
             "label": "action",
             "type": "uri",
-            "uri": "${vcard.agenda}"
+            "uri": "${_.trim(vcard.agenda)}"
           },
           "contents": [
             {
@@ -131,7 +131,7 @@ function escapeStr (str) {
           "action": {
             "label": "action",
             "type": "uri",
-            "uri": "${vcard.hackmd}"
+            "uri": "${_.trim(vcard.hackmd)}"
           },
           "contents": [
             {

@@ -33,7 +33,7 @@ function gaScreenView (vcard) {
         "type": "box",
         "action": {
           "type": "uri",
-          "uri": "${vcard.url}"
+          "uri": "${_.trim(vcard.url)}"
         },
         "contents": [
           {
@@ -99,7 +99,7 @@ function gaScreenView (vcard) {
                 "type": "text",
                 "action": {
                   "type": "uri",
-                  "uri": "${vcard.maps}"
+                  "uri": "${_.trim(vcard.maps)}"
                 }
               },
               {
@@ -108,11 +108,11 @@ function gaScreenView (vcard) {
                 "contents": [
                   {
                     "size": "sm",
-                    "text": "TEL：${vcard.tel}",
+                    "text": "TEL：${_.trim(vcard.tel)}",
                     "type": "text",
                     "action": {
                       "type": "uri",
-                      "uri": "tel:${vcard.tel}"
+                      "uri": "tel:${_.trim(vcard.tel)}"
                     }
                   },
                   {
@@ -124,11 +124,11 @@ function gaScreenView (vcard) {
               },
               {
                 "size": "sm",
-                "text": "Email: ${vcard.email}",
+                "text": "Email: ${_.trim(vcard.email)}",
                 "type": "text",
                 "action": {
                   "type": "uri",
-                  "uri": "mailto:${vcard.email}"
+                  "uri": "mailto:${_.trim(vcard.email)}"
                 }
               }
             ]

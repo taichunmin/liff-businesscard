@@ -66,7 +66,7 @@ function gaScreenView (vcard) {
               "weight": "bold",
               "action": {
                 "type": "uri",
-                "uri": "${vcard.maps}"
+                "uri": "${_.trim(vcard.maps)}"
               }
             },
             {
@@ -76,35 +76,35 @@ function gaScreenView (vcard) {
               "type": "text",
               "action": {
                 "type": "uri",
-                "uri": "${vcard.maps}"
+                "uri": "${_.trim(vcard.maps)}"
               }
             },
             {
               "align": "end",
               "margin": "xxl",
-              "text": "${vcard.tel}",
+              "text": "${_.trim(vcard.tel)}",
               "type": "text",
               "action": {
                 "type": "uri",
-                "uri": "tel:${vcard.tel}"
+                "uri": "tel:${_.trim(vcard.tel)}"
               }
             },
             {
               "align": "end",
-              "text": "${vcard.email}",
+              "text": "${_.trim(vcard.email)}",
               "type": "text",
               "action": {
                 "type": "uri",
-                "uri": "mailto:${vcard.email}"
+                "uri": "mailto:${_.trim(vcard.email)}"
               }
             },
             {
               "align": "end",
-              "text": "${vcard.url}",
+              "text": "${_.trim(vcard.url)}",
               "type": "text",
               "action": {
                 "type": "uri",
-                "uri": "${vcard.url}"
+                "uri": "${_.trim(vcard.url)}"
               }
             },
             {

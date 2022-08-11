@@ -22,7 +22,7 @@ function gaScreenView (vcard) {
 }
 function renderBtn (ctx) {
   const { btn, vcard } = ctx
-  const uri = btn.link || DEFAULT_LINK
+  const uri = _.trim(btn.link || DEFAULT_LINK)
   return {
     color: btn.color || '#17c950',
     height: vcard.btnHeight || 'md',
@@ -37,7 +37,7 @@ function renderBtn (ctx) {
 }
 function renderCard (ctx) {
   const { card, cardIdx, vcard } = ctx
-  const uri = card.link || DEFAULT_LINK
+  const uri = _.trim(card.link || DEFAULT_LINK)
   return {
     type: 'bubble',
     hero: {

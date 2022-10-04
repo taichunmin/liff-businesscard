@@ -41,7 +41,7 @@ function renderCard (ctx) {
   return {
     type: 'bubble',
     hero: {
-      animated: true,
+      animated: cardIdx < 10,
       aspectMode: 'cover',
       aspectRatio: vcard.ratio || '20:13',
       size: 'full',

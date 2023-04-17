@@ -1,0 +1,64 @@
+extends /layout/forms
+
+block beforehtml
+  -
+    title = 'ChatGPT 問與答'
+    description = '讓你在 LINE 中模擬 ChatGPT 的問答畫面！上面有開啟自訂連結及再次分享的按鈕。'
+
+block meta
+  meta(property="og:image:height", content="640")
+  meta(property="og:image:width", content="1280")
+  meta(property="og:image", content="https://i.imgur.com/0uU5aCG.png")
+  meta(property="og:url", content=baseurl+"forms/chatgpt-1.html")
+
+block form
+  .form-group.my-2
+    label(for="vcard-design") 風格
+    select#vcard-design.form-control.form-control-sm(v-model="vcard.design")
+      option(value="") ChatGPT 3
+      option(value="gpt4") ChatGPT 4
+    small.form-text.text-muted 請選擇風格，預設為 #[code ChatGPT 3]。
+  .form-group.was-validated.my-2
+    label(for="vcard-altText") 替代文字
+    input#vcard-altText.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.altText")
+    small.form-text.text-muted 請填寫在訊息無法顯示時（如：系統通知）的替代文字。
+  .form-group.was-validated.my-2
+    label(for="vcard-avatar") 大頭貼
+    input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model.trim="vcard.avatar")
+    small.form-text.text-muted 請填寫大頭貼圖片網址，必須是 #[code https://] 開頭，長寬比為 #[code 1:1]。
+  .form-group.was-validated.my-2
+    label(for="vcard-link") 連結
+    input#vcard-link.form-control.form-control-sm(type="url", inputmode="url", required, pattern="(https?://|line://|tel:|mailto:)\\S+", v-model.trim="vcard.link")
+    small.form-text.text-muted 請填寫連結。你可以使用 #[a(target="_blank", href="https://ga-dev-tools.appspot.com/campaign-url-builder/") UTM Builder] 以及 #[code &amp;openExternalBrowser=1] 另開瀏覽器。
+  .form-group.was-validated.my-2
+    label(for="vcard-prompt") 提示文字
+    textarea#vcard-prompt.form-control.form-control-sm(required, rows="5", pattern=".+", v-model="vcard.prompt")
+    small.form-text.text-muted 請填寫提示文字，文字過多可能會導致分享失敗。
+  .form-group.was-validated.my-2
+    label(for="vcard-answer") 回答文字
+    textarea#vcard-answer.form-control.form-control-sm(required, rows="5", pattern=".+", v-model="vcard.answer")
+    small.form-text.text-muted 請填寫回答文字，文字過多可能會導致分享失敗。
+
+block vue-config
+  script.
+    const cfg = window.vueConfig
+    _.set(cfg, 'data.vcard', {
+      altText: '如何在 LINE 上免費分享漂亮的名片或廣告？',
+      answer: 'LINE 數位版名片是一個完全免費的解決方案！你可以在 LINE 上免費分享圖文並茂的名片或廣告傳單給你的好友或群組，讓你的產品或服務更加引人注目。而且，LINE 目前在台灣的市佔率極高，使用這個免費的開源工具，絕對能夠提升你的宣傳效果。此外，你還可以輕鬆追蹤分享後的觀看數，或者使用簡單的程式為全公司的同事製作名片，方便且實用！',
+      avatar: 'https://i.imgur.com/1KZoSue.png',
+      design: '',
+      link: 'https://taichunmin.idv.tw/liff-businesscard/',
+      prompt: '如何在 LINE 上免費分享圖文並茂的名片或廣告傳單給群組或好友？',
+      template: '#{baseurl}cards/chatgpt-1.txt',
+    })
+    cfg.computed = {
+      ...cfg.computed,
+      shortcut () {
+        const params = window.httpBuildQuery({
+          template: window.encodeBase64url(this.vcard.template),
+          json5gzip: window.encodeGzip(JSON5.stringify(window.beautifyFlex(_.omit(this.vcard, ['template'])))),
+        })
+        if (!_.isString(params) || !params.length) return
+        return `https://liff.line.me/#{liffidFull}/share-json5gzip.html?${params}`
+      },
+    }

@@ -1,4 +1,5 @@
 form,name,author,lang,preview,description
+forms/chatgpt-1.html,ChatGPT 問與答,taichunmin,zh_TW,https://i.imgur.com/0uU5aCG.png,讓你在 LINE 中模擬 ChatGPT 的問答畫面！上面有開啟自訂連結及再次分享的按鈕。
 forms/json5.html,JSON5,taichunmin,zh_TW,https://i.imgur.com/ci4T6xG.png,提供給有程式背景的開發者使用，可以使用 JSON5 API 來當作樣版的資料來源。
 forms/line-carousel-1.html,多頁訊息 1,taichunmin,zh_TW,https://i.imgur.com/0pbirUY.png,來自 LINE 的樣板，最多 12 張卡片，很適合用來製作廣告傳單。
 forms/psprint-592.html,Corporate Buzz,taichunmin,zh_TW,https://i.imgur.com/AjbhMam.png,來自 PsPrint 的樣板，上面有連結可以開啟，很適合用來製作個人名片！

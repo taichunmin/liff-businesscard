@@ -3,7 +3,7 @@ extends /layout/forms
 block beforehtml
   -
     title = 'Facebook Post Link'
-    description = '點此連結來模擬 Facebook 的分享連結！'
+    description = '讓你在 LINE 中模擬 Facebook 分享連結，並且還可再次分享！'
 
 block meta
   meta(property="og:image:height", content="640")
@@ -15,7 +15,7 @@ block form
   .form-group.was-validated.my-2
     label(for="vcard-altText") 替代文字
     input#vcard-altText.form-control.form-control-sm(type="text", required, pattern=".+", v-model="vcard.altText")
-    small.form-text.text-muted 請填寫無法顯示訊息時（如：系統通知）的替代文字。
+    small.form-text.text-muted 請填寫在訊息無法顯示時（如：系統通知）的替代文字。
   .form-group.was-validated.my-2
     label(for="vcard-avatar") 大頭貼
     input#vcard-avatar.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model.trim="vcard.avatar")

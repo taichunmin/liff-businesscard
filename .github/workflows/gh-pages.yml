@@ -5,52 +5,49 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - uses: actions/checkout@v2
-    - name: 安裝 Node.js 與 yarn
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-        check-latest: true
-
-    - name: 取得 yarn 的快取資料夾路徑
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-
-    - name: 讓 yarn 使用快取機制
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-yarn-modules
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
-
-    - run: yarn
-    - name: 編譯網頁
-      run: yarn build
-      env:
-        BASEURL: ${{ secrets.BASEURL }}
-        LIFFID_FULL: ${{ secrets.LIFFID_FULL }}
-        LIFFID_SHARE_CSV: ${{ secrets.LIFFID_SHARE_CSV }}
-        LIFFID_SHARE: ${{ secrets.LIFFID_SHARE }}
-
-    - name: 建立 CNAME 檔案
-      shell: bash
-      run: '[[ -z "$CNAME" ]] || echo $CNAME > dist/CNAME'
-      env:
-        CNAME: ${{ secrets.CNAME }}
-
-    - name: 把網頁放到 GitHub Pages 的專屬分支上
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
-        force_orphan: true
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - name: 編譯網頁
+        env:
+          BASEURL: ${{ secrets.BASEURL }}
+          LIFFID_FULL: ${{ secrets.LIFFID_FULL }}
+          LIFFID_SHARE_CSV: ${{ secrets.LIFFID_SHARE_CSV }}
+          LIFFID_SHARE: ${{ secrets.LIFFID_SHARE }}
+        run: |
+          yarn
+          yarn build
+      - name: 建立 CNAME 檔案
+        shell: bash
+        run: '[[ -z "$CNAME" ]] || echo $CNAME > dist/CNAME'
+        env:
+          CNAME: ${{ secrets.CNAME }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

@@ -1,0 +1,12 @@
+form,name,author,lang,preview,description
+forms/chatgpt-1.html,ChatGPT 問與答,taichunmin,zh_TW,https://i.imgur.com/0uU5aCG.png,讓你在 LINE 中模擬 ChatGPT 的問答畫面！上面有開啟自訂連結及再次分享的按鈕。
+forms/json5.html,JSON5,taichunmin,zh_TW,https://i.imgur.com/ci4T6xG.png,提供給有程式背景的開發者使用，可以使用 JSON5 API 來當作樣版的資料來源。
+forms/line-carousel-1.html,多頁訊息 1,taichunmin,zh_TW,https://i.imgur.com/0pbirUY.png,來自 LINE 的樣板，最多 12 張卡片，很適合用來製作廣告傳單。
+forms/psprint-592.html,Corporate Buzz,taichunmin,zh_TW,https://i.imgur.com/AjbhMam.png,來自 PsPrint 的樣板，上面有連結可以開啟，很適合用來製作個人名片！
+forms/google-sheet.html,Google Sheet,taichunmin,zh_TW,https://i.imgur.com/Jdb68bE.png,從 Google Sheet 讀取名片資料來產生名片
+forms/csv.html,CSV,taichunmin,zh_TW,https://i.imgur.com/CU3myIc.png,從 CSV 讀取名片資料來產生名片
+forms/facebook-post-link-1.html,Facebook Post Link,taichunmin,zh_TW,https://i.imgur.com/hO0LAHK.png,讓你在 LINE 中模擬 Facebook 分享連結，並且還可再次分享！
+forms/psprint-3949.html,Right Align,taichunmin,zh_TW,https://i.imgur.com/tUvhifE.png,來自 PsPrint 的樣板，上面有連結可以開啟，很適合用來製作個人名片！
+forms/acnh-passport-1.html,動物森友會護照,taichunmin,zh_TW,https://i.imgur.com/rGRMSdy.png,「集合吧！動物森友會」的護照
+forms/acnh-postcard-1.html,動物森友會心意卡,taichunmin,zh_TW,https://i.imgur.com/gJASJdW.png,來自「集合吧！動物森友會」的心意卡。
+forms/chatbot-tw-1.html,Chatbot 台灣開發者,taichunmin,zh_TW,https://i.imgur.com/lEKHcUY.png,「Chatbot Developers Taiwan」的名片

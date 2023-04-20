@@ -1,0 +1,121 @@
+<%
+/* global vcard */
+const DEFAULT_LINK = 'https://taichunmin.idv.tw/liff-businesscard/'
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = '多頁訊息1-2021/06/20'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${_.get(vcard, 'cards.0.title')}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+function renderBtn (ctx) {
+  const { btn, vcard } = ctx
+  const uri = _.trim(btn.link || DEFAULT_LINK)
+  return {
+    color: btn.color || '#17c950',
+    height: vcard.btnHeight || 'md',
+    style: btn.style || 'primary',
+    type: 'button',
+    action: {
+      label: btn.text || '預設按鈕文字',
+      type: 'uri',
+      uri,
+    },
+  }
+}
+function renderCard (ctx) {
+  const { card, cardIdx, vcard } = ctx
+  const uri = _.trim(card.link || DEFAULT_LINK)
+  return {
+    type: 'bubble',
+    hero: {
+      animated: cardIdx < 10,
+      aspectMode: 'cover',
+      aspectRatio: vcard.ratio || '20:13',
+      size: 'full',
+      type: 'image',
+      url: card.image || '',
+      action: {
+        type: 'uri',
+        uri,
+      },
+    },
+    body: {
+      backgroundColor: card.bgColor || '#ffffff',
+      layout: 'vertical',
+      spacing: 'md',
+      type: 'box',
+      action: {
+        type: 'uri',
+        uri,
+      },
+      contents: [
+        {
+          color: card.titleColor || '#000000',
+          size: vcard.titleSize || 'xl',
+          text: card.title,
+          type: 'text',
+          weight: 'bold',
+          wrap: true,
+        },
+        {
+          color: card.descColor || '#000000',
+          size: vcard.descSize || 'sm',
+          text: card.desc,
+          type: 'text',
+          wrap: true,
+        },
+        ...(cardIdx ? [] : [{
+          height: '1px',
+          layout: 'vertical',
+          offsetStart: '0px',
+          offsetTop: '0px',
+          position: 'absolute',
+          type: 'box',
+          width: '1px',
+          contents: [{
+            align: 'center',
+            aspectMode: 'cover',
+            aspectRatio: '1:1',
+            gravity: 'center',
+            size: 'full',
+            type: 'image',
+            url: gaScreenView(vcard),
+          }],
+        }]),
+      ],
+    },
+    footer: {
+      backgroundColor: card.bgColor || '#ffffff',
+      layout: 'vertical',
+      spacing: 'sm',
+      type: 'box',
+      contents: _.map(card.btns, btn => renderBtn({ ...ctx, btn })),
+    },
+  }
+}
+function renderCarousel (ctx) {
+  const { vcard } = ctx
+  return {
+    type: 'flex',
+    altText: vcard.altText,
+    contents: {
+      type: 'carousel',
+      contents: _.map(vcard.cards, (card, cardIdx) => renderCard({ ...ctx, card, cardIdx })),
+    },
+  }
+}
+print(JSON.stringify(renderCarousel({ vcard })))
+%>

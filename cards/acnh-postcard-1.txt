@@ -1,0 +1,291 @@
+<%
+const DESIGNS = {
+  Academy00: {name:'快樂家協會卡片',imgur:'zx0bo9H',bg:'#00000000',body:'#210E0A',from:'#210E0A',to:'#210E0A'},
+  Active00: {name:'塗鴉卡片',imgur:'8sVICE9',bg:'#00000000',body:'#FBFE00',from:'#06FFEE',to:'#07F5DE'},
+  Active01: {name:'星星卡片',imgur:'Yihz9Sp',bg:'#00000000',body:'#0B3F71',from:'#C74400',to:'#C94304'},
+  Baby00: {name:'嬰兒用品卡片',imgur:'8xIFyua',bg:'#00000000',body:'#58BFCE',from:'#66514C',to:'#68534E'},
+  Bank00: {name:'Nook卡片',imgur:'DhzKAP5',bg:'#00000000',body:'#00572E',from:'#00572E',to:'#00572E'},
+  Birthday00: {name:'生日蛋糕卡片',imgur:'xfSp5hO',bg:'#00000000',body:'#543D1E',from:'#4E3717',to:'#523827'},
+  Birthday01: {name:'蝴蝶結卡片',imgur:'kRmLcN8',bg:'#00000000',body:'#5B544C',from:'#3F0211',to:'#420210'},
+  Birthday02: {name:'氣球卡片',imgur:'Mx6V72r',bg:'#FDFDF1',body:'#60563B',from:'#EA8803',to:'#F28100'},
+  Christmas00: {name:'大樹卡片',imgur:'JScyCqk',bg:'#00000000',body:'#FFFFFF',from:'#FFFFFF',to:'#FFFFFF'},
+  Christmas01: {name:'聖誕卡片',imgur:'Ed9XQhV',bg:'#00000000',body:'#6D0000',from:'#004120',to:'#004120'},
+  Christmas02: {name:'溫暖針織衫卡片',imgur:'XwEGa6x',bg:'#410000',body:'#FFFFFF',from:'#FFFFFF',to:'#FFFFFF'},
+  Cool00: {name:'酷感卡片',imgur:'vUdZO4P',bg:'#00000000',body:'#ADADAD',from:'#DEDEDE',to:'#DBDBDB'},
+  Cool01: {name:'迷彩卡片',imgur:'N02E9RM',bg:'#00000000',body:'#FFEEC8',from:'#E7E668',to:'#E3DF71'},
+  Cute00: {name:'少女情懷卡片',imgur:'ardsyJX',bg:'#00000000',body:'#FEE4CD',from:'#FFEDD5',to:'#FFE5CC'},
+  Cute01: {name:'奇幻星星卡片',imgur:'M64Qsv0',bg:'#00000000',body:'#6C30EA',from:'#F59531',to:'#F45FD7'},
+  Dal00: {name:'DodoAirlines',imgur:'0EehJ8p',bg:'#00000000',body:'#FFFFFF',from:'#FFFFFF',to:'#FFFFFF'},
+  Easter00: {name:'復活節卡片',imgur:'xy8lLHI',bg:'#FEFDE8',body:'#281511',from:'#281511',to:'#281511'},
+  Elegant00: {name:'寶石卡片',imgur:'NqT3l9r',bg:'#B8DEC7',body:'#2C8974',from:'#227D8F',to:'#278287'},
+  Elegant01: {name:'優雅玫瑰卡片',imgur:'zlTCtBf',bg:'#00000000',body:'#F2DAB8',from:'#EADB74',to:'#E8D77F'},
+  Encourage00: {name:'幸福幸運草卡片',imgur:'Z13sWEP',bg:'#00000000',body:'#164C01',from:'#6F4320',to:'#68491A'},
+  Fall00: {name:'芒草與紅蜻蜓卡片',imgur:'4ZNe5Nf',bg:'#00000000',body:'#BA6441',from:'#F26426',to:'#F96328'},
+  Fall01: {name:'落葉地毯卡片',imgur:'QoO9zNS',bg:'#00000000',body:'#FFDB83',from:'#FFDB83',to:'#FFDB83'},
+  Fall02: {name:'蘑菇卡片',imgur:'d6gbzkS',bg:'#00000000',body:'#E9CF85',from:'#EDE1AB',to:'#EDE1AB'},
+  Fall03: {name:'橡栗卡片',imgur:'uPD4aoV',bg:'#00000000',body:'#FFEB9E',from:'#FFEB9E',to:'#FFEB9E'},
+  Father00: {name:'父親節卡片',imgur:'qLzankT',bg:'#DEFFF4',body:'#0C4390',from:'#030956',to:'#030956'},
+  Fish00: {name:'俞司廷卡片',imgur:'Zd12B6F',bg:'#00000000',body:'#AD1600',from:'#E5DFC1',to:'#041554'},
+  Gorgeous00: {name:'天鵝絨卡片',imgur:'GI5FlDc',bg:'#00000000',body:'#EFBB67',from:'#BE8007',to:'#BF7D05'},
+  Gorgeous01: {name:'裝飾風格卡片',imgur:'FAEmCt7',bg:'#00000000',body:'#B34627',from:'#FCFAC9',to:'#FBFFC0'},
+  Graduate00: {name:'畢業卡片',imgur:'qdEuLWj',bg:'#00000000',body:'#FFFFFF',from:'#FFFFFF',to:'#FFFFFF'},
+  Halloween00: {name:'南瓜卡片',imgur:'FfLmydl',bg:'#00000000',body:'#EBC726',from:'#F6F1BB',to:'#F6F1BB'},
+  Halloween01: {name:'萬聖節卡片',imgur:'vLP3Bta',bg:'#00000000',body:'#FF5504',from:'#FFA907',to:'#FFA907'},
+  Insect00: {name:'龍克斯卡片',imgur:'3sBBFby',bg:'#00000000',body:'#71BF73',from:'#71BF73',to:'#71BF73'},
+  Love00: {name:'甜美愛心卡片',imgur:'ObLF0ME',bg:'#00000000',body:'#DB5B5A',from:'#F09C9A',to:'#F09B9E'},
+  Milage00: {name:'Nook集哩遊卡片',imgur:'PIHalBD',bg:'#00000000',body:'#23237D',from:'#23237D',to:'#23237D'},
+  Mother00: {name:'母親節卡片',imgur:'ZpdMXkX',bg:'#FFF1DE',body:'#900C37',from:'#560313',to:'#560313'},
+  Newyear00: {name:'新年快樂卡片',imgur:'c6lbsN4',bg:'#2C2289',body:'#975BFF',from:'#4864E9',to:'#FF7DE5'},
+  Newyear01: {name:'日本富士山卡片',imgur:'1ICanEr',bg:'#00000000',body:'#0B0603',from:'#0B0603',to:'#0B0603'},
+  Other00: {name:'和風卡片',imgur:'Oq397My',bg:'#00000000',body:'#FEECD8',from:'#FCD671',to:'#FFCD71'},
+  Other01: {name:'航空郵件卡片',imgur:'8RWEHRI',bg:'#00000000',body:'#000000',from:'#000000',to:'#000000'},
+  Other03: {name:'文具卡片',imgur:'OYieTy1',bg:'#00000000',body:'#707070',from:'#707070',to:'#707070'},
+  Other04: {name:'齒輪卡片',imgur:'ambQRKH',bg:'#00000000',body:'#96E7E0',from:'#FFFFFF',to:'#FFFFFF'},
+  Other05: {name:'愛心滿滿卡片',imgur:'HSoY5Wt',bg:'#00000000',body:'#FFF5FF',from:'#8A03E3',to:'#8F03E0'},
+  Other06: {name:'藍天卡片',imgur:'dL8u9KG',bg:'#00000000',body:'#DFF6FE',from:'#A7F2F8',to:'#A6EBFB'},
+  Shopping00: {name:'禮物卡片',imgur:'iSBQ8kU',bg:'#00000000',body:'#623300',from:'#623300',to:'#623300'},
+  Simple00: {name:'常見卡片',imgur:'LqBHztr',bg:'#00000000',body:'#825D55',from:'#825953',to:'#805B53'},
+  Simple01: {name:'撕下的卡片',imgur:'OavIsIR',bg:'#00000000',body:'#737373',from:'#6F6F6F',to:'#767676'},
+  Snowfes00: {name:'雪人卡片',imgur:'pF7P8jE',bg:'#00000000',body:'#FFFFFF',from:'#319FB0',to:'#369CB5'},
+  Spring00: {name:'櫻花紛飛卡片',imgur:'SJuzNsn',bg:'#00000000',body:'#480A1F',from:'#F41D61',to:'#F41D61'},
+  Spring01: {name:'蒲公英卡片',imgur:'IYUDElL',bg:'#00000000',body:'#DF2D04',from:'#033000',to:'#033000'},
+  Spring02: {name:'繁花綻放卡片',imgur:'Xtfayw7',bg:'#00000000',body:'#BF2000',from:'#520C03',to:'#520C03'},
+  Star00: {name:'流星卡片',imgur:'8RL8od0',bg:'#00000000',body:'#DAEEF9',from:'#89E0F3',to:'#89DAED'},
+  Summer00: {name:'金魚卡片',imgur:'7nfaLoz',bg:'#00000000',body:'#267D99',from:'#3E463B',to:'#3D4D43'},
+  Summer01: {name:'積雨雲卡片',imgur:'KQMtlxU',bg:'#00000000',body:'#001764',from:'#FFFFFF',to:'#0A0A10'},
+  Summer02: {name:'扶桑花卡片',imgur:'9W44YVv',bg:'#F2F3F1',body:'#004868',from:'#DB0037',to:'#DB0037'},
+  Summer03: {name:'沙灘卡片',imgur:'OHtTcJO',bg:'#00000000',body:'#601600',from:'#3F0900',to:'#3F0900'},
+  Sympathy00: {name:'絆創帶卡片',imgur:'bz8ftDm',bg:'#00000000',body:'#1574AA',from:'#FFFFFF',to:'#FFFFFF'},
+  Thanksgiving00: {name:'感謝祭卡片',imgur:'jkTfSY3',bg:'#D49006',body:'#320300',from:'#791000',to:'#791000'},
+  Thankyou00: {name:'捧花卡片',imgur:'b5is08F',bg:'#00000000',body:'#9E2E00',from:'#673326',to:'#643A2A'},
+  Thankyou01: {name:'幾何圖形卡片',imgur:'NUB66Vd',bg:'#00000000',body:'#625952',from:'#3CC881',to:'#38C882'},
+  Totakeke00: {name:'K.K.卡片',imgur:'OozIkDG',bg:'#00000000',body:'#443F3F',from:'#181818',to:'#181818'},
+  Tsunekichi00: {name:'九尾狐利卡片',imgur:'mVYhd2z',bg:'#00000000',body:'#002F36',from:'#002F36',to:'#002F36'},
+  Valentine00: {name:'愛心巧克力卡片',imgur:'RfEAXTG',bg:'#00000000',body:'#FFFFFF',from:'#FFD1EB',to:'#FFD1EB'},
+  Valentine01: {name:'巧克力卡片',imgur:'nAgMlBR',bg:'#00000000',body:'#FFE6E9',from:'#FFA63A',to:'#FFA63A'},
+  Wedding00: {name:'結婚卡片',imgur:'JriiP3Z',bg:'#00000000',body:'#76CAD4',from:'#4588BF',to:'#5190BB'},
+  Winter00: {name:'雪花卡片',imgur:'ZOz5Td9',bg:'#00000000',body:'#0075A3',from:'#3EA0BD',to:'#48A3BE'},
+  Winter01: {name:'冬季山茶花卡片',imgur:'c88UxVS',bg:'#00000000',body:'#424B6A',from:'#FFFFFF',to:'#FFFFFF'},
+  Winter02: {name:'城市景色卡片',imgur:'SOqnV1u',bg:'#00000000',body:'#7E1B00',from:'#5B0000',to:'#5B0000'},
+}
+function escapeStr (str) {
+  if (!_.isString(str)) return str
+  return JSON.stringify(str).slice(1, -1)
+}
+function vcardUuid (vcard, secret) {
+  const hash = CryptoJS.HmacMD5(JSON.stringify(vcard), secret)
+  const hex = CryptoJS.enc.Hex.stringify(hash)
+  return hex.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5')
+}
+function gaScreenView (vcard) {
+  const CARD_NAME = '動物森友會卡片-2020/07/17'
+  return `https://www.google-analytics.com/collect?${Qs.stringify({
+    an: 'LINE 數位版名片',
+    cd: `${CARD_NAME}-${vcard.design}`, // 畫面名稱，在此用來紀錄數位版名片的版本
+    cid: vcardUuid(vcard, CARD_NAME), // uuid
+    ds: 'app', // 資料來源，填寫為 app
+    sc: 'start',
+    t: 'screenview',
+    tid: 'UA-39556213-12', // GA 追蹤代碼
+    ul: 'zh-tw', // locale
+    v: 1, // api version
+  })}`
+}
+%>
+
+{
+  "altText": "有人寄給你一張「動物森友會」的卡片，請在手機上查看！",
+  "type": "flex",
+  "contents": {
+    "size": "giga",
+    "type": "bubble",
+    "body": {
+      "backgroundColor": "#000000",
+      "layout": "horizontal",
+      "paddingAll": "0px",
+      "position": "relative",
+      "type": "box",
+      "contents": [
+        {
+          "aspectMode": "cover",
+          "aspectRatio": "1230:780",
+          "size": "full",
+          "type": "image",
+          "url": "https://i.imgur.com/${DESIGNS[vcard.design].imgur}.png"
+        },
+        {
+          "layout": "vertical",
+          "offsetBottom": "25px",
+          "offsetEnd": "40px",
+          "offsetStart": "40px",
+          "offsetTop": "25px",
+          "position": "absolute",
+          "type": "box",
+          "contents": [
+            {
+              "flex": 0,
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "backgroundColor": "${DESIGNS[vcard.design].bg}",
+                  "cornerRadius": "5px",
+                  "flex": 0,
+                  "layout": "vertical",
+                  "paddingBottom": "2px",
+                  "paddingEnd": "5px",
+                  "paddingStart": "5px",
+                  "paddingTop": "2px",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "color": "${DESIGNS[vcard.design].to}",
+                      "size": "sm",
+                      "text": "${vcard.to}",
+                      "type": "text",
+                      "weight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "backgroundColor": "${DESIGNS[vcard.design].bg}",
+                  "cornerRadius": "5px",
+                  "flex": 0,
+                  "layout": "vertical",
+                  "paddingBottom": "2px",
+                  "paddingEnd": "5px",
+                  "paddingStart": "5px",
+                  "paddingTop": "2px",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "color": "${DESIGNS[vcard.design].body}",
+                      "size": "sm",
+                      "text": "${escapeStr(vcard.body)}",
+                      "type": "text",
+                      "weight": "bold",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "flex": 1,
+              "layout": "vertical",
+              "type": "box",
+              "contents": [
+                {
+                  "type": "filler"
+                }
+              ]
+            },
+            {
+              "flex": 0,
+              "layout": "horizontal",
+              "type": "box",
+              "contents": [
+                {
+                  "flex": 1,
+                  "layout": "vertical",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ]
+                },
+                {
+                  "backgroundColor": "${DESIGNS[vcard.design].bg}",
+                  "cornerRadius": "5px",
+                  "flex": 0,
+                  "layout": "vertical",
+                  "paddingBottom": "2px",
+                  "paddingEnd": "5px",
+                  "paddingStart": "5px",
+                  "paddingTop": "2px",
+                  "type": "box",
+                  "contents": [
+                    {
+                      "color": "${DESIGNS[vcard.design].from}",
+                      "size": "sm",
+                      "text": "${escapeStr(vcard.from)}",
+                      "type": "text",
+                      "weight": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "height": "1px",
+          "layout": "vertical",
+          "offsetStart": "0px",
+          "offsetTop": "0px",
+          "position": "absolute",
+          "type": "box",
+          "width": "1px",
+          "contents": [
+            {
+              "align": "center",
+              "aspectMode": "cover",
+              "aspectRatio": "1:1",
+              "gravity": "center",
+              "size": "full",
+              "type": "image",
+              "url": "${gaScreenView(vcard)}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

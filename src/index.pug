@@ -41,12 +41,9 @@ block script
       },
       async mounted () {
         try {
-          window.gtagInit()
-          window.gtagScreenView('瀏覽免費樣板列表網頁')
           this.businesscards = await window.getCsv('#{baseurl}businesscards.csv')
-          window.gtagTiming('after mounted')
         } catch (err) {
-          window.gtagError(err, true)
+          await Swal.fire({ icon: 'error', title: '初始化失敗', text: err.message })
         }
       },
     })

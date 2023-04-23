@@ -14,10 +14,12 @@ const UglifyJS = require('uglify-js')
 exports.build = async () => {
   const sitemapUrls = []
 
+  const GTAG_API_SECRET = Buffer.from('YW81Z2RTeTlTNFM4YWJFSVRBWXdmUQ', 'base64url').toString()
   const PUG_OPTIONS = {
     basedir: path.resolve(__dirname),
     baseurl: getBaseurl(),
-    GA_MEASUREMENT_ID: getenv('GA_MEASUREMENT_ID', 'UA-39556213-12'),
+    GTAG_API_SECRET: getenv('GTAG_API_SECRET', GTAG_API_SECRET),
+    GTAG_ID: getenv('GTAG_ID', 'G-GZZ1VHK5ZD'),
     NODE_ENV: getenv('NODE_ENV', 'production'),
     ..._.fromPairs(_.map([
       'LIFFID_FULL',

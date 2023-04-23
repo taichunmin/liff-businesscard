@@ -57,13 +57,11 @@ block script
         liff.login({ redirectUri: location.href })
         await new Promise(resolve => {}) // 永遠不會結束的 Promise
       }
-      let profile = {}
-      try {
-        profile = await liff.getProfile()
-      } catch (err) {
+      const profile = await liff.getProfile().catch(err => {
         window.logError({ err })
-      }
-      window.gtagInit(profile.userId)
+        return {}
+      })
+      window.gtag.configUserId(profile.userId)
       return profile
     })()
     window.vueConfig = {
@@ -74,15 +72,14 @@ block script
         linkLihi: null,
         loading: true,
         msgs: null,
+        profile: null,
         render: null,
         vcard: null,
       },
       async mounted () {
         try {
           this.showLoading(this.$t('wait'), this.$t('init.loading'))
-          await loginPromise
-          window.gtagScreenView('瀏覽分享名片網頁')
-          window.gtagTiming('after loginPromise')
+          this.profile = await loginPromise
           this.linkLiffV2 = liff.permanentLink.createUrl()
           this.setOtherLinksByLiffV2(this.linkLiffV2)
           await Promise.all([
@@ -96,7 +93,6 @@ block script
             window.flex2html('flex2html', msg)
           }
           this.hideLoading()
-          window.gtagTiming('after mounted')
           await this.showSavedAlert()
         } catch (err) {
           window.logError({ err, fatal: true })
@@ -122,8 +118,26 @@ block script
             }), 'data'))
             if (!_.isFunction(render)) throw new Error('')
             const liffLink = this.isInOpenChat() ? this.linkLiffV1 : this.linkLiffV2
-            this.render = options => render({ _, dayjs, Qs, liffLink, ...options })
-            window.gtagTiming('after getTpl')
+            const { profile = {} } = this
+
+            // generate fake page_view for template_impression
+            const baks = _.fromPairs(await Promise.all(['client_id', 'session_id', 'user_id'], async k => {
+              const val = await new Promise(resolve, gtag('get', gtag.id, k, resolve))
+              return [k, val]
+            }))
+            // generate clientId by line userId
+            const gtagClientId = gtag.genClientIdByLineId(profile.userId)
+            const gtagSessionId = `${liff.getDecodedIDToken()?.iat ?? Math.trunc(Date.now() / 1e3)}`
+            gtag('event', 'page_view', {
+              client_id: gtagClientId,
+              page_location: location.href,
+              page_title: document.title,
+              session_id: gtagSessionId,
+              user_id: null,
+            })
+            gtag('config', gtag.id, baks)
+
+            this.render = options => render({ gtagClientId, gtagSessionId, liffLink, profile, ...options })
           } catch (err) {
             err.message = `${this.$t('init.getTplFail')}${err.message ? ': ' + err.message : ''}`
             this.render = null
@@ -138,12 +152,11 @@ block script
             'state',
             'template',
           ]), window.decodeBase64url)
-          window.gtagTiming('after getVcard')
         },
         async btnShare (slient = false) {
           try {
             this.showLoading(this.$t('wait'), this.$t('share.loading'))
-            window.gtagEvent('瀏覽分享名片網頁', 'btnShare', this.vcard.template)
+            window.gtag.event('template_share', { method: 'liff_share', template_url: this.vcard.template })
             if (!liff.isApiAvailable('shareTargetPicker')) throw new Error(this.$t('share.unsupported'))
             const beforeShare = Date.now()
             const res = await liff.shareTargetPicker(this.msgs)
@@ -164,7 +177,7 @@ block script
         async btnSend () {
           try {
             this.showLoading(this.$t('wait'), this.$t('send.loading'))
-            window.gtagEvent('瀏覽分享名片網頁', 'btnSend', this.vcard.template)
+            window.gtag.event('template_share', { method: 'liff_send', template_url: this.vcard.template })
             if (!this.canSendMessages()) throw new Error(this.$t('send.unsupported'))
             await liff.sendMessages(this.msgs)
             await this.swalFire({ icon: 'success', title: this.$t('send.success') })
@@ -175,8 +188,7 @@ block script
           }
         },
         async btnCopy (text, container = null) {
-          const template = _.get(this, 'vcard.template')
-          if (template) window.gtagEvent('瀏覽分享名片網頁', 'btnCopy', template)
+          window.gtag.event('clipboard_copy', { content_type: 'text', text: _.truncate(text, { length: 30, omission: '' }) })
           if (!container) container = document.body
           const dom = document.createElement('textarea')
           dom.value = text

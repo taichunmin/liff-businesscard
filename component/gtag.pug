@@ -1,59 +1,40 @@
-if GA_MEASUREMENT_ID
-  script(async, src=`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`)
+if GTAG_ID
+  script(async, src=`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`)
   script.
-    window.dataLayer = window.dataLayer || []
-    window.GA_MEASUREMENT_ID = '#{GA_MEASUREMENT_ID}'
-    function gtag () { window.dataLayer.push(arguments) }
-    gtag('js', new Date())
-    gtag('config', 'UA-39556213-3')
-    window.gtagInit = lineId => {
-      const config = {
-        app_name: 'LINE 數位版名片網站',
-        groups: 'liff',
-        send_page_view: false,
-        transport_type: 'beacon',
+    ;(() => {
+      // initialize gtag
+      window.dataLayer = window.dataLayer || []
+      function gtag(){window.dataLayer.push(arguments)}
+      gtag.id = '#{GTAG_ID}'
+      gtag('js', new Date())
+      gtag('config', gtag.id)
+
+      // set LINE userId
+      gtag.configUserId = userId => {
+        if (!_.isString(userId)) return
+        gtag('config', gtag.id, { user_id: userId })
       }
-      if (window.liff) { // 如果是在 LIFF 內
-        config.app_name = `LIFF ${liff.getOS()} ${liff.getVersion()}`
-        if (/^U[0-9a-f]{32}$/.test(lineId)) config.user_id = lineId
-        if (liff.isInClient()) config.app_version = liff.getLineVersion()
+
+      // send event
+      gtag.event = (name, params) => { gtag('event', name, params) }
+
+      gtag.genClientId = () => `${_.random(2147483647)}.${Math.trunc(Date.now() / 1e3)}`
+
+      gtag.genClientIdByLineId = (lineId = '') => {
+        if (!/U[0-9a-f]{32}$/.test(lineId)) lineId = 'Udeadbeefdeadbeefdeadbeefdeadbeef'
+        const u32s = new Uint32Array(_.map(lineId.slice(1).match(/.{8}/g), hex => _.parseInt(hex, 16)))
+        for (let i = 0; i < 2; i++) u32s[i] ^= u32s[i + 2]
+        return `${u32s[0]}.${u32s[1]}`
       }
-      gtag('config', window.GA_MEASUREMENT_ID, config)
-    }
-    window.gtagEvent = (category, action, label, value = 1) => new Promise(resolve => {
-      gtag('event', action, {
-        event_callback: resolve,
-        event_category: category,
-        event_label: label,
-        send_to: 'liff',
-        value,
-      })
-    })
-    window.gtagScreenView = screenName => new Promise(resolve => {
-      gtag('event', 'screen_view', {
-        event_callback: resolve,
-        screen_name: screenName,
-        send_to: 'liff',
-      })
-    })
-    window.gtagError = (err, fatal = false) => new Promise(resolve => {
-      gtag('event', 'exception', {
-        description: err.message || '',
-        event_callback: resolve,
-        fatal,
-        send_to: 'liff',
-      })
-    })
-    window.gtagTiming = async name => {
-      if (!window.performance) return
-      const timeSincePageLoad = Math.round(performance.now())
-      await new Promise(resolve => {
-        gtag('event', 'timing_complete', {
-          event_callback: resolve,
-          event_category: location.pathname,
-          name,
-          send_to: 'liff',
-          value: timeSincePageLoad,
-        })
-      })
-    }
+
+      gtag.mpCollectUrl = json => {
+        const url = new URL('https://gcf-line-devbot-ybtjbo45iq-uc.a.run.app/mp/collect')
+        url.searchParams.set('measurement_id', gtag.id)
+        url.searchParams.set('api_secret', '#{GTAG_API_SECRET}')
+        if (!json.client_id) json.client_id = gtag.genClientId()
+        url.searchParams.set('json', window.encodeBase64url(JSON5.stringify(window.beautifyFlex(json))))
+        return url.href
+      }
+
+      window.gtag = gtag // expose gtag
+    })()

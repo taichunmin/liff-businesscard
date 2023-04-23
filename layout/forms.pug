@@ -86,13 +86,11 @@ html
         },
         async mounted () {
           try {
-            window.gtagInit()
-            window.gtagScreenView('瀏覽製作「#{title}」名片網頁')
+            window.gtag.event('open_template_form', { template_name: document.title })
             window.backupVcard = JSON5.stringify(_.get(this, 'vcard', {}))
             this.loadVcard()
             await this.onloadVcard()
             this.watchVcard()
-            window.gtagTiming('after mounted')
           } catch (err) {
             await Swal.fire({ icon: 'error', title: '初始化失敗', text: err.message })
             await this.btnReset(false)
@@ -112,19 +110,17 @@ html
               const saved = JSON5.parse(localStorage.getItem(location.pathname))
               if (saved) this.$set(this, 'vcard', { ...this.vcard, ...saved })
             } catch (err) {}
-            window.gtagTiming('after loadVcard')
           },
           async onloadVcard () {}, // abstract
           watchVcard () {
             this.$watch('vcard', () => {
               localStorage.setItem(location.pathname, JSON5.stringify(this.vcard))
             }, { deep: true })
-            window.gtagTiming('after watchVcard')
           },
           async btnReset (confirm = true) {
             try {
               if (confirm) {
-                window.gtagEvent('瀏覽製作「#{title}」名片網頁', 'btnReset', this.vcard.template)
+                window.gtag.event('reset_template_form', { template_name: document.title })
                 confirm = await Swal.fire({
                   cancelButtonColor: '#3085d6',
                   cancelButtonText: '保持原樣',

@@ -6,7 +6,6 @@ block vue-config
     cfg.methods.getVcard = async function () {
       try {
         this.vcard = window.parseJsonOrDefault(this.paramBase64url('json5base64'), {})
-        window.gtagTiming('after getVcard')
       } catch (err) {
         err.message = `${this.$t('csv.getVcardFail')}${err.message ? ': ' + err.message : ''}`
         this.render = null

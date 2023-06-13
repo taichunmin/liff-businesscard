@@ -1,0 +1,206 @@
+<%
+/* globals _, CryptoJS, gtag, gtagClientId, gtagSessionId, print, profile, vcard */
+function gaScreenView (vcard) {
+  const TEMPLATE_NAME = '車能網-2022/06/13'
+  let hash = CryptoJS.HmacMD5(JSON.stringify(vcard), TEMPLATE_NAME)
+  hash = CryptoJS.enc.Base64.stringify(hash).replace(/[+/=]/g, c => _.get({ '+': '-', '/': '_', '=': '' }, c))
+  return gtag.mpCollectUrl({
+    client_id: gtagClientId,
+    events: [{
+      name: 'template_impression',
+      params: {
+        session_id: gtagSessionId,
+        share_by: profile.userId ?? 'unknown',
+        template_name: TEMPLATE_NAME,
+        vcard_hash: hash,
+        vcard_name: vcard.name_tw,
+      },
+    }],
+  })
+}
+function renderIonex (vcard) {
+  return [
+    {
+      type: 'flex',
+      altText: `這是${vcard.name_tw}的電子名片，名片上有連結可以開啟。`,
+      contents: {
+        size: 'giga',
+        type: 'bubble',
+        body: {
+          backgroundColor: '#00a0e9',
+          layout: 'vertical',
+          paddingAll: '0px',
+          type: 'box',
+          contents: [
+            {
+              aspectMode: 'cover',
+              aspectRatio: '8:5',
+              size: 'full',
+              type: 'image',
+              url: gaScreenView(vcard),
+            },
+            {
+              backgroundColor: '#00aeef',
+              layout: 'horizontal',
+              offsetBottom: '0px',
+              offsetEnd: '0px',
+              offsetStart: '0px',
+              offsetTop: '0px',
+              paddingBottom: '20px',
+              paddingEnd: '10px',
+              paddingStart: '0px',
+              paddingTop: '20px',
+              position: 'absolute',
+              type: 'box',
+              contents: [
+                {
+                  flex: 11,
+                  justifyContent: 'space-between',
+                  layout: 'vertical',
+                  paddingEnd: '10px',
+                  paddingStart: '10px',
+                  type: 'box',
+                  action: {
+                    label: 'action',
+                    type: 'uri',
+                    uri: 'https://ionexenergy.com/?openExternalBrowser=1',
+                  },
+                  contents: [
+                    {
+                      align: 'center',
+                      color: '#ffffff00',
+                      size: 'xxs',
+                      text: 'ionexenergy.com',
+                      type: 'text',
+                    },
+                    {
+                      aspectMode: 'cover',
+                      aspectRatio: '300:75',
+                      size: 'full',
+                      type: 'image',
+                      url: 'https://i.imgur.com/k7IHBeb.png',
+                    },
+                    {
+                      align: 'center',
+                      color: '#ffffff',
+                      size: 'xxs',
+                      text: 'ionexenergy.com',
+                      type: 'text',
+                    },
+                  ],
+                },
+                {
+                  backgroundColor: '#00aeef',
+                  flex: 17,
+                  justifyContent: 'space-between',
+                  layout: 'vertical',
+                  type: 'box',
+                  contents: [
+                    {
+                      color: '#ffffff',
+                      size: 'sm',
+                      text: '車能網科技股份有限公司',
+                      type: 'text',
+                      weight: 'bold',
+                      action: {
+                        label: 'action',
+                        type: 'uri',
+                        uri: 'https://ionexenergy.com/?openExternalBrowser=1',
+                      },
+                    },
+                    {
+                      layout: 'vertical',
+                      type: 'box',
+                      contents: [
+                        {
+                          color: '#ffffff',
+                          size: 'lg',
+                          text: vcard.name_tw,
+                          type: 'text',
+                        },
+                        {
+                          color: '#ffffff',
+                          size: 'xxs',
+                          text: vcard.title_tw,
+                          type: 'text',
+                        },
+                      ],
+                    },
+                    {
+                      layout: 'vertical',
+                      type: 'box',
+                      contents: [
+                        ...(!vcard.mobile ? [] : [{
+                          color: '#ffffff',
+                          size: 'xs',
+                          text: `行動 ${vcard.mobile}`,
+                          type: 'text',
+                          action: {
+                            label: 'action',
+                            type: 'uri',
+                            uri: `tel:${vcard.mobile}`,
+                          },
+                        }]),
+                        {
+                          color: '#ffffff',
+                          size: 'xs',
+                          text: `電郵 ${vcard.email}`,
+                          type: 'text',
+                          wrap: true,
+                          action: {
+                            label: 'action',
+                            type: 'uri',
+                            uri: `mailto:${vcard.email}`,
+                          },
+                        },
+                      ],
+                    },
+                    {
+                      layout: 'vertical',
+                      type: 'box',
+                      contents: [
+                        {
+                          adjustMode: 'shrink-to-fit',
+                          color: '#ffffff',
+                          size: 'xxs',
+                          text: '115601 台北市南港區三重路19-5號9樓',
+                          type: 'text',
+                          wrap: false,
+                          action: {
+                            label: 'action',
+                            type: 'uri',
+                            uri: 'https://maps.app.goo.gl/byySQ81p1rJxAR417',
+                          },
+                        },
+                        {
+                          color: '#ffffff',
+                          size: 'xxs',
+                          text: '電話 02-77557730' + (vcard.ext ? `,${vcard.ext}` : ''),
+                          type: 'text',
+                          action: {
+                            label: 'action',
+                            type: 'uri',
+                            uri: 'tel:0277557730' + (vcard.ext ? `,${vcard.ext}` : ''),
+                          },
+                        },
+                        {
+                          color: '#ffffff',
+                          size: 'xxs',
+                          text: '統編 90244301',
+                          type: 'text',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+    { type: 'text', text: `這是${vcard.name_tw}的電子名片，名片上有連結可以開啟。` },
+  ]
+}
+print(JSON.stringify(renderIonex(_.mapValues(vcard, _.trim))))
+%>

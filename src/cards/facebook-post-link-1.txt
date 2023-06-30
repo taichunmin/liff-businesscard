@@ -1,4 +1,7 @@
 <%
+function truncate (str) {
+  return _.truncate(str, { length: 20, omission: '' })
+}
 function gaScreenView (vcard) {
   const TEMPLATE_NAME = 'Facebook分享連結-2020/09/18'
   let hash = CryptoJS.HmacMD5(JSON.stringify(vcard), TEMPLATE_NAME)

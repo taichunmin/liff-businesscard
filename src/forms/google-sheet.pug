@@ -15,7 +15,7 @@ block form
   .form-group.was-validated.my-2
     label(for="vcard-template") 名片樣板
     input#vcard-template.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https?://\\S+", v-model.trim="vcard.template")
-    small.form-text.text-muted 請填寫名片樣板網址。你可以使用 #[code https://cors-anywhere.herokuapp.com/] 來繞過 CORS 的限制。
+    small.form-text.text-muted 請填寫名片樣板網址。
   .form-group.was-validated.my-2
     label(for="vcard-apiKey") Google Sheets API 金鑰
     input#vcard-apiKey.form-control.form-control-sm(type="password", required, pattern="[0-9A-Za-z_-]{30,}", v-model="vcard.apiKey")

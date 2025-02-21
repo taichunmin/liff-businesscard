@@ -60,7 +60,13 @@
 
   const decodeGzip = (() => {
     const cBase64 = CryptoJS.enc.Base64
-    const inflate = window.pako.inflate
+    const inflate = (...args) => {
+      try {
+        return window?.pako?.inflate?.(...args)
+      } catch (err) {
+        throw new Error(`pako.inflate: ${err.message ?? err}`)
+      }
+    }
     const urlToBase64 = str => str.replace(/[-_]/g, c => _.get({ '-': '+', _: '/' }, c))
     const wordToArrayBuffer = wordArr => {
       const len = wordArr.words.length
@@ -69,8 +75,12 @@
       return view.buffer.slice(0, wordArr.sigBytes)
     }
     return base64 => {
-      const buffer = wordToArrayBuffer(cBase64.parse(urlToBase64(base64)))
-      return inflate(new Uint8Array(buffer), { to: 'string' })
+      try {
+        const buffer = wordToArrayBuffer(cBase64.parse(urlToBase64(base64)))
+        return inflate(new Uint8Array(buffer), { to: 'string' })
+      } catch (err) {
+        throw _.set(new Error(`decodeGzip: ${err.message}`), 'originalError', err)
+      }
     }
   })()
 

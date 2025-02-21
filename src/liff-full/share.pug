@@ -50,6 +50,7 @@ block script
   script(crossorigin="anonymous", src="https://static.line-scdn.net/liff/edge/2/sdk.js")
   script(crossorigin="anonymous", src="https://cdn.jsdelivr.net/gh/PamornT/flex2html@main/js/flex2html.min.js")
   script.
+    /** global gtag */
     const loginPromise = (async () => {
       await liff.init({ liffId: '#{liffidFull}' })
       if (window.getSearchParam('liff.state')) await new Promise(resolve => {}) // 永遠不會結束的 Promise
@@ -109,9 +110,10 @@ block script
       },
       methods: {
         async getTpl () {
+          const { gtag } = window
           try {
             const tpl = this.paramBase64url('template')
-            if (!tpl) throw new Error('template is required.')
+            if (_.isNil(tpl)) throw new Error('template is required.')
             const render = _.template(_.get(await axios.get(tpl, {
               params: { cachebust: Date.now() },
               transformResponse: [],
@@ -121,10 +123,9 @@ block script
             const { profile = {} } = this
 
             // generate fake page_view for template_impression
-            const baks = _.fromPairs(await Promise.all(['client_id', 'session_id', 'user_id'], async k => {
-              const val = await new Promise(resolve, gtag('get', gtag.id, k, resolve))
-              return [k, val]
-            }))
+            const baks = _.fromPairs(await Promise.all(_.map(['client_id', 'session_id', 'user_id'], async k => {
+              return [k, await new Promise(resolve => { gtag('get', gtag.id, k, resolve) })]
+            })))
             // generate clientId by line userId
             const gtagClientId = gtag.genClientIdByLineId(profile.userId)
             const gtagSessionId = `${liff.getDecodedIDToken()?.iat ?? Math.trunc(Date.now() / 1e3)}`

@@ -35,7 +35,7 @@ block form
   .form-group.was-validated.my-2
     label(for="vcard-image") 預覽圖
     input#vcard-image.form-control.form-control-sm(type="url", inputmode="url", required, pattern="https://\\S+", v-model.trim="vcard.image")
-    small.form-text.text-muted 請填寫連結的預覽圖，必須是 #[code https://] 開頭，建議可將圖片#[a(target="_blank", href="https://imgur.com/") 上傳到 Imgur 圖床]。
+    small.form-text.text-muted 請填寫連結的預覽圖，必須是 #[code https://] 開頭，建議可將圖片#[a(target="_blank", href="https://hackmd.io/@docs/how_to_upload_image_tw") 上傳到 HackMD]。
   .form-group.was-validated.my-2
     label(for="vcard-ratio") 預覽圖的長寬比
     input#vcard-ratio.form-control.form-control-sm(type="text", required, pattern="\\d+:\\d+", v-model="vcard.ratio")

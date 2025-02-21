@@ -4,7 +4,7 @@ if GTAG_ID
     ;(() => {
       // initialize gtag
       window.dataLayer = window.dataLayer || []
-      function gtag(){window.dataLayer.push(arguments)}
+      function gtag () { window.dataLayer.push(arguments) }
       gtag.id = '#{GTAG_ID}'
       gtag('js', new Date())
       gtag('config', gtag.id)

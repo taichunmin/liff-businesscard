@@ -9,9 +9,8 @@ block vue-config
         try {
           this.vcard = window.parseJsonOrDefault(this.paramGzip('json5gzip'), {})
         } catch (err) {
-          err.message = `${this.$t('csv.getVcardFail')}${err.message ? ': ' + err.message : ''}`
           this.render = null
-          throw err
+          throw _.set(new Error(err.message), 'originalError', err)
         }
       },
     }

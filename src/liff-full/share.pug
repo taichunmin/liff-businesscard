@@ -123,9 +123,16 @@ block script
             const { profile = {} } = this
 
             // generate fake page_view for template_impression
-            const baks = _.fromPairs(await Promise.all(_.map(['client_id', 'session_id', 'user_id'], async k => {
-              return [k, await new Promise(resolve => { gtag('get', gtag.id, k, resolve) })]
-            })))
+            const baks = _.omitBy(_.fromPairs(await Promise.all(_.map(['client_id', 'session_id', 'user_id'], async k => {
+              let timer = null
+              const val = await new Promise(resolve => {
+                timer = setTimeout(() => { resolve(undefined) }, 2000) // timeout
+                gtag('get', gtag.id, k, resolve)
+              })
+              if (!_.isNil(timer)) clearTimeout(timer)
+              return [k, val]
+            }))), _.isNil)
+            console.log(`baks = ${JSON.stringify(baks)}`)
             // generate clientId by line userId
             const gtagClientId = gtag.genClientIdByLineId(profile.userId)
             const gtagSessionId = `${liff.getDecodedIDToken()?.iat ?? Math.trunc(Date.now() / 1e3)}`
